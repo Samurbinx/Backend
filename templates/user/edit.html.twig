@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+<div class="breadcrumbs">
+    <p>
+        <a href="{{ path('app_user_index') }}">Usuarios</a>
+        &#60 <a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.Name }}</a>
+        &#60 Editar
+    </p>
+</div>
+
+<div id="show_header">
+    <h1>Editar usuario</h1>
+    {{ include('user/_delete_form.html.twig') }}
+</div>
+
+{{ include('user/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+
+<a href="{{ path('app_user_index') }}" class="btn back">Atrás</a>
+
+{% endblock %}

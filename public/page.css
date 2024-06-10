@@ -1,0 +1,79 @@
+/* GLOBAL */
+#page {
+   width: 100%;
+}
+
+a.page {
+   height: fit-content;
+   font-size: large;
+   padding: 10px;
+   text-transform: uppercase;
+}
+
+#page_Image {
+   padding: 0px !important;
+}
+/* HOME */
+#page_home {
+   height: 600px;
+}
+
+#home_img {
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   height: 100% !important;
+}
+
+/* CONTACT */
+#page_contact {
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: center;
+   margin-bottom: 250px;
+}
+
+#contact_img {
+   height: auto !important;
+   width: 300px;
+   margin-right: 50px;
+
+   background-position: center;
+   background-size: cover;
+}
+
+#contactForm {
+   height: fit-content;
+   width: 450px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+#form {
+   height: 450px;
+   background-color: #eeeeee;
+}
+
+/* ABOUT */
+#page_about {
+   display: flex;
+   height: auto;
+   align-items: center;
+   justify-content: center;
+}
+
+#page_about>div {
+   margin-left: 20px;
+   width: 700px;
+   height: fit-content;
+}
+
+#page_about pre {
+   overflow: hidden;
+   text-wrap: wrap;
+
+   font-size: large;
+   line-height: 1.5em;
+}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Work{% endblock %}
+
+{% block body %}
+<div class="breadcrumbs">
+    <p>
+        <a href="{{ path('app_work_index') }}">Proyectos</a>
+        &#60 <a href="{{ path('app_work_show', {'id': work.id}) }}">{{ work.Title }}</a>
+        &#60 Editar
+    </p>
+</div>
+
+<div id="show_header">
+    <h1>Editar proyecto: {{ work.title }}</h1>
+    {{ include('work/_delete_form.html.twig') }}
+</div>
+
+<div id="work_body_form">
+    <div id="work_form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn save">{{ button_label|default('Guardar cambios') }}</button>
+        {{ form_end(form) }}
+    </div>
+
+    <div>
+        <img src="{{ asset('uploads/works/' ~ work.id ~'/'~ work.image) }}" style="max-height: 300px;"
+            id="imagePreview">
+    </div>
+</div>
+
+<!-- Cambia la imagen del formulario en tiempo real si se selecciona una nueva -->
+<script>
+    document.getElementById('work_Image').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+{% endblock %}

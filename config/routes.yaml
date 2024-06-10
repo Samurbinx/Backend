@@ -1,0 +1,22 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+# config/routes.yaml
+aesma:
+    path: /aesma
+    controller: App\Controller\AdminZoneController::index
+
+contact:
+    path: /contact
+    controller: App\Controller\ContactController::index
+
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+
+logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout

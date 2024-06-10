@@ -1,0 +1,190 @@
+* {
+   font-family: "Lexend", sans-serif;
+   font-optical-sizing: auto;
+   font-style: normal;
+}
+
+body {
+   margin: 0;
+   font-family: Arial, sans-serif;
+   display: flex;
+   flex-direction: column !important;
+   margin-bottom: 50px;
+}
+
+.body {
+   display: flex;
+   flex-direction: row;
+}
+
+.content {
+   margin-left: 50px;
+   width: 80%;
+}
+.content > h1 {
+   margin-top: 0px;
+}
+.header {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   padding: 10px 30px;
+}
+.header a {
+   text-decoration: none;
+   align-items: center;
+   display: flex;
+   justify-content: end;
+   color: #3d3d3d;
+}
+
+/* Menú lateral */
+.sidebar {
+   width: 200px;
+   padding: 20px 0;
+   border-right: 1px solid #a1a1a1;
+}
+
+.sidebar a {
+   color: rgb(0, 0, 0);
+   text-decoration: none;
+   display: block;
+   padding: 10px 25px;
+   margin: 10px 0;
+}
+
+.sidebar a:hover {
+   background-color: #dadada;
+}
+
+
+
+/* Estilos para la tabla */
+.table {
+   width: 100%;
+   border-collapse: collapse;
+   margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+   padding: 8px;
+   text-align: left;
+   border-bottom: 1px solid #ddd;
+}
+
+td.actions {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+}
+
+/* Formularios */
+form>div>div {
+   margin-bottom: 20px;
+   display: flex;
+   flex-direction: column;
+}
+
+form label {
+   font-weight: 600;
+}
+
+form input {
+   margin: 5px 0;
+   padding: 3px;
+   width: 100%;
+}
+
+textarea {
+   height: fit-content;
+   margin: 5px 0;
+   padding: 3px;
+   width: 100%;
+   min-width: 100%;
+   max-width: 100%;
+}
+
+
+
+/* Estilos para los enlaces y botones*/
+
+.btn {
+   cursor: pointer;
+   font-size: small;
+   padding: 4px;
+   border-radius: 3px;
+   margin: 5px 10px 5px 0;
+}
+
+.btn.del {
+   color: red;
+   background-color: transparent;
+   border: 1px solid red;
+}
+
+.btn.edit {
+   border: 1px solid blue;
+   text-decoration: none;
+}
+
+.btn.new {
+   color: rgb(63, 161, 54);
+   border: 1px solid rgb(63, 161, 54);
+   text-decoration: none;
+}
+
+.btn.show {
+   color: #3d3d3d;
+}
+
+.btn.save {
+   background-color: rgba(78, 174, 65, 0.609);
+   border: 1px solid rgb(7, 78, 7);
+}
+
+
+#images {
+   display: flex;
+   flex-direction: row;
+}
+#imageContainer {
+   display: flex;
+   flex-direction: row;
+}
+#imageContainer > div {
+   margin: 10px 20px 10px 0;
+}
+
+#imageContainer > img {
+   margin: 10px 20px 10px 0;
+}
+
+
+
+#show_header {
+   background-color: #ebebeb;
+   padding: 5px 20px;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 20px;
+}
+
+
+#user {
+   max-width: 70vh;
+}
+#user_roles {
+   width: fit-content;
+}
+
+#user_roles input {
+   width: fit-content;
+}
+#user_roles label {
+   font-weight: 400;
+   margin-left: 5px;
+}

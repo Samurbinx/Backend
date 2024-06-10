@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Work{% endblock %}
+
+{% block body %}
+<p>
+    <a href="{{ path('app_work_index') }}">Proyectos</a> &#60 Crear
+</p>
+
+<div id="show_header">
+    <h1>Crear nuevo proyecto</h1>
+    <a href="{{ path('app_work_index') }}">Salir</a>
+</div>
+
+<div id="work_body_form">
+    <div id="work_form">
+        {{ include('work/_form.html.twig') }}
+    </div>
+
+    <div id="work_imageContainer"></div>
+</div>
+<br>
+
+<script>
+    document.getElementById('work_Image').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const imageContainer = document.getElementById('work_imageContainer');
+
+        if (file) {
+            if (file.type.match('image.*')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imageElement = document.createElement('img');
+                    imageElement.src = e.target.result;
+                    imageElement.style.maxHeight = '300px';
+                    imageContainer.appendChild(imageElement);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+
+</script>
+
+{% endblock %}

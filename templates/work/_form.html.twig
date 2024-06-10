@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn save">{{ button_label|default('Aceptar') }}</button>
+{{ form_end(form) }}
+
+<script>
+    document.getElementById('work_Image').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Work{% endblock %}
+
+{% block body %}
+
+<p><a href="{{ path('app_work_index') }}">Proyectos</a> &#60 {{ work.Title }}</p>
+
+<div id="show_header">
+    <h1>{{work.Title}}</h1>
+    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit page">Editar proyecto</a>
+</div>
+
+<div id="work_body">
+    <div style="background-image: url('{{ asset('uploads/works/' ~ work.id ~ '/' ~ work.Image) }}'); height: 200px;"
+        id="work_img"></div>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Declaración</th>
+            </tr>
+            <tr>
+                <td>{{ work.Statement }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Descripción</th>
+            </tr>
+
+            <tr>
+                <td>{{ work.Description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div id="piece_body">
+        <div id="show_header">
+            <h2>Obras</h2>
+            <a href="{{ path('app_piece_new', {'id': work.id}) }}" class="btn new page">Añadir obra</a>
+        </div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Título</th>
+                    <th>Año</th>
+                    <th>Materiales</th>
+                    <th>Dimensiones</th>
+                    <th>Acciones</th>
+                </tr>
+                {% for piece in work.pieces %}
+                <tr>
+                    <td>
+                        {{ piece.title ? piece.title : 'Sin título' }}
+                    </td>
+                    <td>
+                        {{ piece.creationDate ? piece.creationDate|date('Y') : 'Año desconocido' }}
+                    </td>
+                    <td>
+                        {{ piece.materials ? piece.materials : 'Materiales desconocidos' }}
+                    </td>
+                    <td>
+                        {% if piece.height or piece.width or piece.depht %}
+                        {% if piece.height %}{{ piece.height }}{% endif %}
+                        {% if piece.height and (piece.width or piece.depht) %} x {% endif %}
+                        {% if piece.width %}{{ piece.width }}{% endif %}
+                        {% if piece.width and piece.depht %} x {% endif %}
+                        {% if piece.depht %}{{ piece.depht }}{% endif %}
+                        cm
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        <a href="{{ path('app_piece_show', {'id': piece.id}) }}" class="btn show">Ver
+                            detalles</a>
+                        <a href="{{ path('app_piece_edit', {'id': piece.id}) }}" class="btn edit">Editar</a>
+                        {{ include('piece/_delete_form.html.twig') }}
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="delwork">
+    <a href="{{ path('app_work_show', {'id': work.id}) }}" class="btn back">Atrás</a>
+    {{ include('work/_delete_form.html.twig') }}
+</div>
+{% endblock %}

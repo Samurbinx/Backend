@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Page{% endblock %}
+
+{% block body %}
+
+<div id="show_header">
+    <h1>Editar {{ page.Name }}</h1>
+
+</div>
+<div id="work_body_form">
+    <div id="work_form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn save page">{{ button_label|default('Guardar cambios') }}</button>
+        {{ form_end(form) }}
+    </div>
+
+    <div>
+        <img src="{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}" style="max-height: 300px;"
+            id="imagePreview">
+    </div>
+</div>
+
+</div>
+<script>
+    document.getElementById('page_Image').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+{% endblock %}

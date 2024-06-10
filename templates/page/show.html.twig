@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page{% endblock %}
+
+{% block body %}
+<div id="show_header">
+    <h1>{{ page.Name }}</h1>
+    <a href="{{ path('app_page_edit', {'id': page.id}) }}" class="btn edit page">Editar</a>
+</div>
+
+{% if page.id == "1" or page.id == "4" %}
+<div id="page_home">
+    <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}'); height: 200px;"
+        id="home_img"></div>
+    <p>{{ page.Subtitle }}</p>
+</div>
+{% endif %}
+
+{% if page.id == "2" %}
+<div id="page_contact">
+    <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}'); height: 200px;"
+        id="contact_img"></div>
+    <div id="contactForm">
+        <span>
+            <h3>{{ page.title }}</h3>
+            <p>{{ page.Subtitle }}</p>
+        </span>
+        <div id="form"></div>
+    </div>
+</div>
+{% endif %}
+
+{% if page.id == "3" %}
+<div id="page_about">
+    <img src="{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}" style="max-height: 500px;"
+        id="imagePreview">
+    <div>
+        <h3>{{ page.title }}</h3>
+        <pre>{{ page.Subtitle }}</pre>
+    </div>
+</div>
+{% endif %}
+<br>
+
+
+
+
+{% endblock %}

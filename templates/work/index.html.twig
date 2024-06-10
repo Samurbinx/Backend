@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Work index{% endblock %}
+
+
+{% block body %}
+<div id="show_header">
+    <h1>Proyectos</h1>
+    <a href="{{ path('app_work_new') }}" class="btn new page">Crear nuevo proyecto</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for work in works %}
+        <tr>
+            <td>{{ work.Title }}</td>
+            <td class="actions">
+                <a href="{{ path('app_work_show', {'id': work.id}) }}" class="btn show">Ver detalles</a>
+                <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit">Editar</a>
+                {{ include('work/_delete_form.html.twig') }}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">No existen proyectos</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

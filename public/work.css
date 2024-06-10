@@ -1,0 +1,52 @@
+#work_body {
+   width: 100%;
+}
+#work_img {
+   background-repeat: no-repeat;
+   background-size: cover;  
+   background-position: center; 
+}
+#work_body_form {
+   display: flex;
+   flex-direction: row;
+   margin: 20px 0px;
+   max-width: 100%;
+}
+
+#work_form {
+   min-width: 30vw;
+   width: 60%;
+   margin-right: 50px;
+}
+#delwork {
+   width: 100%;
+   justify-content: space-between;
+   display: flex;
+}
+#piece_body {
+   margin-top: 70px;
+}
+#work_imageContainer {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+   width: 70%;
+}
+.image-wrapper {
+   display: flex;
+   flex-direction: column;
+   margin-right: 15px;
+}
+.image-wrapper > button {
+   width: fit-content;
+}
+#work_imageContainer > div, div > img {
+   margin-right: 15px;
+}
+.to-delete img {
+   filter: grayscale(100%);
+   opacity: 0.5;
+}
+#btnDIV {
+   display: block;
+}
