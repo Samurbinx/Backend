@@ -1,3 +1,8 @@
+:root {
+   --primary-300: #7FB2B5;
+   --neutral-700: #AEBBBB;
+   --error-500: #A73E2B;
+}
 * {
    font-family: "Lexend", sans-serif;
    font-optical-sizing: auto;
@@ -54,7 +59,7 @@ input {
    padding: 10px;
    margin-bottom: 25px !important;
    border-radius: 3px;
-   border: 1px solid rgb(155, 155, 155);
+   border: 1px solid var(--neutral-700);
    font-size: large;
 
 }
@@ -64,15 +69,15 @@ button {
    padding: 13px !important;
    border-radius: 3px;
    border: none;
-   background-color: rgb(134, 207, 183);
+   background-color: var(--primary-300);
    margin-bottom: 25px !important;
    cursor: pointer;
 }
 .error {
-   color: rgb(219, 51, 0);
+   color: var(--error-500);
    padding: 10px;
-   background-color: rgb(255, 255, 255);
-   border: 0.5px solid rgb(219, 51, 0);
+   background-color: white;
+   border: 0.5px solid var(--error-500);
    font-size: medium;
    font-weight: bold;
    border-radius: 3px;
