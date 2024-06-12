@@ -1,3 +1,9 @@
+:root {
+   --neutral-800: #7D9191;
+   --neutral-500: #DFE4E4;
+
+
+}
 /* GLOBAL */
 #page {
    width: 100%;
@@ -53,6 +59,8 @@ a.page {
 
 #form {
    height: 450px;
+   background-color: var(--neutral-500);
+   width: 100%;
 }
 
 /* ABOUT */
