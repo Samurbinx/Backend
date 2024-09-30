@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Illustration index{% endblock %}
+
+{% block body %}
+<div id="show_header">
+    <h1>Ilustraciones</h1>
+</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Collection</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for illustration in illustrations %}
+            <tr>
+                <td>{{ illustration.id }}</td>
+                <td>{{ illustration.title }}</td>
+                <td>{{ illustration.collection }}</td>
+                <td>{{ illustration.image }}</td>
+                <td>{{ illustration.price }}</td>
+                <td>{{ illustration.stock }}</td>
+                <td>
+                    <a href="{{ path('app_illustration_show', {'id': illustration.id}) }}">show</a>
+                    <a href="{{ path('app_illustration_edit', {'id': illustration.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_illustration_new') }}">Create new</a>
+{% endblock %}

@@ -10,7 +10,7 @@ use App\Entity\Image;
 use App\Form\WorkType;
 use App\Form\PageType;
 use App\Form\PieceType;
-
+use App\Repository\IllustrationRepository;
 use App\Repository\PageRepository;
 use App\Repository\PieceRepository;
 use App\Repository\UserRepository;
@@ -531,6 +531,14 @@ class AdminZoneController extends AbstractController
     {
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/illustration', name: 'app_illustration_index', methods: ['GET'])]
+    public function illustration(IllustrationRepository $illustrationRepository): Response
+    {
+        return $this->render('illustration/index.html.twig', [
+            'illustrations' => $illustrationRepository->findAll(),
         ]);
     }
 }
