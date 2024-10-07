@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Illustration;
-use App\Form\IllustrationType;
+
 use App\Repository\IllustrationRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,60 +26,34 @@ class IllustrationController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/new', name: 'app_illustration_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // Coge los datos de una ilustracion
+    #[Route('/{id}', name: 'illustration_detail', methods: ['GET'])]
+    public function getIllustrationDetails(string $id, IllustrationRepository $illustrationRepository): JsonResponse
     {
-        $illustration = new Illustration();
-        $form = $this->createForm(IllustrationType::class, $illustration);
-        $form->handleRequest($request);
+        $illustration = $illustrationRepository->find($id);
+        $data = $illustration->getIllustration();
+        return new JsonResponse($data);
+    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($illustration);
-            $entityManager->flush();
+    #[Route('/{id}/img', name: 'illustration_index_img', methods: ['GET'])]
+    public function getIllustrationImg(IllustrationRepository $illustrationRepository, string $id)
+    {
+        $illustration = $illustrationRepository->find($id);
 
-            return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
+        $imagePath = 'uploads/shop/'.$illustration->getCollection().'/'.$illustration->getId().'/'.$illustration->getImage();
+
+
+        if (!file_exists($imagePath)) {
+            throw $this->createNotFoundException('Image not found');
         }
 
-        return $this->render('illustration/new.html.twig', [
-            'illustration' => $illustration,
-            'form' => $form,
-        ]);
+        $imageContent = file_get_contents($imagePath);
+        $mimeType = mime_content_type($imagePath);
+
+        $response = new Response($imageContent);
+        $response->headers->set('Content-Type', $mimeType);
+
+        return $response;
     }
 
-    #[Route('/{id}', name: 'app_illustration_show', methods: ['GET'])]
-    public function show(Illustration $illustration): Response
-    {
-        return $this->render('illustration/show.html.twig', [
-            'illustration' => $illustration,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_illustration_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Illustration $illustration, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(IllustrationType::class, $illustration);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('illustration/edit.html.twig', [
-            'illustration' => $illustration,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_illustration_delete', methods: ['POST'])]
-    public function delete(Request $request, Illustration $illustration, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$illustration->getId(), $request->getPayload()->get('_token'))) {
-            $entityManager->remove($illustration);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

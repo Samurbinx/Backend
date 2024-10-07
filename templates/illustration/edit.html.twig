@@ -3,11 +3,35 @@
 {% block title %}Edit Illustration{% endblock %}
 
 {% block body %}
-    <h1>Edit Illustration</h1>
-
-    {{ include('illustration/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_illustration_index') }}">back to list</a>
-
+<div id="show_header">
+    <h1>{{ illustration.title }}</h1>
     {{ include('illustration/_delete_form.html.twig') }}
+</div>
+
+<div id="work_body_form">
+
+    <img src="{{ asset('uploads/shop/' ~ illustration.collection ~ '/' ~ illustration.id ~ '/' ~ illustration.image) }}" style="max-height: 500px;" id="imagePreview">
+    
+    <div id="work_form">
+        {{ include('illustration/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+    </div>
+</div>
+
+<a href="{{ path('app_illustration_index') }}">Atrás</a>
+
+<script>
+    document.getElementById('illustration_Image').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
 {% endblock %}

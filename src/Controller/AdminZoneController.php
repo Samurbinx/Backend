@@ -1,29 +1,33 @@
 <?php
-
 namespace App\Controller;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Piece;
 use App\Entity\Work;
 use App\Entity\Page;
-use App\Entity\Image;
+use App\Entity\Illustration;
 
 use App\Form\WorkType;
 use App\Form\PageType;
 use App\Form\PieceType;
+use App\Form\IllustrationType;
+
 use App\Repository\IllustrationRepository;
 use App\Repository\PageRepository;
 use App\Repository\PieceRepository;
 use App\Repository\UserRepository;
 use App\Repository\WorkRepository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+// ESTA CLASE RECOGE TODOS LAS CRUD NECESARIAS PARA LAS TWIG DE LA ZONA DE ADMINISTRACIÓN
+// PROYECTOS, OBRAS, PÁGINAS, USUARIOS Y TIENDA
 #[Route('/aesma')]
 class AdminZoneController extends AbstractController
 {
@@ -534,11 +538,92 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
+    // ----------- SHOP ----------//
     #[Route('/illustration', name: 'app_illustration_index', methods: ['GET'])]
-    public function illustration(IllustrationRepository $illustrationRepository): Response
+    public function illustration(IllustrationRepository $illustrationRepository, PaginatorInterface $paginator, Request $request): Response
     {
         return $this->render('illustration/index.html.twig', [
             'illustrations' => $illustrationRepository->findAll(),
+            
         ]);
     }
+
+    #[Route('/illustration/{id}/edit', name: 'app_illustration_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Illustration $illustration, IllustrationRepository $illustrationRepository, EntityManagerInterface $entityManager, string $id): Response
+    {
+        $route = $illustration->getCollection() . '/' . $id . '/';
+        $assetsDirectory = 'uploads/shop/' . $route;
+
+        $form = $this->createForm(IllustrationType::class, $illustration);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+    
+                    // Move the file to the directory where images are stored
+                    try {
+                        $imageFile->move(
+                            $assetsDirectory,
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        // Handle exception
+                    }
+    
+                    // Update the images array
+                    $illustration->setImage($newFilename);
+            }
+            
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('illustration/edit.html.twig', [
+            'illustration' => $illustration,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/illustration/{id}', name: 'app_illustration_show', methods: ['GET'])]
+    public function show(Illustration $illustration): Response
+    {
+        return $this->render('illustration/show.html.twig', [
+            'illustration' => $illustration,
+        ]);
+    }
+
+    #[Route('/illustration/{id}', name: 'app_illustration_delete', methods: ['POST'])]
+    public function delete(Request $request, Illustration $illustration, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$illustration->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($illustration);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/illustration/new', name: 'app_illustration_new', methods: ['GET', 'POST'])]
+        public function new(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $illustration = new Illustration();
+            $form = $this->createForm(IllustrationType::class, $illustration);
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($illustration);
+                $entityManager->flush();
+    
+                return $this->redirectToRoute('app_illustration_index', [], Response::HTTP_SEE_OTHER);
+            }
+    
+            return $this->render('illustration/new.html.twig', [
+                'illustration' => $illustration,
+                'form' => $form,
+            ]);
+        }
 }

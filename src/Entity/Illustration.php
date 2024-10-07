@@ -38,7 +38,7 @@ class Illustration
             'price'=> $this->price,
             'stock'=> $this->stock,
             'collection'=> $this->collection,
-            // 'url'=>"http://127.0.0.1:8080/work/$id/img"
+            'url'=>"http://127.0.0.1:8080/illustration/$id/img"
         ];
     }
 
