@@ -58,6 +58,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         ];
     }
 
+    public function getUserSafe(): ?array {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'name' => $this->Name,
+            'surname' => $this->Surname,
+            'nick' => $this->Nick,
+            'phone' => $this->Phone
+        ];
+    }
+
     public function getId(): ?int
     {
         return $this->id;

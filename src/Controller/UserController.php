@@ -53,7 +53,7 @@ class UserController extends AbstractController
         // Crear token JWT
         $token = $jwtTokenManager->create($user);
 
-        return new JsonResponse(['token' => $token]);
+        return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
     }
 
 
