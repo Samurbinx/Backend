@@ -5,8 +5,9 @@
 {% block body %}
 <p>
     <a href="{{ path('app_work_index') }}">Proyectos</a>
-    &#60 <a href="{{ path('app_work_show', {'id': piece.Work.id}) }}">{{ piece.Work.Title }}</a>
-    &#60 {{ piece.Title }}
+    &#60 <a href="{{ path('app_work_show', {'id': piece.artwork.work.id}) }}">{{ piece.artwork.work.Title }}</a>
+    &#60 <a href="{{ path('app_artwork_show', {'id': piece.artwork.id}) }}">{{ piece.artwork.Title }}</a>
+    &#60 <a href="{{ path('app_piece_show', {'id': piece.id}) }}">{{ piece.Title }}</a>
 </p>
 
 <div id="show_header">

@@ -22,13 +22,12 @@ class PieceController extends AbstractController
         foreach ($pieces as $piece) {
             $data[] = [
                 'id' => $piece->getId(),
-                'work_id' => $piece->getWork()->getId(),
+                'artwork_id' => $piece->getArtwork()->getId(),
                 'title' => $piece->getTitle(),
-                'creation_date' => $piece->getCreationYear(),
-                'materials' => $piece->getMaterials(),
+                'materials' => $piece->getMaterialsName(),
                 'width' => $piece->getWidth(),
                 'height' => $piece->getHeight(),
-                'depth' => $piece->getDepht(),
+                'depth' => $piece->getDepth(),
             ];
         }
 
@@ -44,21 +43,15 @@ class PieceController extends AbstractController
             return new JsonResponse(['error' => 'Piece not found'], 404);
         }
 
-        $images = [];
-        foreach ($piece->getImages() as $image) {
-            $images[] = $image->getImage();
-        }
-
         $data[] = [
             'id' => $piece->getId(),
-            'work_id' => $piece->getWork()->getId(),
+            'artwork_id' => $piece->getArtwork()->getId(),
             'title' => $piece->getTitle(),
-            'creation_date' => $piece->getCreationYear(),
-            'materials' => $piece->getMaterials(),
+            'materials' => $piece->getMaterialsName(),
             'width' => $piece->getWidth(),
             'height' => $piece->getHeight(),
-            'depth' => $piece->getDepht(),
-            'images' => $images
+            'depth' => $piece->getDepth(),
+            'images' => $piece->getImages(),
         ];
 
         return new JsonResponse($data);
@@ -68,9 +61,10 @@ class PieceController extends AbstractController
     public function getPieceImg(PieceRepository $pieceRepository, string $id, string $img)
     {
         $piece = $pieceRepository->find($id);
-        $work = $piece->getWork();
+        $artwork = $piece->getArtwork()->getId();
+        $work = $piece->getArtwork()->getWork()->getId();
 
-        $imagePath = 'uploads/works/'.$work->getId().'/'.$piece->getId().'/'.$img;
+        $imagePath = 'uploads/works/'.$work.'/'.$artwork.'/'.$piece->getId().'/'.$img;
 
 
         if (!file_exists($imagePath)) {

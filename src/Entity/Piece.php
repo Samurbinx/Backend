@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[ORM\Entity(repositoryClass: PieceRepository::class)]
 class Piece
@@ -15,51 +17,54 @@ class Piece
     #[ORM\Column]
     private ?int $id = null;
 
+    
+    #[ORM\ManyToOne(inversedBy: 'Pieces')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Artwork $Artwork = null;
+
+
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Title = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $Creation_date = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Materials = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $Height = null;
     
     #[ORM\Column(nullable: true)]
     private ?float $Width = null;
-    
-    
 
     #[ORM\Column(nullable: true)]
-    private ?float $Depht = null;
-
-    #[ORM\ManyToOne(inversedBy: 'Pieces')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Work $Work = null;
-
+    private ?float $Depth = null;
     
     #[ORM\Column(nullable: true)]
     private ?array $Images = null;
+
+    /**
+     * @var Collection<int, Materials>
+     */
+    #[ORM\ManyToMany(targetEntity: Materials::class, inversedBy: 'pieces')]
+    private Collection $Materials;
+
 
 
 
    
     public function __construct()
     {
+        $this->Materials = new ArrayCollection();
     }
 
     public function getPiece(): ?array {
         return [
             'id'=> $this->id,
-            'workID'=> $this->Work,
+            'artworkID'=> $this->Artwork->getId(),
             'title'=> $this->Title,
-            'date'=> $this->Creation_date,
             'materials'=> $this->Materials,
             'width'=> $this->Width,
             'height'=> $this->Height,
-            'depht'=> $this->Depht,
+            'depth'=> $this->Depth,
         ];
     }
 
@@ -81,41 +86,6 @@ class Piece
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->Creation_date;
-    }
-
-    public function getCreationYear(): ?string
-    {
-        $year = $this->Creation_date;
-
-        if ($year) {
-            $year = $year->format('Y');
-        } else {
-            $year = null;
-        }
-        return $year;
-    }
-
-    public function setCreationDate(?\DateTimeInterface $Creation_date): static
-    {
-        $this->Creation_date = $Creation_date;
-
-        return $this;
-    }
-
-    public function getMaterials(): ?string
-    {
-        return $this->Materials;
-    }
-
-    public function setMaterials(?string $Materials): static
-    {
-        $this->Materials = $Materials;
-
-        return $this;
-    }
 
     public function getHeight(): ?float
     {
@@ -141,26 +111,14 @@ class Piece
         return $this;
     }
 
-    public function getDepht(): ?float
+    public function getDepth(): ?float
     {
-        return $this->Depht;
+        return $this->Depth;
     }
 
-    public function setDepht(?float $Depht): static
+    public function setDepth(?float $Depth): static
     {
-        $this->Depht = $Depht;
-
-        return $this;
-    }
-
-    public function getWork(): ?Work
-    {
-        return $this->Work;
-    }
-
-    public function setWork(?Work $Work): static
-    {
-        $this->Work = $Work;
+        $this->Depth = $Depth;
 
         return $this;
     }
@@ -189,6 +147,53 @@ class Piece
         if ($image !== null && in_array($image, $this->Images)) {
             $this->Images = array_filter($this->Images, fn($img) => $img !== $image);
         }
+        return $this;
+    }
+
+
+
+
+    public function getArtwork(): ?Artwork
+    {
+        return $this->Artwork;
+    }
+
+    public function setArtwork(?Artwork $Artwork): static
+    {
+        $this->Artwork = $Artwork;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Materials>
+     */
+    public function getMaterials(): Collection
+    {
+        return $this->Materials;
+    }
+    public function getMaterialsName(): ?array
+    {
+        $materials = [];
+        foreach ($this->Materials as $name => $material) {
+            array_push($materials, $material->getName());
+        }
+        return $materials;
+    }
+
+    public function addMaterial(Materials $material): static
+    {
+        if (!$this->Materials->contains($material)) {
+            $this->Materials->add($material);
+        }
+
+        return $this;
+    }
+
+    public function removeMaterial(Materials $material): static
+    {
+        $this->Materials->removeElement($material);
+
         return $this;
     }
     

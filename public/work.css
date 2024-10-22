@@ -18,11 +18,9 @@
    width: 60%;
    margin-right: 50px;
 }
-#delwork {
-   width: 100%;
-   justify-content: space-between;
-   display: flex;
-}
+
+
+
 #piece_body {
    margin-top: 70px;
 }

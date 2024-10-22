@@ -8,16 +8,16 @@
     <h1>Editar {{ page.Name }}</h1>
 
 </div>
-<div id="work_body_form">
-    <div id="work_form">
+<div id="page_body_form">
+    <div id="page_form">
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button class="btn save page">{{ button_label|default('Guardar cambios') }}</button>
+        <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
         {{ form_end(form) }}
     </div>
 
     <div>
-        <img src="{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}" style="max-height: 300px;"
+        <img src="{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}"
             id="imagePreview">
     </div>
 </div>

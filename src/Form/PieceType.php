@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Piece;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,8 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use App\Entity\Materials;  // Importa la entidad Materials
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;  // Importa EntityType
 
 class PieceType extends AbstractType
 {
@@ -23,14 +23,13 @@ class PieceType extends AbstractType
                 'label' => 'Título',
                 'required' => false,
             ])
-            ->add('Creation_date', DateType::class, [
-                'label' => 'Año de creación',
-                'widget' => 'single_text',
+            ->add('Materials', EntityType::class, [
+                'class' => Materials::class,
+                'choice_label' => 'Name',
+                'multiple' => true,
+                'expanded' => true,  // Mostrar como checkboxes
+                'label' => false,  // No mostrar label
                 'required' => false,
-            ])
-            ->add('Materials', TextType::class, [
-                'label' => 'Materiales',
-                'required' => false
             ])
             ->add('Height', NumberType::class, [
                 'label' => 'Alto',
@@ -40,7 +39,7 @@ class PieceType extends AbstractType
                 'label' => 'Ancho',
                 'required' => false
             ])
-            ->add('Depht', NumberType::class, [
+            ->add('Depth', NumberType::class, [
                 'label' => 'Profundo',
                 'required' => false
             ])
@@ -66,7 +65,10 @@ class PieceType extends AbstractType
                         ])
                     ]),
                 ],
+                'attr' => ['class' => 'form-control']
             ])
+           
+            
 
         ;
     }

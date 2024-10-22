@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<p>
+    <a href="{{ path('app_work_index') }}">Proyectos</a>
+    &#60 <a href="{{ path('app_work_show', {'id': work.id}) }}">{{ work.Title }}</a>
+    &#60 Nueva obra
+</p>
+
+<div id="show_header">
+    <h1>Añadir obra a {{ work.title }}</h1>
+    <a href="{{ path('app_work_show', {'id': work.id}) }}">Salir</a>
+</div>
+
+
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button class="btn save">{{ button_label|default('Añadir') }}</button>
+{{ form_end(form) }}
+
+<!-- Botón para abrir el modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pieceModal">
+    Añadir obra
+</button>
+
+<!-- Modal para el formulario de app_piece_new -->
+<div class="modal fade" id="pieceModal" tabindex="-1" aria-labelledby="pieceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pieceModalLabel">Añadir nueva obra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

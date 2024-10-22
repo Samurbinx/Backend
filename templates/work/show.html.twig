@@ -8,7 +8,7 @@
 
 <div id="show_header">
     <h1>{{work.Title}}</h1>
-    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit page">Editar proyecto</a>
+    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar proyecto</a>
 </div>
 
 <div id="work_body">
@@ -37,47 +37,45 @@
         </tbody>
     </table>
 
+  <form method="post" action="{{ path('app_work_delete', {'id': work.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar este proyecto? (Se borrarán también sus obras)');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ work.id) }}">
+    <button class="btn del">{{ ux_icon('bi:trash') }} Eliminar proyecto </button>
+</form>
 
+    
     <div id="piece_body">
         <div id="show_header">
             <h2>Obras</h2>
-            <a href="{{ path('app_piece_new', {'id': work.id}) }}" class="btn new page">Añadir obra</a>
+            <a href="{{ path('app_artwork_new', {'id': work.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} Añadir obra</a>
         </div>
         <table class="table">
             <tbody>
                 <tr>
                     <th>Título</th>
                     <th>Año</th>
-                    <th>Materiales</th>
-                    <th>Dimensiones</th>
+                    <th>Precio</th>
+                    <th>Vendido</th>
                     <th>Acciones</th>
                 </tr>
-                {% for piece in work.pieces %}
+                {% for artwork in work.artworks %}
                 <tr>
                     <td>
-                        {{ piece.title ? piece.title : 'Sin título' }}
+                        {{ artwork.title ? artwork.title : 'Sin título' }}
                     </td>
                     <td>
-                        {{ piece.creationDate ? piece.creationDate|date('Y') : 'Año desconocido' }}
+                        {{ artwork.creationDate ? artwork.creationDate|date('Y') : 'Año desconocido' }}
                     </td>
                     <td>
-                        {{ piece.materials ? piece.materials : 'Materiales desconocidos' }}
+                        {{ artwork.price ? artwork.price : '0.00€' }}
                     </td>
                     <td>
-                        {% if piece.height or piece.width or piece.depht %}
-                        {% if piece.height %}{{ piece.height }}{% endif %}
-                        {% if piece.height and (piece.width or piece.depht) %} x {% endif %}
-                        {% if piece.width %}{{ piece.width }}{% endif %}
-                        {% if piece.width and piece.depht %} x {% endif %}
-                        {% if piece.depht %}{{ piece.depht }}{% endif %}
-                        cm
-                        {% endif %}
+                        {{ artwork.sold ? artwork.sold : 'Vendido' }}
                     </td>
                     <td class="actions">
-                        <a href="{{ path('app_piece_show', {'id': piece.id}) }}" class="btn show">Ver
+                        <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show">Ver
                             detalles</a>
-                        <a href="{{ path('app_piece_edit', {'id': piece.id}) }}" class="btn edit">Editar</a>
-                        {{ include('piece/_delete_form.html.twig') }}
+                        <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
+                        {{ include('artwork/_delete_form.html.twig') }}
 
                     </td>
                 </tr>
@@ -86,8 +84,5 @@
         </table>
     </div>
 </div>
-<div id="delwork">
-    <a href="{{ path('app_work_show', {'id': work.id}) }}" class="btn back">Atrás</a>
-    {{ include('work/_delete_form.html.twig') }}
-</div>
+
 {% endblock %}

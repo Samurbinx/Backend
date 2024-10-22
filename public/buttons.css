@@ -1,0 +1,42 @@
+/* Estilos para los enlaces y botones*/
+.btn {
+   cursor: pointer;
+   font-size: small;
+   padding: 5px 10px;
+   border-radius: 3px;
+   margin-right: 10px;
+}
+
+.btn.del {
+   color: var(--error-500);
+   background-color: transparent;
+   border: 1px solid var(--error-500);
+}
+
+.btn.edit {
+   border: 1px solid var(--primary-600);
+   color: var(--primary-600);
+   text-decoration: none;
+   max-width: fit-content;
+}
+
+.btn.new {
+   color: var(--success-500);
+   border: 1px solid var(--success-500);
+   text-decoration: none;
+}
+
+.btn.show {
+   color: var(--neutral-900);
+}
+
+.btn.save {
+   background-color: var(--success-300);
+   border: 1px solid var(--success-600);
+}
+
+#imagePreview {
+   margin: 0px;
+   height: auto;
+   max-height: 500px;
+}

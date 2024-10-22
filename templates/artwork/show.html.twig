@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}artwork{% endblock %}
+
+{% block body %}
+<p>
+    <a href="{{ path('app_work_index') }}">Proyectos</a>
+    &#60 <a href="{{ path('app_work_show', {'id': artwork.Work.id}) }}">{{ artwork.Work.Title }}</a>
+    &#60 {{ artwork.Title }}
+</p>
+
+<div id="show_header">
+    <h1>Obra: {{ artwork.Title }}</h1>
+    <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
+</div>
+<div id="artwork_inf">
+    <div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Fecha de creación</th>
+                    <td>{{ artwork.CreationDate ? artwork.CreationDate|date('Y') : 'Desconocido' }}</td>
+                </tr>
+                <tr>
+                    <th>Precio</th>
+                    <td>{{ artwork.price ? artwork.price : 'Desconocido' }}</td>
+                </tr>
+                <tr>
+                    <th>Vendido</th>
+                    <td>{{ artwork.sold ? artwork.sold : 'Desconocido' }}</td>
+                </tr>
+                <tr>
+                    <th>Piezas</th>
+                    <td>
+                        {% for piece in artwork.pieces %}
+                        {{ piece.title ? piece.title : 'Desconocido' }}<br>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <form method="post" action="{{ path('app_artwork_delete', {'id': artwork.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar esta obra?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.id) }}">
+    <button class="btn del">{{ ux_icon('bi:trash') }} Eliminar obra</button>
+</form>
+
+    </div>
+
+<div>
+    <div id="show_header">
+        <h2>Piezas</h2>
+        <a href="{{ path('app_piece_new', {'id': artwork.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} Añadir pieza</a>
+    </div>
+
+    <div id="artwork_pieces">
+        {% for piece in artwork.pieces %}
+        <div class="show_pieces">
+            <div class="show_pieces_images">
+                {% if piece.Images is not empty %}
+                {% for image in piece.Images %}
+                <img src="{{ asset('uploads/works/' ~ artwork.work.id ~'/'~ artwork.id ~'/'~ piece.id ~'/'~ image) }}" style="max-height: 400px;">
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="show_pieces_data">
+            <table class="table">
+                <tr>
+                    <th>Título</th>
+                    <td>{{ piece.title ? piece.title : 'Sin título' }}</td>
+                </tr>
+                <tr>
+                    <th>Materiales</th>
+                    <td>
+                    {% for material in piece.materials %}
+                        {{ material.name ? material.name : 'Sin título' }}
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Alto</th>
+                    <td>{{ piece.height ? piece.height : 'Sin título' }}</td>
+                </tr>
+                <tr>
+                    <th>Ancho</th>
+                    <td>{{ piece.width ? piece.width : 'Sin título' }}</td>
+                </tr>
+                <tr>
+                    <th>Profundo</th>
+                    <td>{{ piece.depth ? piece.depth : 'Sin título' }}</td>
+                </tr>
+                    
+            </table>
+        <div class="show_pieces_buttons">
+                        <a href="{{ path('app_piece_edit', {'id': piece.id}) }}" class="btn edit">Editar</a>
+                        {{ include('piece/_delete_form.html.twig') }}
+                    </div>
+            
+            </div>
+
+        </div>
+        {% endfor %}
+        </div>
+        </div>
+
+
+    </div>
+   
+
+
+{% endblock %}

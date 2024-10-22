@@ -5,26 +5,35 @@
 {% block body %}
 <p>
     <a href="{{ path('app_work_index') }}">Proyectos</a>
-    &#60 <a href="{{ path('app_work_show', {'id': piece.work.id}) }}">{{ piece.work.Title }}</a>
-    &#60 <a href="{{ path('app_piece_show', {'id': piece.id}) }}">{{ piece.Title }}</a>
+    &#60 <a href="{{ path('app_work_show', {'id': artwork.work.id}) }}">{{ artwork.work.Title }}</a>
+    &#60 <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">{{ artwork.Title }}</a>
+    &#60 <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">{{ piece.Title }}</a>
     &#60 Editar
 </p>
 
 <div id="show_header">
     <h1>Editar obra: {{ piece.Title }}</h1>
-    <a href="{{ path('app_work_show', {'id': piece.work.id}) }}">Salir</a>
+    <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">Salir</a>
 </div>
 
 <div id="work_body_form">
     <div id="work_form">
-        {{ include('work/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
+        {{ form_start(form) }}
+            {{ form_row(form.Title) }}  
+            {{ form_row(form.Height) }}
+            {{ form_row(form.Width) }}
+            {{ form_row(form.Depth) }}
+            {{ form_row(form.Images) }}
+            {{ form_row(form.Materials) }}
+            <button type="submit" class="btn btn-success">{{ ux_icon('bi:save') }} Guardar</button>
+        {{ form_end(form) }}
     </div>
 
     <div id="work_imageContainer">
         {% if piece.Images is not empty %}
         {% for image in piece.Images %}
         <div class="image-wrapper" data-image="{{ image }}">
-            <img src="{{ asset('uploads/works/' ~ piece.work.id ~'/'~ piece.id ~'/'~ image) }}"style="max-height: 200px;" id="imagePreview">
+            <img src="{{ asset('uploads/works/' ~ artwork.work.id ~ artwork.id ~'/'~ piece.id ~'/'~ image) }}"style="max-height: 200px;" id="imagePreview">
         </div>
         {% endfor %}
         {% endif %}

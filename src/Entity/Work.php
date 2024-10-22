@@ -21,21 +21,23 @@ class Work
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $Statement = null;
 
-    /**
-     * @var Collection<int, Piece>
-     */
-    #[ORM\OneToMany(targetEntity: Piece::class, mappedBy: 'Work')]
-    private Collection $Pieces;
-
     #[ORM\Column(length: 45, nullable: true)]
     private ?string $Description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Image = null;
+
+    /**
+     * @var Collection<int, Artwork>
+     */
+    #[ORM\OneToMany(targetEntity: Artwork::class, mappedBy: 'Work')]
+    private Collection $Artworks;
+
+
     
     public function __construct()
     {
-        $this->Pieces = new ArrayCollection();
+        $this->Artworks = new ArrayCollection();
     }
 
     public function getWork(): ?array {
@@ -52,23 +54,12 @@ class Work
 
     public function getWorkDetail(): ?array {
         $data = $this->getWork();
-        $pieces = [];
-    
-        foreach ($this->getPieces() as $piece) {
-            $pieces[] = [
-                'id' => $piece->getId(),
-                'title' => $piece->getTitle(),
-                'creation_date' => $piece->getCreationYear(),
-                'materials' => $piece->getMaterials(),
-                'width' => $piece->getWidth(),
-                'height' => $piece->getHeight(),
-                'depth' => $piece->getDepht(),
-                'images' => $piece->getImages()
-            ];
+        $artworks = [];
+        foreach ($this->getArtworks() as $artwork) {
+            $artworks[] = $artwork->getArtworkDetail();
         }
-    
         // Añadir la información de las piezas al array $data
-        $data['pieces'] = $pieces;
+        $data['artworks'] = $artworks;
     
         return $data;
     }
@@ -113,38 +104,6 @@ class Work
         return $this;
     }
 
-  
-
-    /**
-     * @return Collection<int, Piece>
-     */
-    public function getPieces(): Collection
-    {
-        return $this->Pieces;
-    }
-
-    public function addPiece(Piece $piece): static
-    {
-        if (!$this->Pieces->contains($piece)) {
-            $this->Pieces->add($piece);
-            $piece->setWork($this);
-        }
-
-        return $this;
-    }
-
-    public function removePiece(Piece $piece): static
-    {
-        if ($this->Pieces->removeElement($piece)) {
-            // set the owning side to null (unless already changed)
-            if ($piece->getWork() === $this) {
-                $piece->setWork(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->Description;
@@ -165,6 +124,36 @@ class Work
     public function setImage(string $Image): static
     {
         $this->Image = $Image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artwork>
+     */
+    public function getArtworks(): Collection
+    {
+        return $this->Artworks;
+    }
+
+    public function addArtwork(Artwork $artwork): static
+    {
+        if (!$this->Artworks->contains($artwork)) {
+            $this->Artworks->add($artwork);
+            $artwork->setWork($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtwork(Artwork $artwork): static
+    {
+        if ($this->Artworks->removeElement($artwork)) {
+            // set the owning side to null (unless already changed)
+            if ($artwork->getWork() === $this) {
+                $artwork->setWork(null);
+            }
+        }
 
         return $this;
     }

@@ -26,7 +26,7 @@ class WorkType extends AbstractType
                 'required' => false
             ])
             ->add('Description', TextType::class, [
-                'label' => 'Disciplina',
+                'label' => 'Descripción',
                 'required' => false
             ])
             ->add('Image', FileType::class, [

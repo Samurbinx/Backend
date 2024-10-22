@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<p>
+    <a href="{{ path('app_work_index') }}">Proyectos</a>
+    &#60 <a href="{{ path('app_work_show', {'id': work.id}) }}">{{ work.Title }}</a>
+    &#60 Nueva obra
+</p>
+
+<div id="show_header">
+    <h1>Añadir obra a {{ work.title }}</h1>
+    <a href="{{ path('app_work_show', {'id': work.id}) }}">Salir</a>
+</div>
+
+
+<div id="work_body_form">
+    <div id="work_form">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn save">{{ button_label|default('Añadir') }}</button>
+        {{ form_end(form) }}
+    </div>
+
+    <div id="work_imageContainer">
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('piece_Images').addEventListener('change', function (event) {
+        const files = event.target.files;
+        const imageContainer = document.getElementById('work_imageContainer');
+
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imageElement = document.createElement('img');
+                        imageElement.src = e.target.result;
+                        imageElement.style.maxHeight = '200px';
+                        imageContainer.appendChild(imageElement);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -5,7 +5,7 @@
 {% block body %}
 <div id="show_header">
     <h1>{{ page.Name }}</h1>
-    <a href="{{ path('app_page_edit', {'id': page.id}) }}" class="btn edit page">Editar</a>
+    <a href="{{ path('app_page_edit', {'id': page.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
 </div>
 
 {% if page.id == "1" or page.id == "4" %}

@@ -5,9 +5,9 @@
 
 }
 /* GLOBAL */
-#page {
+/* #page {
    width: 100%;
-}
+} */
 
 a.page {
    height: fit-content;
@@ -16,9 +16,18 @@ a.page {
    text-transform: uppercase;
 }
 
-#page_Image {
-   padding: 0px !important;
+#page_body_form {
+   display: flex;
+   flex-direction: row;
+
+   justify-content: space-between;
 }
+#page_form {
+   flex: 1;
+   margin-right: 30px;
+   min-width: fit-content;
+}
+
 /* HOME */
 #page_home {
    height: 600px;
@@ -83,4 +92,5 @@ a.page {
 
    font-size: large;
    line-height: 1.5em;
+   font-family: "Lexend", sans-serif !important;
 }
