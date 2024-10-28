@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Repository\MaterialsRepository;
 use App\Repository\PieceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/piece')]
 class PieceController extends AbstractController
@@ -79,4 +81,30 @@ class PieceController extends AbstractController
 
         return $response;
     }
+
+
+    #[Route('/{id}/addm', name: 'piece_addm', methods: ['GET', 'POST'])]
+    public function addM(PieceRepository $pieceRepository, string $id, Request $request, MaterialsRepository $materialsRepository, EntityManagerInterface $entityManager)
+    {
+        $piece = $pieceRepository->find($id);
+        $data = json_decode($request->getContent(), true);
+        $selectedM = $data['selectedM'] ?? [];
+
+        if ($selectedM) {
+            foreach ($selectedM as $name) {
+                $material = $materialsRepository->findOneBy(['Name'=>$name]);
+                $piece->addMaterial($material);
+                $entityManager->persist($piece);
+            }
+
+            // Guardar todos los cambios en la base de datos
+            $entityManager->flush();
+
+            // Respuesta de éxito
+            return new JsonResponse(['status' => 'success', 'message' => 'Materiales añadidos correctamente.']);
+        }
+    }
+
+
+
 }

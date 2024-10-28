@@ -46,6 +46,11 @@ class Materials
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->Name ?? '';
+    }
+
     /**
      * @return Collection<int, Piece>
      */

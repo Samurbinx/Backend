@@ -16,8 +16,12 @@
     {{ include('user/_delete_form.html.twig') }}
 </div>
 
-{{ include('user/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
-
-<a href="{{ path('app_user_index') }}" class="btn back">Atrás</a>
-
+<div id="body_form">
+    <div>
+         {{ form_start(form, { 'attr': { 'id': 'form' } }) }}
+        {{ form_widget(form) }}
+        <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}

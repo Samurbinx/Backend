@@ -14,43 +14,76 @@
 	<a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">Salir</a>
 </div>
 
-<div id="work_body_form">
-	<div id="work_form">
-		{{ form_start(form) }}
+<!-- Primera parte del formulario -->
+<div id="body_form">
+	{{ form_start(form, { 'attr': { 'id': 'form' } }) }}
+	<div>
 		{{ form_row(form.Title) }}
 		{{ form_row(form.Height) }}
 		{{ form_row(form.Width) }}
 		{{ form_row(form.Depth) }}
 		{{ form_row(form.Images) }}
+
+		<!-- Aquí se muestran los materiales seleccionados y el botón para abrir el modal -->
+		<div id="materials_body">
+			<label for="selected_materials">Materiales</label>
+			<div id="selected_materials">
+			</div>
+			<!-- Botón para abrir el modal -->
+			<button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#pieceModal">Seleccionar
+				materiales</button>
+		</div>
 	</div>
-	<div id="work_imageContainer"></div>
+	<!-- Botón para enviar el formulario -->
+	<button class="btn save">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
+	{{ form_end(form) }}
+
+
+	<!-- Contenedor de imágenes para la vista previa -->
+	<div id="imageContainer"></div>
 </div>
-<!-- Botón para enviar el formulario -->
-<button type="submit" class="btn btn-success">Guardar</button>
-{{ form_end(form) }}
 
 
-<script>
-	document.getElementById('piece_Images').addEventListener('change', function (event) {
-		const files = event.target.files;
-		const imageContainer = document.getElementById('work_imageContainer');
+<!-- Modal para el formulario de app_piece_new -->
+<div class="modal fade" id="pieceModal" tabindex="-1" aria-labelledby="pieceModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="pieceModalLabel">Materiales</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
 
-		if (files) {
-			for (let i = 0; i < files.length; i++) {
-				const file = files[i];
-				if (file.type.match('image.*')) {
-					const reader = new FileReader();
-					reader.onload = function (e) {
-						const imageElement = document.createElement('img');
-						imageElement.src = e.target.result;
-						imageElement.style.maxHeight = '200px';
-						imageContainer.appendChild(imageElement);
-					};
-					reader.readAsDataURL(file);
-				}
-			}
-		}
-	});
-</script>
+			<div class="modal-body">
+				<div class="modal-body-left">
+					<div id="temporalM"></div>
+					{% for material in materials %}
+					<div class="material-checkbox-div" id="existingM">
+						<input type="checkbox" id="{{material.Name}}" class="material-checkbox">
+						<label for="{{material.Name}}">{{ material.Name }}</label>
+					</div>
+					{% endfor %}
+				</div>
+
+				<div class="modal-add-material">
+					<p class="add-material-p">Añadir nuevo material</p>
+					<div>
+						<input type="text" id="add-material-text" placeholder="Ej: Óleo">
+						<button type="button" id="add-material-btn" class="btn primary" onclick="addM()">Añadir material</button>
+					</div>
+					<p class="error" id="material-error"></p>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn ok" data-bs-dismiss="modal" onclick="saveMaterials()">Aceptar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script src="{{ asset('js/newpiece.js') }}"></script>
+
 
 {% endblock %}

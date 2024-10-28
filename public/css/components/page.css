@@ -1,0 +1,106 @@
+a.page {
+   height: fit-content;
+   font-size: large;
+   padding: 10px;
+   text-transform: uppercase;
+}
+
+#page_body_form {
+   display: flex;
+   flex-direction: row;
+
+   justify-content: space-between;
+}
+#page_form {
+   flex: 1;
+   margin-right: 30px;
+   min-width: fit-content;
+}
+
+/* HOME */
+#page_home {
+   height: 600px;
+}
+
+#home_img {
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+   height: 100% !important;
+}
+
+/* CONTACT */
+#page_contact {
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: center;
+
+   margin: 0px auto;
+   width: fit-content;
+}
+#contact_img {
+   min-height: 650px !important;
+   width: 300px;
+   margin-right: 50px;
+
+   background-position: center;
+   background-size: cover;
+}
+
+#contactForm {
+   min-height: 100% !important;
+   min-width: none;
+   width: 400px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+#form_shadow {
+   background-color: rgb(212, 212, 212);
+   flex: 1;
+}
+
+
+/* ABOUT */
+#page_about {
+   display: flex;
+   justify-content: center;
+   flex: 1;
+   max-height: 600px;
+   max-width: 100%;
+   width: fit-content;
+   margin: 0 auto;
+}
+
+#about_inf {
+   min-height: 100% !important;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+#page_about pre {
+   font-size: medium;
+   line-height: 1.5em;
+   font-family: "Lexend", sans-serif !important;
+
+
+   overflow: hidden;
+   text-wrap: wrap;
+
+   min-height: 100% !important;
+   min-width: fit-content !important;
+   width: min-content;
+
+}
+#about_img {
+   min-height: 650px !important;
+   width: 300px;
+   margin-right: 50px;
+
+   background-position: center;
+   background-size: cover;
+}

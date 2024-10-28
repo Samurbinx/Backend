@@ -16,17 +16,16 @@
     {{ include('work/_delete_form.html.twig') }}
 </div>
 
-<div id="work_body_form">
-    <div id="work_form">
-        {{ form_start(form) }}
+<div id="body_form">
+    <div>
+        {{ form_start(form, { 'attr': { 'id': 'form' } }) }}
         {{ form_widget(form) }}
         <button class="btn save">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
         {{ form_end(form) }}
     </div>
 
-    <div>
-        <img src="{{ asset('uploads/works/' ~ work.id ~'/'~ work.image) }}""
-            id="imagePreview">
+    <div id="imageContainer">
+        <img src="{{ asset('uploads/works/' ~ work.id ~'/'~ work.image) }}" id="imagePreview">
     </div>
 </div>
 

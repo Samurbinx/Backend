@@ -1,0 +1,264 @@
+/* --- Global Styles --- */
+* {
+   font-family: "Outfit", sans-serif;
+   font-optical-sizing: auto;
+   font-style: normal;
+   box-sizing: border-box;
+}
+
+html,
+body {
+   width: 100%;
+   height: 100%;
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   margin: 0;
+
+   display: flex;
+   flex-direction: column !important;
+
+   font-family: Arial, sans-serif;
+}
+
+/* --- Main Layout --- */
+.body {
+   display: flex;
+   flex-direction: row;
+}
+
+/* --- Content --- */
+.content {
+   flex: 1;
+   padding: 0px 50px;
+}
+
+.content>h1 {
+   margin-top: 0px;
+}
+
+/* --- Header --- */
+.header {
+   padding: 20px 50px 20px 30px;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+
+   width: 100%;
+}
+
+.header a {
+   display: flex;
+   align-items: center;
+
+   text-decoration: none;
+   color: var(--neutral-900);
+}
+
+#brand, #brand_small {
+   font-size: 35px;
+}
+
+.list_menu, #brand_small, #blurr {
+   display: none;
+}
+/* --- Second header --- */
+#welcome_msg {
+   margin-bottom: 0px;
+}
+
+#logout_icon {
+   justify-content: end;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+   min-width: none;
+   width: 200px;
+   padding: 20px 0;
+
+   border-right: 1px solid var(--neutral-800);
+   display: block;
+}
+
+
+.sidebar a {
+   padding: 10px 25px;
+   margin: 10px 0;
+
+   display: block;
+   color: rgb(0, 0, 0);
+   text-decoration: none;
+}
+
+.sidebar a:hover {
+   background-color: var(--neutral-500);
+}
+
+
+
+/* --- Show Header --- */
+#show_header {
+   padding: 15px 20px;
+   margin-bottom: 20px;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+
+   background-color: var(--neutral-500) !important;
+}
+
+#show_header>h1 {
+   margin: 0px;
+   font-size: 35px;
+}
+
+#show_header>h2 {
+   margin: 0px;
+   font-size: 25px;
+}
+
+/* --- User and Roles --- */
+#user {
+   max-width: 70vh;
+}
+
+#user_roles {
+   width: fit-content;
+}
+
+#user_roles input {
+   width: fit-content;
+}
+
+#user_roles label {
+   margin-left: 5px;
+
+   font-weight: 400;
+}
+
+/* --- Colors --- */
+:root {
+   --primary-50: #D4E5E6;
+   --primary-100: #BFD8DA;
+   --primary-200: #94BFC2;
+   --primary-300: #7FB2B5;
+   --primary-400: #6AA5A9;
+   --primary-500: #589599;
+   --primary-600: #589499;
+   --primary-700: #3F6A6D;
+   --primary-800: #264041;
+   --primary-900: #192A2C;
+
+   --success-50: #E6F4EA;
+   --success-100: #CCEAD9;
+   --success-200: #99D5B3;
+   --success-300: #66BF8D;
+   --success-400: #33AA67;
+   --success-500: #008744;
+   --success-600: #00773D;
+   --success-700: #006333;
+   --success-800: #004C29;
+   --success-900: #002614;
+
+   --warning-50: #FBEED4;
+   --warning-100: #F6DCAA;
+   --warning-200: #F4D495;
+   --warning-300: #F2CB80;
+   --warning-400: #F0C36A;
+   --warning-500: #EEBA55;
+   --warning-600: #EAAB30;
+   --warning-700: #DC9916;
+   --warning-800: #B87F12;
+   --warning-900: #93660F;
+
+   --error-50: #F7E5E1;
+   --error-100: #E8B0A6;
+   --error-200: #D97B6A;
+   --error-300: #D1604C;
+   --error-400: #C54933;
+   --error-500: #d62525;
+   --error-600: #923626;
+   --error-700: #7D2F20;
+   --error-800: #68271B;
+   --error-900: #3F1710;
+
+   --neutral-50: #F7F8F8;
+   --neutral-100: #F3F5F5;
+   --neutral-200: #EFF2F2;
+   --neutral-300: #EBEEEE;
+   --neutral-400: #E3E7E7;
+   --neutral-500: #DFE4E4;
+   --neutral-600: #C7CFCF;
+   --neutral-700: #AEBBBB;
+   --neutral-800: #7D9191;
+   --neutral-900: #3E4949;
+}
+
+/* --- Responsive Design Breakpoints --- */
+
+@media screen and (max-width: 435px) {
+   .content {
+      padding: 0px !important;
+   }
+   #show_header {
+      margin-bottom: 0px !important;
+   }
+   #show_header > h1{
+      font-size: 20px !important;
+   }
+}
+
+@media screen and (max-width: 740px) {
+   .content {
+      padding: 0 20px;
+   }
+   .sidebar,
+   #brand,
+   .second_header {
+      display: none;
+   }
+
+   .sidebar {
+      position: absolute;
+      background-color: #fff;
+      min-height: 100%;
+      min-width: 50%;
+      z-index: 1;
+   }
+   #blurr {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.158);
+      width: 100%;
+      height: 100vh;
+   }
+   .header {
+      padding: 20px;
+      justify-content: flex-start;
+      align-items: center;
+   }
+   #brand_small {
+      display: flex;
+   }
+   .list_menu {
+      display: flex;
+      margin: 0px 15px 0 0;
+      font-size: 40px;
+      align-items: center;
+      cursor: pointer;
+   }
+}
+
+
+@media screen and (max-width: 1050px) {
+   .sidebar {
+      max-width: fit-content;
+   }
+}
+

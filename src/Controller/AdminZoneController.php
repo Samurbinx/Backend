@@ -440,10 +440,11 @@ class AdminZoneController extends AbstractController
 
 
     #[Route('/piece/{id}/edit', name: 'app_piece_edit', methods: ['GET', 'POST'])]
-    public function editPiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, PieceRepository $pieceRepository, string $id): Response
+    public function editPiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, PieceRepository $pieceRepository, string $id, MaterialsRepository $materialsRepository): Response
     {
         $piece = $pieceRepository->find($id);
         $artwork = $piece->getArtwork();
+        $materials = $materialsRepository->findAll();
 
         $route = $artwork->getWork()->getId() . '/' . $artwork->getId() . '/' . $id . '/';
         $assetsDirectory = 'uploads/works/' . $route;
@@ -484,12 +485,13 @@ class AdminZoneController extends AbstractController
                 }
             }
             $entityManager->flush();
-            return $this->redirectToRoute('app_piece_show',  ['id' => $id], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_artwork_show',  ['id' => $artwork->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('piece/edit.html.twig', [
             'piece' => $piece,
             'artwork' => $artwork,
             'form' => $form,
+            'materials' => $materials,
         ]);
     }
 
@@ -532,19 +534,33 @@ class AdminZoneController extends AbstractController
         $artwork = $artworkRepository->find($id);
         $work = $artwork->getWork();
         $workid = $work->getId();
+        $materials = $materialsRepository->findAll();
+
+        usort($materials, function ($a, $b) {
+            return strcmp($a->getName(), $b->getName());
+        });
 
         if ($form->isSubmitted() && $form->isValid()) {
             $piece->setArtwork($artwork);
 
-            // $materials = $form->get('Materials')->getData(); // Get selected materials
-            // foreach ($materials as $material) {
-            //     $piece->addMaterial($material); // Ensure you have a method addMaterial in Piece
-            // }
+            // Recoge los materiales de la request y los añade a la obra
+            $selectedM = $request->request->get('selectedMaterials');
+            $selectedMaterials = json_decode($selectedM, true); // true para obtener un array asociativo
+            if ($selectedMaterials) {
+                foreach ($selectedMaterials as $material) {
+                    $newmaterial = $materialsRepository->findOneBy(['Name'=>$material]);
+                    $piece->addMaterial($newmaterial);
+                }
+            }
 
             $entityManager->persist($piece);
             $entityManager->flush();
+            
+            $pieceid = $piece->getId();
 
-            $assetsDirectory = 'uploads/works/'. $workid . '/' . $id . '/' . $piece->getId() . '/';
+
+            // Manejo de imágenes
+            $assetsDirectory = 'uploads/works/'. $workid . '/' . $id . '/' . $pieceid . '/';
 
             $images = $form->get('Images')->getData();
             $imagePaths = [];
@@ -581,6 +597,7 @@ class AdminZoneController extends AbstractController
             'form' => $form->createView(),
             'artwork' => $artwork,
             'work' => $work,
+            'materials' => $materials,
         ]);
     }
 
@@ -621,7 +638,7 @@ class AdminZoneController extends AbstractController
     //     if ($form->isSubmitted() && $form->isValid()) {
     //         $entityManager->persist($material);
     //         $entityManager->flush();
-            
+
     //         return $this->redirectToRoute('app_work_index');
     //     }
 

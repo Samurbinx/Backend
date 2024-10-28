@@ -1,0 +1,59 @@
+/* Estilos para los enlaces y botones*/
+.btn {
+   cursor: pointer;
+   padding: 5px 10px;
+   border-radius: 3px;
+   margin-right: 5px;
+   align-items: center;
+}
+
+.btn.del {
+   color: var(--error-500);
+   background-color: transparent;
+   border: 1px solid var(--error-500);
+   max-width: fit-content !important;
+   margin: 0px !important;
+}
+
+.btn.edit {
+   border: 1px solid var(--primary-600);
+   color: var(--primary-600);
+   text-decoration: none;
+   max-width: fit-content;
+}
+
+.btn.new {
+   color: var(--success-500);
+   border: 1px solid var(--success-500);
+   text-decoration: none;
+}
+
+.btn.show {
+   color: var(--neutral-900);
+}
+
+.btn.save {
+   color: white;
+   background-color: var(--success-400);
+   padding: 10px 20px;
+   font-size: medium;
+   margin: 0px !important;
+   width: fit-content;
+   bottom: 0px;
+}
+
+.btn.primary {
+   color: white;
+   background-color: var(--primary-600);
+}
+
+.btn.ok {
+   color: white;
+   background-color: var(--success-400);
+}
+
+@media screen and (max-width: 435px) {
+   a.btn {
+      font-size: 15px;
+   }
+}

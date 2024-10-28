@@ -1,0 +1,102 @@
+
+/* Muestra los materiales seleccionados en el form */
+#selected_materials {
+    width: 100%;
+    border: 1px solid rgb(118, 118, 118);
+    padding: 3px;
+    margin: 5px 0;
+    display: none;
+    background-color: #fff;
+    border-radius: 5px;
+    
+}
+#selected_materials > p {
+    margin: 0px;
+}
+#materials_body {
+margin-bottom: 15px;
+}
+/* MODAL */
+/* Tamaño y posicionamiento */
+.modal-dialog {
+    margin-top: 50px;
+}
+.modal-content {
+    width: 100%;
+}
+
+/* Elementos dentro del modal */
+.modal-body {
+    width: 100%;
+    min-height: 300px;
+    max-height: 300px;
+    padding: 20px;
+    padding-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+.modal-body > div > h6 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--neutral-500);
+}
+.modal-body-left {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--neutral-200);
+    overflow-y: scroll;
+}
+.material-checkbox-div {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+}
+.material-checkbox {
+    margin-right: 5px !important;
+}
+
+.selectedMaterialP {
+    margin-bottom: 0px;
+}
+.modal-add-material {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.modal-add-material > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.add-material-p {
+    margin-bottom: 3px;
+}
+#add-material-text {
+    border: 1px solid var(--neutral-800);
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    font-size: small;
+    flex: 1;
+}
+.error {
+    height: 20px;
+    margin: 0px;
+    margin-top: 10px;
+    font-size: small;
+    color: var(--error-500);
+}
+
+
+/* MODAL FOOTER */
+.modal-footer {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 25px;
+}
+
+

@@ -12,19 +12,22 @@
     <a href="{{ path('app_work_index') }}">Salir</a>
 </div>
 
-<div id="work_body_form">
-    <div id="work_form">
-        {{ include('work/_form.html.twig') }}
+<div id="body_form">
+    <div>
+         {{ form_start(form, { 'attr': { 'id': 'form' } }) }}
+        {{ form_widget(form) }}
+        <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
+        {{ form_end(form) }}
     </div>
 
-    <div id="work_imageContainer"></div>
+    <div id="imageContainer"></div>
 </div>
 <br>
-
+ 
 <script>
     document.getElementById('work_Image').addEventListener('change', function (event) {
         const file = event.target.files[0];
-        const imageContainer = document.getElementById('work_imageContainer');
+        const imageContainer = document.getElementById('imageContainer');
 
         if (file) {
             if (file.type.match('image.*')) {
@@ -32,7 +35,7 @@
                 reader.onload = function (e) {
                     const imageElement = document.createElement('img');
                     imageElement.src = e.target.result;
-                    imageElement.style.maxHeight = '300px';
+                    imageElement.id = 'imagePreview';
                     imageContainer.appendChild(imageElement);
                 };
                 reader.readAsDataURL(file);

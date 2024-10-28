@@ -1,0 +1,123 @@
+#body_form {
+   max-width: 100%;
+
+   min-height: fit-content;
+   height: 100%;
+   max-height: 650px !important;
+
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+}
+#body_form > div {
+   margin-bottom: 20px;
+   max-height: inherit;
+}
+
+form#form {
+   min-width: 500px;
+   width: 350px;
+   max-width: fit-content;
+
+   min-height: 100% !important;
+   height: 100% !important;
+   max-height: 650px !important;
+
+
+   margin-right: 50px;
+   padding: 10px 30px;
+   padding-bottom: 20px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+
+   background-color: var(--neutral-200);
+}
+form label {
+   margin-top: 15px;
+   margin-right: 5px;
+   font-weight: 600;
+}
+
+form input {
+   width: 100%;
+
+   margin: 5px 0;
+   padding: 3px;
+
+   border-radius: 5px;
+   border: 1px solid rgb(118, 118, 118);
+}
+
+textarea {
+   width: 100%;
+   max-width: 100%;
+   max-height: 300px;
+
+   margin: 5px 0;
+   padding: 3px;
+
+   border-radius: 5px;
+   border: 1px solid rgb(118, 118, 118);
+}
+input[type="checkbox"] {
+   width: fit-content;
+   margin: 0px;
+}
+select {
+   width: 100%;
+
+   margin: 5px 0;
+   padding: 3px;
+   
+   border-radius: 5px;
+   border: 1px solid rgb(118, 118, 118);
+}
+
+
+#imageContainer {
+   max-height: inherit;
+   min-width: 300px;
+   max-width: inherit;
+
+   display: flex;
+   flex: 1;
+   flex-direction: row;
+   flex-wrap: wrap;
+
+   background-color: var(--neutral-200);
+   
+   overflow: auto;
+   padding: 20px;
+}
+
+#imagePreview {
+   min-width: 100px;
+   width: auto;
+   max-width: 90%;
+
+   height: auto;
+   max-height: 90%;
+
+   margin: 10px auto !important;
+}
+
+
+/* --- RESPONSIVE DESINGS BREAKPOINTS --- */
+@media screen and (max-width: 620px) {
+
+}
+@media screen and (max-width: 1050px){
+   #body_form {
+      flex-wrap: wrap;
+   }
+   #body_form > div {
+      width: 100%;
+   }
+   form#form {
+      min-width: 100%;
+   }
+}
+

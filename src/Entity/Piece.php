@@ -61,7 +61,7 @@ class Piece
             'id'=> $this->id,
             'artworkID'=> $this->Artwork->getId(),
             'title'=> $this->Title,
-            'materials'=> $this->Materials,
+            'materials'=> $this->getMaterialsName(),
             'width'=> $this->Width,
             'height'=> $this->Height,
             'depth'=> $this->Depth,

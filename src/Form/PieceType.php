@@ -11,8 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use App\Entity\Materials;  // Importa la entidad Materials
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;  // Importa EntityType
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class PieceType extends AbstractType
 {
@@ -23,13 +22,13 @@ class PieceType extends AbstractType
                 'label' => 'Título',
                 'required' => false,
             ])
-            ->add('Materials', EntityType::class, [
-                'class' => Materials::class,
-                'choice_label' => 'Name',
-                'multiple' => true,
-                'expanded' => true,  // Mostrar como checkboxes
-                'label' => false,  // No mostrar label
+            ->add('Materials', CollectionType::class, [
+                'label' => false,
                 'required' => false,
+                'entry_type' => TextType::class, 
+                'allow_add' => true,               
+                'allow_delete' => true,            
+                'prototype' => true,               
             ])
             ->add('Height', NumberType::class, [
                 'label' => 'Alto',
