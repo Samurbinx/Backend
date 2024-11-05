@@ -1,0 +1,16 @@
+.material_header {
+   display: flex;
+   flex-direction: row;
+}
+.modal-header > p {
+   margin: 0px;
+}
+.modal-body-mat {
+   width: 100%;
+   padding: 20px;
+   padding-bottom: 10px;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}

@@ -60,17 +60,26 @@ class Artwork
     }
 
     public function getArtworkDetail(): ?array {
-        $data = $this->getArtwork();
+        $data = [
+            'id'=> $this->id,
+            'workID'=> $this->Work->getId(),
+            'title'=> $this->Title,
+            'creation_date'=> $this->getCreationYear(),
+            'dimensions' => $this->getDimensions(),
+            'price'=> $this->Price,
+            'sold'=> $this->Sold,
+            'display'=> $this->Display,
+        ];
         $pieces = [];
      
         foreach ($this->getPieces() as $piece) {
             $pieces[] = [
                 'id' => $piece->getId(),
                 'title' => $piece->getTitle(),
-                'materials' => $piece->getMaterials(),
+                'materials' => $piece->getMaterialsName(),
                 'width' => $piece->getWidth(),
                 'height' => $piece->getHeight(),
-                'depth' => $piece->getDepht(),
+                'depth' => $piece->getDepth(),
                 'images' => $piece->getImages(),
             ];
         }
@@ -78,6 +87,30 @@ class Artwork
     
         return $data;
     }
+
+    public function getDimensions(): ?string {
+        $width = 0;
+        $height = 0;
+        $depth = 0;
+    
+        foreach ($this->getPieces() as $piece) {
+            $pw = $piece->getWidth();
+            $ph = $piece->getHeight();
+            $pd = $piece->getDepth();
+            if ($pw) { $width += $pw; }
+            if ($ph) { $height += $ph; }
+            if ($pd) { $depth += $pd; }
+        }
+    
+        $dimensions = [];
+        if ($width > 0) { $dimensions[] = $width; }
+        if ($height > 0) { $dimensions[] = $height; }
+        if ($depth > 0) { $dimensions[] = $depth; }
+    
+        return !empty($dimensions) ? implode(" x ", $dimensions) : null;
+    }
+    
+
 
     public function getId(): ?int
     {
@@ -121,7 +154,10 @@ class Artwork
     }
     public function getCreationYear(): ?string
     {
-        return $this->Creation_date->format("Y");
+        if ($this->Creation_date) {
+            return $this->Creation_date->format("Y");
+        }
+        return null;
     }
 
     public function getPrice(): ?float

@@ -1,18 +1,10 @@
 
 /* Muestra los materiales seleccionados en el form */
 #selected_materials {
-    width: 100%;
-    border: 1px solid rgb(118, 118, 118);
-    padding: 3px;
-    margin: 5px 0;
-    display: none;
-    background-color: #fff;
-    border-radius: 5px;
-    
+    background-color: var(--neutral-50);
+    border-color: var(--neutral-500);
 }
-#selected_materials > p {
-    margin: 0px;
-}
+
 #materials_body {
 margin-bottom: 15px;
 }
@@ -57,7 +49,28 @@ margin-bottom: 15px;
 .material-checkbox {
     margin-right: 5px !important;
 }
-
+.material-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.material-div-icons {
+    display: flex;
+    flex-direction: row;
+}
+.material-div .icon {
+    cursor: pointer;
+    margin: 0px;
+    max-width: fit-content;
+    font-size: medium;
+}
+.icon.del {
+    color: var(--error-500);
+}
+.icon.edit {
+    color: var(--primary-500);
+    margin-right: 10px;
+}
 .selectedMaterialP {
     margin-bottom: 0px;
 }

@@ -26,6 +26,7 @@ class PieceType extends AbstractType
                 'label' => false,
                 'required' => false,
                 'entry_type' => TextType::class, 
+                'mapped' => false, // Esto evitará que se genere automáticamente
                 'allow_add' => true,               
                 'allow_delete' => true,            
                 'prototype' => true,               

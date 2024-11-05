@@ -29,6 +29,12 @@ class Materials
         $this->pieces = new ArrayCollection();
     }
 
+    public function getMaterial() : array {
+        return [
+            'Name' => $this->Name,
+            'Pieces' => $this->getPieces()
+        ];
+    }
     public function getId(): ?int
     {
         return $this->id;

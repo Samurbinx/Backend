@@ -5,52 +5,22 @@
 {% block body %}
 <p>
     <a href="{{ path('app_work_index') }}">Proyectos</a>
-    &#60 <a href="{{ path('app_work_show', {'id': piece.work.id}) }}">{{ piece.work.Title }}</a>
-    &#60 <a href="{{ path('app_piece_show', {'id': piece.id}) }}">{{ piece.Title }}</a>
+    &#60 <a href="{{ path('app_work_show', {'id': work.id}) }}">{{ work.Title }}</a>
     &#60 Editar
 </p>
 
 <div id="show_header">
-    <h1>Editar obra: {{ piece.Title }}</h1>
-    <a href="{{ path('app_work_show', {'id': piece.work.id}) }}">Salir</a>
+    <h1>Editar {{ artwork.title }}</h1>
+    <a href="{{ path('app_work_show', {'id': work.id}) }}">Salir</a>
 </div>
+
 
 <div id="body_form">
-    <div id="form">
-        {{ include('work/_form.html.twig', {'button_label': 'Guardar cambios'}) }}
-    </div>
-
-    <div id="work_imageContainer">
-        {% if piece.Images is not empty %}
-        {% for image in piece.Images %}
-        <div class="image-wrapper" data-image="{{ image }}">
-            <img src="{{ asset('uploads/works/' ~ piece.work.id ~'/'~ piece.id ~'/'~ image) }}"style="max-height: 200px;" id="imagePreview">
-        </div>
-        {% endfor %}
-        {% endif %}
+    <div>
+         {{ form_start(form, { 'attr': { 'id': 'form' } }) }}
+        {{ form_widget(form) }}
+        <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
+        {{ form_end(form) }}
     </div>
 </div>
-
-<script>
-    document.getElementById('piece_Images').addEventListener('change', function (event) {
-        const files = event.target.files;
-        const imageContainer = document.getElementById('work_imageContainer');
-
-        if (files) {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (file.type.match('image.*')) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const imageElement = document.createElement('img');
-                        imageElement.src = e.target.result;
-                        imageElement.style.maxHeight = '200px';
-                        imageContainer.appendChild(imageElement);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        }
-    });
-</script>
 {% endblock %}

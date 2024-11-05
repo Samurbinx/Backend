@@ -66,10 +66,10 @@
                         {{ artwork.creationDate ? artwork.creationDate|date('Y') : 'Año desconocido' }}
                     </td>
                     <td>
-                        {{ artwork.price ? artwork.price : '0.00€' }}
+                        {{ artwork.price ? artwork.price ~ '€' : '0.00€' }}
                     </td>
                     <td>
-                        {{ artwork.sold ? artwork.sold : 'Vendido' }}
+                        {{ artwork.sold ? 'Vendido' : 'A la venta' }}
                     </td>
                     <td class="actions">
                         <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show">Ver

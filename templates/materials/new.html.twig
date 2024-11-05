@@ -1,10 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MaterialsController!{% endblock %}
-
 {% block body %}
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Guardar</button>
-{{ form_end(form) }}
+
+<p>
+    <a href="{{ path('app_materials_index') }}">Materiales</a>
+    &#60 Nuevo material
+</p>
+
+<div id="show_header">
+    <h1>Añadir material</h1>
+    <a href="{{ path('app_materials_index') }}">Salir</a>
+</div>
+
+<div id="body_form">
+    <div>
+        {{ form_start(form, { 'attr': { 'id': 'form' , 'class': 'mat'} }) }}
+        {{ form_row(form.Name) }}
+        <button type="submit" class="btn btn-success">{{ ux_icon('bi:save') }} Guardar</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+    
 {% endblock %}

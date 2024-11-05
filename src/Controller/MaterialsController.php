@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\MaterialsRepository;
 use App\Entity\Materials;
+use App\Form\MaterialsType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,7 +28,7 @@ class MaterialsController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/materials/new', name: 'app_materials_new', methods: ['GET', 'POST'])]
+    #[Route('/materials/new', name: 'materials_new', methods: ['GET', 'POST'])]
     public function addMaterial(Request $request, EntityManagerInterface $entityManager, MaterialsRepository $materialsRepository): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $temporalM = $data['temporalMaterials'] ?? [];
@@ -51,6 +52,8 @@ class MaterialsController extends AbstractController
         // Respuesta en caso de que no haya materiales
         return new JsonResponse(['status' => 'error', 'message' => 'No se recibieron materiales.'], 400);
     }
+
+ 
 
 
     

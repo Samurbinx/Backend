@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div id="show_header">
+    <h1>{{ material.name }}</h1>
+    <div class="material_header">
+        <a href="{{ path('app_materials_edit', {'id': material.id}) }}" class="btn edit">{{ ux_icon('bi:pencil')}}</a>
+        {{ include('materials/_delete_form.html.twig') }}
+    </div>
+</div>
+
+<table class="table_simple">
+    <tr>
+        <th>Piezas</th>
+    </tr>
+    {% if material.Pieces|length > 0 %}
+        {% for piece in material.Pieces %}
+        <tr>
+            <td><a href="{{ path('app_artwork_show', {'id': piece.artwork.id}) }}">{{ piece.Title }}</a></td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="3">No hay ninguna pieza con este material</td>
+        </tr>
+    {% endif %}
+</table>
+{% endblock %}

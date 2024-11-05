@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class ArtworkType extends AbstractType
 {
@@ -30,7 +31,13 @@ class ArtworkType extends AbstractType
         ])
         ->add('Price', NumberType::class, [
             'label' => 'Precio',
-            'required' => false
+            'required' => false,
+            'constraints' => [
+                new GreaterThanOrEqual([
+                    'value' => 0,
+                    'message' => 'El precio no puede ser negativo.',
+                ]),
+            ],
         ])
         ->add('Sold', CheckboxType::class, [
             'label' => 'Vendido',

@@ -19,19 +19,18 @@
 	{{ form_start(form, { 'attr': { 'id': 'form' } }) }}
 	<div>
 		{{ form_row(form.Title) }}
-		{{ form_row(form.Height) }}
 		{{ form_row(form.Width) }}
+		{{ form_row(form.Height) }}
 		{{ form_row(form.Depth) }}
 		{{ form_row(form.Images) }}
 
 		<!-- Aquí se muestran los materiales seleccionados y el botón para abrir el modal -->
 		<div id="materials_body">
 			<label for="selected_materials">Materiales</label>
-			<div id="selected_materials">
-			</div>
+			<input type="text" disabled id="selected_materials">
+
 			<!-- Botón para abrir el modal -->
-			<button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#pieceModal">Seleccionar
-				materiales</button>
+			<button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#pieceModal">Seleccionar materiales</button>
 		</div>
 	</div>
 	<!-- Botón para enviar el formulario -->
@@ -58,8 +57,11 @@
 					<div id="temporalM"></div>
 					{% for material in materials %}
 					<div class="material-checkbox-div" id="existingM">
-						<input type="checkbox" id="{{material.Name}}" class="material-checkbox">
-						<label for="{{material.Name}}">{{ material.Name }}</label>
+						<div>
+							<input type="checkbox" id="{{material.Name}}" class="material-checkbox">
+							<label for="{{material.Name}}">{{ material.Name }}</label>
+						</div>
+				
 					</div>
 					{% endfor %}
 				</div>
@@ -83,7 +85,6 @@
 
 
 
-<script src="{{ asset('js/newpiece.js') }}"></script>
 
 
 {% endblock %}

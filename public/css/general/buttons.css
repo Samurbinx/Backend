@@ -37,7 +37,8 @@
    background-color: var(--success-400);
    padding: 10px 20px;
    font-size: medium;
-   margin: 0px !important;
+   margin: 0px;
+   margin-top: 15px;
    width: fit-content;
    bottom: 0px;
 }
@@ -45,6 +46,8 @@
 .btn.primary {
    color: white;
    background-color: var(--primary-600);
+   display: block;
+   margin: 5px 0;
 }
 
 .btn.ok {

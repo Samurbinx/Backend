@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Work;
@@ -99,7 +101,6 @@ class AdminZoneController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('app_work_show', ['id' => $work->getId()], Response::HTTP_SEE_OTHER);
-
         }
 
         return $this->render('work/new.html.twig', [
@@ -207,11 +208,10 @@ class AdminZoneController extends AbstractController
                     // Delete all files and directories recursively inside the assets directory
                     $this->deleteDirectory($assetsDirectory);
                 }
-                    $entityManager->remove($work);
-                    $entityManager->flush();
+                $entityManager->remove($work);
+                $entityManager->flush();
 
-                    $entityManager->commit();
-
+                $entityManager->commit();
             } catch (\Exception $e) {
                 // Rollback changes if an exception occurs
                 $entityManager->rollback();
@@ -267,7 +267,8 @@ class AdminZoneController extends AbstractController
     }
 
     #[Route('/artwork/{id}', name: 'app_artwork_delete', methods: ['POST'])]
-    public function deleteArtwork(Request $request, Artwork $artwork, EntityManagerInterface $entityManager): Response {
+    public function deleteArtwork(Request $request, Artwork $artwork, EntityManagerInterface $entityManager): Response
+    {
 
         if ($this->isCsrfTokenValid('delete' . $artwork->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->beginTransaction();
@@ -301,11 +302,10 @@ class AdminZoneController extends AbstractController
                     // Delete all files and directories recursively inside the assets directory
                     $this->deleteDirectory($assetsDirectory);
                 }
-                    $entityManager->remove($artwork);
-                    $entityManager->flush();
+                $entityManager->remove($artwork);
+                $entityManager->flush();
 
-                    $entityManager->commit();
-
+                $entityManager->commit();
             } catch (\Exception $e) {
                 // Rollback changes if an exception occurs
                 $entityManager->rollback();
@@ -313,7 +313,6 @@ class AdminZoneController extends AbstractController
             }
         }
         return $this->redirectToRoute('app_work_show', ['id' => $artwork->getWork()->getId()], Response::HTTP_SEE_OTHER);
-
     }
 
 
@@ -345,7 +344,8 @@ class AdminZoneController extends AbstractController
 
 
     #[Route('/artwork/{id}/edit', name: 'app_artwork_edit', methods: ['GET', 'POST'])]
-    public function editArtwork(Request $request, EntityManagerInterface $entityManager, string $id, ArtworkRepository $artworkRepository): Response {
+    public function editArtwork(Request $request, EntityManagerInterface $entityManager, string $id, ArtworkRepository $artworkRepository): Response
+    {
 
         $artwork = $artworkRepository->find($id);
         $work = $artwork->getWork();
@@ -360,7 +360,7 @@ class AdminZoneController extends AbstractController
         }
 
 
-        return $this->render('artwork/new.html.twig', [
+        return $this->render('artwork/edit.html.twig', [
             'work' => $work,
             'artwork' => $artwork,
             'form' => $form,
@@ -390,61 +390,15 @@ class AdminZoneController extends AbstractController
     }
 
 
-    // #[Route('/piece/{id}/edit', name: 'app_piece_edit', methods: ['GET', 'POST'])]
-    // public function editPiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, PieceRepository $pieceRepository, string $id): Response
-    // {
-    //     $piece = $pieceRepository->find($id);
-    //     $work = $piece->getWork();
-
-    //     $route = $work->getId() . '/' . $id . '/';
-    //     $assetsDirectory = 'uploads/works/' . $route;
-
-    //     $form = $this->createForm(PieceType::class, $piece);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         // Handle file uploads
-    //         $imageFiles = $form->get('Images')->getData();
-
-    //         if ($imageFiles) {
-    //             foreach ($imageFiles as $imageFile) {
-    //                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
-
-    //                 // Move the file to the directory where images are stored
-    //                 try {
-    //                     $imageFile->move(
-    //                         $assetsDirectory,
-    //                         $newFilename
-    //                     );
-    //                 } catch (FileException $e) {
-    //                     // Handle exception
-    //                 }
-
-    //                 // Update the images array
-    //                 $piece->addImage($newFilename);
-    //             }
-    //         }
-
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_piece_show',  ['id' => $id], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->render('piece/edit.html.twig', [
-    //         'piece' => $piece,
-    //         'form' => $form,
-    //     ]);
-    // }
-
-
-
-
     #[Route('/piece/{id}/edit', name: 'app_piece_edit', methods: ['GET', 'POST'])]
     public function editPiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, PieceRepository $pieceRepository, string $id, MaterialsRepository $materialsRepository): Response
     {
         $piece = $pieceRepository->find($id);
         $artwork = $piece->getArtwork();
+
         $materials = $materialsRepository->findAll();
+        // SM = selected materials
+        $SMstr = $piece->getMaterialsString();
 
         $route = $artwork->getWork()->getId() . '/' . $artwork->getId() . '/' . $id . '/';
         $assetsDirectory = 'uploads/works/' . $route;
@@ -453,6 +407,20 @@ class AdminZoneController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Recoge los materiales de la request y los añade a la obra
+            $selectedM = $request->request->get('selectedMaterials');
+
+            $selectedMaterials = json_decode($selectedM, true); // true para obtener un array asociativo
+            $piece->removeAllMaterials();
+            if ($selectedMaterials) {
+                foreach ($selectedMaterials as $material) {
+                    $newmaterial = $materialsRepository->findOneBy(['Name' => $material]);
+                    $piece->addMaterial($newmaterial);
+                }
+            }
+
+            $entityManager->persist($piece);
+            $entityManager->flush();
             // Handle file uploads
             $imageFiles = $form->get('Images')->getData();
 
@@ -492,6 +460,7 @@ class AdminZoneController extends AbstractController
             'artwork' => $artwork,
             'form' => $form,
             'materials' => $materials,
+            'SMstr' => $SMstr,
         ]);
     }
 
@@ -536,6 +505,7 @@ class AdminZoneController extends AbstractController
         $workid = $work->getId();
         $materials = $materialsRepository->findAll();
 
+        // Sort materials alphabetical
         usort($materials, function ($a, $b) {
             return strcmp($a->getName(), $b->getName());
         });
@@ -543,24 +513,27 @@ class AdminZoneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $piece->setArtwork($artwork);
 
+            $entityManager->persist($piece);
+            $entityManager->flush();
+            
             // Recoge los materiales de la request y los añade a la obra
             $selectedM = $request->request->get('selectedMaterials');
             $selectedMaterials = json_decode($selectedM, true); // true para obtener un array asociativo
             if ($selectedMaterials) {
                 foreach ($selectedMaterials as $material) {
-                    $newmaterial = $materialsRepository->findOneBy(['Name'=>$material]);
+                    $newmaterial = $materialsRepository->findOneBy(['Name' => $material]);
                     $piece->addMaterial($newmaterial);
                 }
             }
 
             $entityManager->persist($piece);
             $entityManager->flush();
-            
+
             $pieceid = $piece->getId();
 
 
             // Manejo de imágenes
-            $assetsDirectory = 'uploads/works/'. $workid . '/' . $id . '/' . $pieceid . '/';
+            $assetsDirectory = 'uploads/works/' . $workid . '/' . $id . '/' . $pieceid . '/';
 
             $images = $form->get('Images')->getData();
             $imagePaths = [];
@@ -601,55 +574,117 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
-    #[Route('/piece/{id}/{img}', name: 'app_piece_delete_image', methods: ['POST'])]
-    public function deletePieceImage(Request $request, Piece $piece, EntityManagerInterface $entityManager, string $img, PieceRepository $pieceRepository, string $id): Response
-    {
-        $piece = $pieceRepository->find($id);
-
-        // Remove the image from the piece's images array
-        $images = $piece->getImages();
-        $index = array_search($img, $images);
-        if ($index !== false) {
-            unset($images[$index]);
-            $piece->setImages($images);
-
-            // Delete the image file from the server
-            $imagePath = 'uploads/works/' . $piece->getWork()->getTitle() . '/' . $piece->getTitle() . '/' . $img;
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
-
-            $entityManager->flush();
-        }
-
-        // Redirect back to the piece edit page
-        return $this->redirectToRoute('app_piece_edit', parameters: ['id' => $id]);
-    }
-
-    // ------ MATERIAL --------- //
-    // #[Route('/material/new', name: 'app_material_new', methods: ['GET', 'POST'])]
-    // public function newMaterial(Request $request, EntityManagerInterface $entityManager, MaterialsRepository $materialsRepository): Response
+    // #[Route('/piece/{id}/{img}', name: 'app_piece_delete_image', methods: ['POST'])]
+    // public function deletePieceImage(Request $request, Piece $piece, EntityManagerInterface $entityManager, string $img, PieceRepository $pieceRepository, string $id): Response
     // {
+    //     $piece = $pieceRepository->find($id);
 
-    //     $material = new Materials();
-    //     $form = $this->createForm(MaterialsType::class, $material);
-    //     $form->handleRequest($request);
+    //     // Remove the image from the piece's images array
+    //     $images = $piece->getImages();
+    //     $index = array_search($img, $images);
+    //     if ($index !== false) {
+    //         unset($images[$index]);
+    //         $piece->setImages($images);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager->persist($material);
+    //         // Delete the image file from the server
+    //         $imagePath = 'uploads/works/' . $piece->getWork()->getTitle() . '/' . $piece->getTitle() . '/' . $img;
+    //         if (file_exists($imagePath)) {
+    //             unlink($imagePath);
+    //         }
+
     //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('app_work_index');
     //     }
 
-    //     return $this->render('materials/new.html.twig', [
-    //         'form' => $form,
-    //     ]);
+    //     // Redirect back to the piece edit page
+    //     return $this->redirectToRoute('app_piece_edit', parameters: ['id' => $id]);
     // }
+
+    // --------- MATERIALS ---------- //
+    #[Route('/materials', name: 'app_materials_index', methods: ['GET'])]
+    public function indexMaterial(MaterialsRepository $materialsRepository, PieceRepository $pieceRepository): Response
+    {
+        return $this->render('materials/index.html.twig', [
+            'materials' => $materialsRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/materials/{id}', name: 'app_materials_show', methods: ['GET'])]
+    public function showMat(MaterialsRepository $materialsRepository, string $id): Response
+    {
+        return $this->render('materials/show.html.twig', [
+            'material' => $materialsRepository->find($id),
+        ]);
+    }
+
+    #[Route('/materials/{id}', name: 'app_material_delete', methods: ['POST'])]
+    public function deleteMaterial(Request $request, Materials $materials, EntityManagerInterface $entityManager): Response {
+        
+        if ($this->isCsrfTokenValid('delete' . $materials->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->beginTransaction();
+
+            try {
+                $entityManager->remove($materials);
+                $entityManager->flush();    
+                $entityManager->commit();
+
+            } catch (\Exception $e) {
+                // Rollback changes if an exception occurs
+                $entityManager->rollback();
+                throw $e;
+            }
+        }
+        return $this->redirectToRoute('app_materials_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/material/{id}/edit', name: 'app_materials_edit')]
+    public function editMaterial(int $id, Request $request, EntityManagerInterface $entityManager, MaterialsRepository $materialsRepository): Response
+    {
+        $material = $materialsRepository->find($id);
+
+        if (!$material) {
+            throw $this->createNotFoundException('El material no fue encontrada.');
+        }
+
+        $form = $this->createForm(MaterialsType::class, $material);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($material);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_materials_show', ['id' => $material->getId()]);
+        }
+
+        return $this->render('materials/edit.html.twig', [
+            'form' => $form->createView(),
+            'material' => $material,
+        ]);
+    }
+
+    #[Route('/material/new', name: 'app_materials_new')]
+    public function newMaterial(Request $request, EntityManagerInterface $entityManager, MaterialsRepository $materialsRepository): Response
+    {
+        $material = new Materials();
+
+        $form = $this->createForm(MaterialsType::class, $material);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($material);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_materials_show', ['id' => $material->getId()]);
+        }
+
+        return $this->render('materials/new.html.twig', [
+            'form' => $form->createView(),
+            'material' => $material,
+        ]);
+    }
+
+    
 
     // --------- PAGES ---------- //
     #[Route('/page/{id}', name: 'app_page_show', methods: ['GET'])]
-    public function showPage(Page $page, string $id): Response
+    public function showPage(Page $page): Response
     {
         return $this->render('page/show.html.twig', [
             'page' => $page,
@@ -715,5 +750,4 @@ class AdminZoneController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
-
 }

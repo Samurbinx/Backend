@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use App\Repository\PieceRepository;
@@ -17,7 +18,7 @@ class Piece
     #[ORM\Column]
     private ?int $id = null;
 
-    
+
     #[ORM\ManyToOne(inversedBy: 'Pieces')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Artwork $Artwork = null;
@@ -31,13 +32,13 @@ class Piece
 
     #[ORM\Column(nullable: true)]
     private ?float $Height = null;
-    
+
     #[ORM\Column(nullable: true)]
     private ?float $Width = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $Depth = null;
-    
+
     #[ORM\Column(nullable: true)]
     private ?array $Images = null;
 
@@ -50,21 +51,22 @@ class Piece
 
 
 
-   
+
     public function __construct()
     {
         $this->Materials = new ArrayCollection();
     }
 
-    public function getPiece(): ?array {
+    public function getPiece(): ?array
+    {
         return [
-            'id'=> $this->id,
-            'artworkID'=> $this->Artwork->getId(),
-            'title'=> $this->Title,
-            'materials'=> $this->getMaterialsName(),
-            'width'=> $this->Width,
-            'height'=> $this->Height,
-            'depth'=> $this->Depth,
+            'id' => $this->id,
+            'artworkID' => $this->Artwork->getId(),
+            'title' => $this->Title,
+            'materials' => $this->getMaterialsName(),
+            'width' => $this->Width,
+            'height' => $this->Height,
+            'depth' => $this->Depth,
         ];
     }
 
@@ -174,11 +176,32 @@ class Piece
     }
     public function getMaterialsName(): ?array
     {
-        $materials = [];
-        foreach ($this->Materials as $name => $material) {
-            array_push($materials, $material->getName());
-        }
-        return $materials;
+        return array_map(fn($material) => $material->getName(), $this->Materials->toArray());
+    }
+    public function getMaterialsString(): ?string
+    {
+        $arr = $this->getMaterialsName();
+        $count = count($arr);
+
+        if ($count === 0) return "";
+
+        // Formateamos los nombres a minúsculas
+        $formattedArray = array_map('strtolower', $arr);
+
+        // Capitalizamos la primera letra del primer elemento
+        $formattedArray[0] = ucfirst($formattedArray[0]);
+
+        // Si solo hay un elemento, lo devolvemos tal cual
+        if ($count === 1) return $formattedArray[0];
+
+        // Si hay dos elementos, los unimos con " y "
+        if ($count === 2) return implode(" y ", $formattedArray);
+
+        // Para más de dos elementos, unimos todos excepto el último con ", " y el último con " y "
+        $allButLast = implode(", ", array_slice($formattedArray, 0, -1));
+        $last = end($formattedArray);
+
+        return "$allButLast y $last";
     }
 
     public function addMaterial(Materials $material): static
@@ -196,5 +219,11 @@ class Piece
 
         return $this;
     }
-    
+    public function removeAllMaterials(): static {
+        $materials = $this->Materials;
+        foreach ($materials as $material) {
+            $this->removeMaterial($material);
+        }
+        return $this;
+    }
 }

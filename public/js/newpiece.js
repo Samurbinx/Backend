@@ -3,8 +3,6 @@ let temporalMaterials = [];
 let selectedM = [];
 
 
-
-
 // Función que añade nuevos materiales temporalmente
 function addM() {
    // Material introducido
@@ -81,7 +79,7 @@ function addMdom(newMaterial) {
 
 
 
-// Función que agrega el eventlistener e imprime los materiales seleccionados a la derecha
+// Función que agrega el eventlistener
 function listener(checkbox) {
    checkbox.addEventListener('change', function (event) {
       if (event.target.checked) {
@@ -142,8 +140,8 @@ function saveMaterials() {
       let domSM = document.getElementById("selected_materials");
       domSM.style.display = "block";
 
-      domSM.innerHTML = ""
-      domSM.innerHTML = "<p>" + format(selectedM) + "</p>";
+      domSM.value = ""
+      domSM.value = format(selectedM);
    }
    document.getElementById("add-material-text").value = "";
 }
