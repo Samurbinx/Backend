@@ -56,6 +56,7 @@ class UserController extends AbstractController
         return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
     }
 
+    
 
     #[Route('/new', name: 'user_new', methods: ['POST'])]
     public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
