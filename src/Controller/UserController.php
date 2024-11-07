@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 
 
@@ -23,9 +22,28 @@ use Symfony\Component\Security\Core\Security;
 #[Route('/user')]
 class UserController extends AbstractController
 {
+     /**
+     * @Route("/user/current-user", name="current_user", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function getCurrentUser(UserRepository $userRepository): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], 404);
+        }
+        $usermodel = $userRepository->find(id: $user->getUserIdentifier());
+        return new JsonResponse([
+            'id' => $usermodel->getId(),
+            'email' => $usermodel->getEmail(),
+            'name' => $usermodel->getName(),
+        ]);
+    }
+
     #[Route('/{id}', name: 'user', methods: ['GET'])]
     public function getUserById(int $id, UserRepository $userRepository): JsonResponse {
-        $user = $userRepository->find($id);
+        $user = $userRepository->find(id: $id);
         $data[] = $user->getUser();
         return new JsonResponse($data);
     }
