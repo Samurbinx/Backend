@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Token;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Psr\Log\LoggerInterface;
 
 
 #[Route('/user')]
@@ -35,61 +37,63 @@ class UserController extends AbstractController
         if (!isset($data['email']) || !isset($data['pwd'])) {
             return new JsonResponse('Missing email or password', JsonResponse::HTTP_BAD_REQUEST);
         }
-
         $email = $data['email'];
         $password = $data['pwd'];
-
         // Buscar usuario por correo electrónico
         $user = $userRepository->findOneByEmail($email); 
 
         if (!$user) {
             return new JsonResponse('User not found', JsonResponse::HTTP_NOT_FOUND);
         }
-
         // Validar la contraseña
         if (!$hasher->isPasswordValid($user, $password)) {
             return new JsonResponse('Invalid credentials', JsonResponse::HTTP_UNAUTHORIZED);
         }
-
         // Crear token JWT
         $token = $jwtTokenManager->create($user);
-
-        return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
+        return new JsonResponse(['token' => $token, 'user' => $user]);
     }
 
-    #[Route('/login-token', name: 'user_login-token', methods: ['POST'])]
-    public function loginWithToken(Request $request, JWTTokenManagerInterface $jwtTokenManager, UserRepository $userRepository): JsonResponse
+    #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
+    public function loginWithToken(Request $request, JWTTokenManagerInterface $jwtTokenManager, UserRepository $userRepository, LoggerInterface $logger): JsonResponse
     {
-        $token = $request->get('token');
-
+        // Extract the token from the request
+        $data = json_decode($request->getContent(), true);
+        $token = $data['token'] ?? null;
+    
         if (!$token) {
             return new JsonResponse(['error' => 'Token not provided'], 400);
         }
-
+    
         try {
-            // Intenta obtener el usuario desde el token
-            $payload = $jwtTokenManager->decode($token);
-
-            if (!$payload) {
+            // Attempt to parse the token
+            $payload = $jwtTokenManager->parse($token);
+            // Check if payload contains a email
+            if (!$payload || !isset($payload['email'])) {
                 throw new AuthenticationException('Invalid token');
             }
+    
+            // Attempt to load the user by email
+            $user = $userRepository->findOneByEmail($payload['email']);
 
-            // Cargar el usuario desde la base de datos
-            $user = $userRepository->loadUserByUsername($payload['username']);
-
-            // Devolver información del usuario y un nuevo token, si es necesario
-            return new JsonResponse([
-                'token' => $jwtTokenManager->create($user),
-                'user' => [
-                    'username' => $user->getUsername(),
-                    'email' => $user->getEmail(),
-                    // Agrega otros datos del usuario según tus necesidades
-                ]
-            ]);
+            if (!$user) {
+                return new JsonResponse(['error' => 'User not found'], 404);
+            }
+    
+            // Generate a new token for the user
+            $newToken = $jwtTokenManager->create($user);
+    
+            // Return the new token and user data
+            return new JsonResponse(['token' => $newToken, 'user' => $user]);
+            
         } catch (AuthenticationException $e) {
             return new JsonResponse(['error' => $e->getMessage()], 401);
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return new JsonResponse(['error' => 'An error occurred'], 500);
         }
     }
+    
 
     
 
