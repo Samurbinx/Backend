@@ -16,7 +16,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Core\Security;
+
 
 
 #[Route('/user')]
@@ -53,8 +54,6 @@ class UserController extends AbstractController
         $token = $jwtTokenManager->create($user);
         return new JsonResponse(['token' => $token, 'user' => $user->getUser()]);
     }
-
-    
 
     #[Route('/new', name: 'user_new', methods: ['POST'])]
     public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
