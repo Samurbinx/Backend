@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 
 #[Route('/user')]
@@ -54,6 +55,40 @@ class UserController extends AbstractController
         $token = $jwtTokenManager->create($user);
 
         return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
+    }
+
+    #[Route('/login-token', name: 'user_login-token', methods: ['POST'])]
+    public function loginWithToken(Request $request, JWTTokenManagerInterface $jwtTokenManager, UserRepository $userRepository): JsonResponse
+    {
+        $token = $request->get('token');
+
+        if (!$token) {
+            return new JsonResponse(['error' => 'Token not provided'], 400);
+        }
+
+        try {
+            // Intenta obtener el usuario desde el token
+            $payload = $jwtTokenManager->decode($token);
+
+            if (!$payload) {
+                throw new AuthenticationException('Invalid token');
+            }
+
+            // Cargar el usuario desde la base de datos
+            $user = $userRepository->loadUserByUsername($payload['username']);
+
+            // Devolver información del usuario y un nuevo token, si es necesario
+            return new JsonResponse([
+                'token' => $jwtTokenManager->create($user),
+                'user' => [
+                    'username' => $user->getUsername(),
+                    'email' => $user->getEmail(),
+                    // Agrega otros datos del usuario según tus necesidades
+                ]
+            ]);
+        } catch (AuthenticationException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 401);
+        }
     }
 
     
