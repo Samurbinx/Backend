@@ -51,49 +51,8 @@ class UserController extends AbstractController
         }
         // Crear token JWT
         $token = $jwtTokenManager->create($user);
-        return new JsonResponse(['token' => $token, 'user' => $user]);
+        return new JsonResponse(['token' => $token, 'user' => $user->getUser()]);
     }
-
-    #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
-    public function loginWithToken(Request $request, JWTTokenManagerInterface $jwtTokenManager, UserRepository $userRepository, LoggerInterface $logger): JsonResponse
-    {
-        // Extract the token from the request
-        $data = json_decode($request->getContent(), true);
-        $token = $data['token'] ?? null;
-    
-        if (!$token) {
-            return new JsonResponse(['error' => 'Token not provided'], 400);
-        }
-    
-        try {
-            // Attempt to parse the token
-            $payload = $jwtTokenManager->parse($token);
-            // Check if payload contains a email
-            if (!$payload || !isset($payload['email'])) {
-                throw new AuthenticationException('Invalid token');
-            }
-    
-            // Attempt to load the user by email
-            $user = $userRepository->findOneByEmail($payload['email']);
-
-            if (!$user) {
-                return new JsonResponse(['error' => 'User not found'], 404);
-            }
-    
-            // Generate a new token for the user
-            $newToken = $jwtTokenManager->create($user);
-    
-            // Return the new token and user data
-            return new JsonResponse(['token' => $newToken, 'user' => $user]);
-            
-        } catch (AuthenticationException $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 401);
-        } catch (\Exception $e) {
-            // Handle other exceptions
-            return new JsonResponse(['error' => 'An error occurred'], 500);
-        }
-    }
-    
 
     
 
