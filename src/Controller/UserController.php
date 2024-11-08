@@ -83,7 +83,6 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['token' => $user->getToken(), 'user' => $user->getUserSafe()]);
-        return new JsonResponse(['token' => $token, 'user' => $user->getUser()]);
     }
 
     #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
