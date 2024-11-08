@@ -58,9 +58,19 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'FavoritedBy')]
     private Collection $Favorites;
 
+    #[ORM\OneToOne(mappedBy: 'User_id', cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
+
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'User')]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->Favorites = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
 
@@ -247,6 +257,53 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeFavorite(Artwork $favorite): static
     {
         $this->Favorites->removeElement($favorite);
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): static
+    {
+        // set the owning side of the relation if necessary
+        if ($cart->getUserId() !== $this) {
+            $cart->setUserId($this);
+        }
+
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
 
         return $this;
     }

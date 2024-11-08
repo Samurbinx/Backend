@@ -47,11 +47,21 @@ class Artwork
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'Favorites')]
     private Collection $FavoritedBy;
 
+    /**
+     * @var Collection<int, Cart>
+     */
+    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'Artworks')]
+    private Collection $carts;
+
+    #[ORM\ManyToOne(inversedBy: 'Artworks')]
+    private ?Order $Order_id = null;
+
 
     public function __construct()
     {
         $this->pieces = new ArrayCollection();
         $this->FavoritedBy = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getArtwork(): ?array {
@@ -256,6 +266,45 @@ class Artwork
         if ($this->FavoritedBy->removeElement($favoritedBy)) {
             $favoritedBy->removeFavorite($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): static
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->addArtwork($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeArtwork($this);
+        }
+
+        return $this;
+    }
+
+    public function getOrderId(): ?Order
+    {
+        return $this->Order_id;
+    }
+
+    public function setOrderId(?Order $Order_id): static
+    {
+        $this->Order_id = $Order_id;
 
         return $this;
     }
