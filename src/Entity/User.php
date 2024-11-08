@@ -58,7 +58,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'FavoritedBy')]
     private Collection $Favorites;
 
-    #[ORM\OneToOne(mappedBy: 'User_id', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'User', cascade: ['persist', 'remove'])]
     private ?Cart $cart = null;
 
     /**
