@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Token;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,14 +17,35 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
+
 
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
+     /**
+     * @Route("/user/current-user", name="current_user", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_FULLY")
+     */
+    public function getCurrentUser(UserRepository $userRepository): JsonResponse
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], 404);
+        }
+        $usermodel = $userRepository->find(id: $user->getUserIdentifier());
+        return new JsonResponse([
+            'id' => $usermodel->getId(),
+            'email' => $usermodel->getEmail(),
+            'name' => $usermodel->getName(),
+        ]);
+    }
+
     #[Route('/{id}', name: 'user', methods: ['GET'])]
     public function getUserById(int $id, UserRepository $userRepository): JsonResponse {
-        $user = $userRepository->find($id);
+        $user = $userRepository->find(id: $id);
         $data[] = $user->getUser();
         return new JsonResponse($data);
     }
@@ -36,22 +58,18 @@ class UserController extends AbstractController
         if (!isset($data['email']) || !isset($data['pwd'])) {
             return new JsonResponse('Missing email or password', JsonResponse::HTTP_BAD_REQUEST);
         }
-
         $email = $data['email'];
         $password = $data['pwd'];
-
         // Buscar usuario por correo electrónico
         $user = $userRepository->findOneByEmail($email); 
 
         if (!$user) {
             return new JsonResponse('User not found', JsonResponse::HTTP_NOT_FOUND);
         }
-
         // Validar la contraseña
         if (!$hasher->isPasswordValid($user, $password)) {
             return new JsonResponse('Invalid credentials', JsonResponse::HTTP_UNAUTHORIZED);
         }
-
         // Crear token JWT
         $token = $jwtTokenManager->create($user);
 
@@ -65,6 +83,7 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['token' => $user->getToken(), 'user' => $user->getUserSafe()]);
+        return new JsonResponse(['token' => $token, 'user' => $user->getUser()]);
     }
 
     #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
