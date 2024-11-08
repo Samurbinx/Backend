@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,6 +51,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Column(nullable: true)]
     private ?bool $IsValidT = null;
+
+    /**
+     * @var Collection<int, Artwork>
+     */
+    #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'FavoritedBy')]
+    private Collection $Favorites;
+
+    public function __construct()
+    {
+        $this->Favorites = new ArrayCollection();
+    }
 
 
  
@@ -210,6 +223,30 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function setValidT(?bool $IsValidT): static
     {
         $this->IsValidT = $IsValidT;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artwork>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->Favorites;
+    }
+
+    public function addFavorite(Artwork $favorite): static
+    {
+        if (!$this->Favorites->contains($favorite)) {
+            $this->Favorites->add($favorite);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Artwork $favorite): static
+    {
+        $this->Favorites->removeElement($favorite);
 
         return $this;
     }
