@@ -41,11 +41,8 @@ class Artwork
     #[ORM\OneToMany(targetEntity: Piece::class, mappedBy: 'Artwork')]
     private Collection $pieces;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'Favorites')]
-    private Collection $FavoritedBy;
+
+    
 
     /**
      * @var Collection<int, Cart>
@@ -56,12 +53,18 @@ class Artwork
     #[ORM\ManyToOne(inversedBy: 'Artworks')]
     private ?Order $Order_id = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'Favorites')]
+    private Collection $FavoritedBy;
+
 
     public function __construct()
     {
         $this->pieces = new ArrayCollection();
-        $this->FavoritedBy = new ArrayCollection();
         $this->carts = new ArrayCollection();
+        $this->FavoritedBy = new ArrayCollection();
     }
 
     public function getArtwork(): ?array {
@@ -243,32 +246,6 @@ class Artwork
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getFavoritedBy(): Collection
-    {
-        return $this->FavoritedBy;
-    }
-
-    public function addFavoritedBy(User $favoritedBy): static
-    {
-        if (!$this->FavoritedBy->contains($favoritedBy)) {
-            $this->FavoritedBy->add($favoritedBy);
-            $favoritedBy->addFavorite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFavoritedBy(User $favoritedBy): static
-    {
-        if ($this->FavoritedBy->removeElement($favoritedBy)) {
-            $favoritedBy->removeFavorite($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Cart>
@@ -305,6 +282,33 @@ class Artwork
     public function setOrderId(?Order $Order_id): static
     {
         $this->Order_id = $Order_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getFavoritedBy(): Collection
+    {
+        return $this->FavoritedBy;
+    }
+
+    public function addFavoritedBy(User $favoritedBy): static
+    {
+        if (!$this->FavoritedBy->contains($favoritedBy)) {
+            $this->FavoritedBy->add($favoritedBy);
+            $favoritedBy->addFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritedBy(User $favoritedBy): static
+    {
+        if ($this->FavoritedBy->removeElement($favoritedBy)) {
+            $favoritedBy->removeFavorite($this);
+        }
 
         return $this;
     }

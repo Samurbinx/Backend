@@ -52,11 +52,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $IsValidT = null;
 
-    /**
-     * @var Collection<int, Artwork>
-     */
-    #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'FavoritedBy')]
-    private Collection $Favorites;
 
     #[ORM\OneToOne(mappedBy: 'User', cascade: ['persist', 'remove'])]
     private ?Cart $cart = null;
@@ -67,10 +62,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'User')]
     private Collection $orders;
 
+    /**
+     * @var Collection<int, Artwork>
+     */
+    #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'FavoritedBy')]
+    #[ORM\JoinTable(name: 'favorites')] // Definir el nombre de la tabla intermedia
+    private Collection $Favorites;
+
     public function __construct()
     {
-        $this->Favorites = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->Favorites = new ArrayCollection();
     }
 
 
@@ -237,29 +239,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Artwork>
-     */
-    public function getFavorites(): Collection
-    {
-        return $this->Favorites;
-    }
-
-    public function addFavorite(Artwork $favorite): static
-    {
-        if (!$this->Favorites->contains($favorite)) {
-            $this->Favorites->add($favorite);
-        }
-
-        return $this;
-    }
-
-    public function removeFavorite(Artwork $favorite): static
-    {
-        $this->Favorites->removeElement($favorite);
-
-        return $this;
-    }
+  
 
     public function getCart(): ?Cart
     {
@@ -304,6 +284,30 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
                 $order->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artwork>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->Favorites;
+    }
+
+    public function addFavorite(Artwork $favorite): static
+    {
+        if (!$this->Favorites->contains($favorite)) {
+            $this->Favorites->add($favorite);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Artwork $favorite): static
+    {
+        $this->Favorites->removeElement($favorite);
 
         return $this;
     }
