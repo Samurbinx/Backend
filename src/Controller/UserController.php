@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 #[Route('/user')]
@@ -27,7 +29,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/login', name: 'user_login', methods: ['POST'])]
-    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, JWTTokenManagerInterface $jwtTokenManager): JsonResponse {
+    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, JWTTokenManagerInterface $jwtTokenManager, EntityManagerInterface $entityManager, SessionInterface $session): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
         // Validar datos de entrada
@@ -53,9 +55,68 @@ class UserController extends AbstractController
         // Crear token JWT
         $token = $jwtTokenManager->create($user);
 
-        return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
+        // Configurar datos de sesión
+        $session->set('user_id', $user->getId());
+        $session->set('user_token', $token);
+        
+        $user->setToken($token);
+        $user->setValidT(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['token' => $user->getToken(), 'user' => $user->getUserSafe()]);
     }
 
+    #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
+public function loginByToken(Request $request, UserRepository $userRepository, LoggerInterface $loggerInterface): JsonResponse
+{
+    $data = json_decode($request->getContent(), true);
+
+    // Validate incoming data
+    if (!isset($data['token'])) {
+        return new JsonResponse(['error' => 'Missing token'], JsonResponse::HTTP_BAD_REQUEST);
+    }
+
+    $token = $data['token'];
+
+    // Find the user by token
+    $user = $userRepository->findOneByToken($token);
+
+    if (!$user) {
+        return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    // Validate token expiration or session status
+    $isValid = $user->isValidT(); 
+
+    if (!$isValid) {
+        return new JsonResponse(['error' => 'Session ended'], JsonResponse::HTTP_UNAUTHORIZED);
+    }
+
+    // If everything is fine, return user data and token
+    return new JsonResponse([
+        'token' => $token,
+        'user' => $user->getUserSafe()
+    ]);
+}
+
+
+    // #[Route('/login-session', name: 'user_login_session', methods: ['POST'])]
+    // public function loginSession(SessionInterface $session, UserRepository $userRepository): JsonResponse {
+    //     $userId = $session->get('user_id');
+    //     $token = $session->get('user_token');
+
+    //     if (!$userId) {
+    //         return new JsonResponse('User not authenticated', JsonResponse::HTTP_UNAUTHORIZED);
+    //     }
+    //     if (!$token) {
+    //         return new JsonResponse('Session ended', JsonResponse::HTTP_UNAUTHORIZED);
+    //     }
+
+    //     $user = $userRepository->find($userId);
+
+    //     return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
+    // }
 
     #[Route('/new', name: 'user_new', methods: ['POST'])]
     public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse

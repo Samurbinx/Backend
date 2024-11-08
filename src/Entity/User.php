@@ -43,6 +43,14 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
      */
     #[ORM\Column]
     private array $roles = [];
+
+    #[ORM\Column(length: 700, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $IsValidT = null;
+
+
  
 
 
@@ -182,14 +190,31 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): static
+    public function getToken(): ?string
     {
-        $this->roles = $roles;
+        return $this->token;
+    }
+
+    public function setToken(?string $Token): static
+    {
+        $this->token = $Token;
+
         return $this;
     }
+
+    public function isValidT(): ?bool
+    {
+        return $this->IsValidT;
+    }
+
+    public function setValidT(?bool $IsValidT): static
+    {
+        $this->IsValidT = $IsValidT;
+
+        return $this;
+    }
+
+
 
 
 }
