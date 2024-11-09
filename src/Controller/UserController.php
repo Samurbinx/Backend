@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ArtworkRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Token;
@@ -18,30 +19,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 
 #[Route('/user')]
 class UserController extends AbstractController
 {
-     /**
-     * @Route("/user/current-user", name="current_user", methods={"GET"})
-     * @IsGranted("IS_AUTHENTICATED_FULLY")
-     */
-    public function getCurrentUser(UserRepository $userRepository): JsonResponse
-    {
-        $user = $this->getUser();
-
-        if (!$user) {
-            return new JsonResponse(['error' => 'User not found'], 404);
-        }
-        $usermodel = $userRepository->find(id: $user->getUserIdentifier());
-        return new JsonResponse([
-            'id' => $usermodel->getId(),
-            'email' => $usermodel->getEmail(),
-            'name' => $usermodel->getName(),
-        ]);
-    }
 
     #[Route('/{id}', name: 'user', methods: ['GET'])]
     public function getUserById(int $id, UserRepository $userRepository): JsonResponse {
@@ -49,6 +33,23 @@ class UserController extends AbstractController
         $data[] = $user->getUser();
         return new JsonResponse($data);
     }
+
+    #[Route('/getidbytoken', name: 'get_user_bytoken', methods: ['POST'])]
+    public function getUserByToken(Request $request, UserRepository $userRepository): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $token = $data['token'] ?? null;
+        if (!$token) {
+            return new JsonResponse(['error' => 'Token no proporcionado'], 400);
+        }
+    
+        $user = $userRepository->findOneByToken($token);
+        if (!$user) {
+            return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
+        }
+    
+        return new JsonResponse(['user_id' => $user->getId()]);
+    }
+
 
     #[Route('/login', name: 'user_login', methods: ['POST'])]
     public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, JWTTokenManagerInterface $jwtTokenManager, EntityManagerInterface $entityManager, SessionInterface $session): JsonResponse {
@@ -168,7 +169,7 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         return new JsonResponse(['status' => 'User created!'], JsonResponse::HTTP_CREATED);
     }
 
-
+   
 
     // ------------------------------ //
     // ----------ADMIN ZONE---------- //

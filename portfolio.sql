@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-11-2024 a las 09:19:47
+-- Tiempo de generación: 09-11-2024 a las 12:14:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `artwork` (
   `id` int(11) NOT NULL,
   `work_id` int(11) NOT NULL,
+  `order_id_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `creation_date` date DEFAULT NULL,
   `price` double DEFAULT NULL,
@@ -41,64 +42,76 @@ CREATE TABLE `artwork` (
 -- Volcado de datos para la tabla `artwork`
 --
 
-INSERT INTO `artwork` (`id`, `work_id`, `title`, `creation_date`, `price`, `sold`, `display`) VALUES
-(1, 1, 'Descanso I', '2022-01-01', 169, 0, 'simple'),
-(2, 1, 'Descanso II', '2022-01-01', 267, 0, 'simple'),
-(5, 1, 'Cabeza I', '2022-01-01', 167, 1, 'simple'),
-(6, 1, 'Cabeza II', '2022-01-01', 175, 0, 'simple'),
-(7, 1, 'Descanso III', '2022-01-01', 279, 0, 'simple'),
-(8, 1, 'Descanso IV', '2022-01-01', 160, 0, 'simple'),
-(9, 1, 'Cabeza III', '2022-01-01', 123, 1, 'simple'),
-(10, 2, 'Camarón', '2021-01-01', 171, 1, 'simple'),
-(11, 2, 'Gata Cattana', '2021-01-01', 154, 1, 'simple'),
-(12, 2, 'Blas Infante', '2021-01-01', 296, 1, 'simple'),
-(13, 2, 'Lola Flores', '2021-01-01', 249, 1, 'simple'),
-(14, 2, 'Picasso', '2021-01-01', 168, 0, 'simple'),
-(15, 2, 'Paco de Lucía', '2021-01-01', 145, 0, 'simple'),
-(16, 2, 'Rocío Jurado', '2021-01-01', 109, 1, 'simple'),
-(17, 2, 'Juan Ramón Jiménez', '2021-01-01', 238, 0, 'simple'),
-(18, 2, 'Lorca', '2021-01-01', 259, 1, 'simple'),
-(19, 2, 'Velazquez', '2021-01-01', 109, 1, 'simple'),
-(20, 3, 'Autorretrato', '2021-01-01', 194, 0, 'simple'),
-(24, 3, NULL, NULL, NULL, 1, 'detail'),
-(25, 4, 'Jaula frágil', '2022-01-01', 155, 0, 'simple'),
-(29, 4, NULL, NULL, NULL, 1, 'covercarousel'),
-(30, 4, 'Piel rota', '2022-01-01', 152, 0, 'simple'),
-(31, 4, NULL, NULL, NULL, 1, 'detail'),
-(32, 4, 'Rotura I', '2022-01-01', 163, 1, 'simple'),
-(33, 4, 'Rotura II', '2022-01-01', 181, 0, 'simple'),
-(34, 4, 'Rotura III', '2022-01-01', 238, 1, 'simple'),
-(35, 4, 'Rotura IV', '2022-01-01', 118, 1, 'simple'),
-(36, 5, 'Camino', '2024-01-01', NULL, 1, 'diptych'),
-(38, 5, 'Costras', '2024-01-01', NULL, 0, 'diptych'),
-(39, 5, 'Herida II', NULL, NULL, 1, 'simple'),
-(40, 5, NULL, '2024-01-01', NULL, 0, NULL),
-(41, 5, NULL, '2024-01-01', NULL, 0, NULL),
-(42, 5, NULL, '2024-01-01', NULL, 0, NULL),
-(43, 5, NULL, '2024-01-01', NULL, 0, NULL),
-(44, 6, 'Cuna', '2022-01-01', 261, 0, 'simple');
+INSERT INTO `artwork` (`id`, `work_id`, `order_id_id`, `title`, `creation_date`, `price`, `sold`, `display`) VALUES
+(1, 1, NULL, 'Descanso I', '2022-01-01', 169, 0, 'simple'),
+(2, 1, NULL, 'Descanso II', '2022-01-01', 267, 0, 'simple'),
+(5, 1, NULL, 'Cabeza I', '2022-01-01', 167, 1, 'simple'),
+(6, 1, NULL, 'Cabeza II', '2022-01-01', 175, 0, 'simple'),
+(7, 1, NULL, 'Descanso III', '2022-01-01', 279, 0, 'simple'),
+(8, 1, NULL, 'Descanso IV', '2022-01-01', 160, 0, 'simple'),
+(9, 1, NULL, 'Cabeza III', '2022-01-01', 123, 1, 'simple'),
+(10, 2, NULL, 'Camarón', '2021-01-01', 171, 1, 'simple'),
+(11, 2, NULL, 'Gata Cattana', '2021-01-01', 154, 1, 'simple'),
+(12, 2, NULL, 'Blas Infante', '2021-01-01', 296, 1, 'simple'),
+(13, 2, NULL, 'Lola Flores', '2021-01-01', 249, 1, 'simple'),
+(14, 2, NULL, 'Picasso', '2021-01-01', 168, 0, 'simple'),
+(15, 2, NULL, 'Paco de Lucía', '2021-01-01', 145, 0, 'simple'),
+(16, 2, NULL, 'Rocío Jurado', '2021-01-01', 109, 1, 'simple'),
+(17, 2, NULL, 'Juan Ramón Jiménez', '2021-01-01', 238, 0, 'simple'),
+(18, 2, NULL, 'Lorca', '2021-01-01', 259, 1, 'simple'),
+(19, 2, NULL, 'Velazquez', '2021-01-01', 109, 1, 'simple'),
+(20, 3, NULL, 'Autorretrato', '2021-01-01', 194, 0, 'simple'),
+(24, 3, NULL, NULL, NULL, NULL, 1, 'detail'),
+(25, 4, NULL, 'Jaula frágil', '2022-01-01', 155, 0, 'simple'),
+(29, 4, NULL, NULL, NULL, NULL, 1, 'covercarousel'),
+(30, 4, NULL, 'Piel rota', '2022-01-01', 152, 0, 'simple'),
+(31, 4, NULL, NULL, NULL, NULL, 1, 'detail'),
+(32, 4, NULL, 'Rotura I', '2022-01-01', 163, 1, 'simple'),
+(33, 4, NULL, 'Rotura II', '2022-01-01', 181, 0, 'simple'),
+(34, 4, NULL, 'Rotura III', '2022-01-01', 238, 1, 'simple'),
+(35, 4, NULL, 'Rotura IV', '2022-01-01', 118, 1, 'simple'),
+(36, 5, NULL, 'Camino', '2024-01-01', NULL, 1, 'diptych'),
+(38, 5, NULL, 'Costras', '2024-01-01', NULL, 0, 'diptych'),
+(39, 5, NULL, 'Herida II', NULL, NULL, 1, 'simple'),
+(40, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
+(41, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
+(42, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
+(43, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
+(44, 6, NULL, 'Cuna', '2022-01-01', 261, 0, 'simple');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `doctrine_migration_versions`
+-- Estructura de tabla para la tabla `cart`
 --
 
-CREATE TABLE `doctrine_migration_versions` (
-  `version` varchar(191) NOT NULL,
-  `executed_at` datetime DEFAULT NULL,
-  `execution_time` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `total_amount` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
--- Volcado de datos para la tabla `doctrine_migration_versions`
+-- Estructura de tabla para la tabla `cart_artwork`
 --
 
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20241017183518', '2024-10-17 20:35:21', 85),
-('DoctrineMigrations\\Version20241017184109', '2024-10-17 20:41:13', 6),
-('DoctrineMigrations\\Version20241017202114', '2024-10-17 22:21:37', 23),
-('DoctrineMigrations\\Version20241017213808', '2024-10-17 23:38:12', 62);
+CREATE TABLE `cart_artwork` (
+  `cart_id` int(11) NOT NULL,
+  `artwork_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `favorites`
+--
+
+CREATE TABLE `favorites` (
+  `user_id` int(11) NOT NULL,
+  `artwork_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -116,18 +129,30 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `name`) VALUES
+(104, 'Óleo'),
+(105, 'Tinta china'),
 (107, 'Acuarela'),
-(119, 'Betadine'),
-(121, 'Cinta'),
+(111, 'Gouache'),
+(112, 'Ferricianuro de potasio'),
 (114, 'Citrato de amonio e hierro'),
 (116, 'Escayola'),
-(112, 'Ferricianuro de potasio'),
-(111, 'Gouache'),
-(118, 'Grafito'),
-(120, 'Madera'),
-(104, 'Óleo'),
 (117, 'Tela'),
-(105, 'Tinta china');
+(118, 'Grafito'),
+(119, 'Betadine'),
+(120, 'Madera'),
+(121, 'Cinta');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `order`
+--
+
+CREATE TABLE `order` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `total_amount` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -161,64 +186,64 @@ INSERT INTO `page` (`id`, `name`, `image`, `title`, `subtitle`) VALUES
 
 CREATE TABLE `piece` (
   `id` int(11) NOT NULL,
-  `artwork_id` int(11) DEFAULT NULL,
+  `artwork_id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `width` decimal(10,2) DEFAULT NULL,
-  `height` decimal(10,2) DEFAULT NULL,
-  `depth` decimal(10,2) DEFAULT NULL,
-  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `height` double DEFAULT NULL,
+  `width` double DEFAULT NULL,
+  `depth` double DEFAULT NULL,
+  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`images`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `piece`
 --
 
-INSERT INTO `piece` (`id`, `artwork_id`, `title`, `width`, `height`, `depth`, `images`) VALUES
-(1, 1, 'Descanso I', 84.10, 118.90, NULL, '[\"67251afad3fc2.jpg\"]'),
-(2, 2, 'Descanso II', 84.10, 118.90, NULL, '[\"6725192a07d6d.jpg\"]'),
-(3, 5, 'Cabeza I', 84.10, 118.90, NULL, '[\"67251b153752f.jpg\"]'),
-(4, 6, 'Cabeza II', 84.10, 118.90, NULL, '[\"67251d2b45111.jpg\"]'),
-(5, 7, 'Descanso III', 84.10, 118.90, NULL, '[\"67251d4109905.jpg\"]'),
-(6, 8, 'Descanso IV', 84.10, 118.90, NULL, '[\"67251d594960b.jpg\"]'),
-(7, 9, 'Cabeza III', 84.10, 118.90, NULL, '[\"67251d6cd453d.jpg\"]'),
-(8, 10, 'Retrato de camaron', 29.70, 42.00, NULL, '[\"67251fa543336.jpg\"]'),
-(9, 10, 'Iconografía de Camarón', 29.70, 42.00, NULL, '[\"67251fd3ba8c6.jpg\"]'),
-(10, 11, 'Retrato de Gata Cattana', 29.70, 42.00, NULL, '[\"67251febdf3ff.jpg\"]'),
-(11, 11, 'Iconografía de Gata Cattana', 29.70, 42.00, NULL, '[\"6725200421016.jpg\"]'),
-(12, 12, 'Retrato de Blas Infante', 29.70, 42.00, NULL, '[\"67252017b84a0.jpg\"]'),
-(13, 12, 'Iconografía de Blas Infante', 29.70, 42.00, NULL, '[\"6725202465a94.jpg\"]'),
-(14, 13, 'Retrato de Lola Flores', 29.70, 42.00, NULL, '[\"6725203f969c6.jpg\"]'),
-(15, 13, 'Iconografía de Lola Flores', 29.70, 42.00, NULL, '[\"67252053c1507.jpg\"]'),
-(16, 14, 'Retrato de Picasso', 29.70, 42.00, NULL, '[\"6725207265f96.jpg\"]'),
-(17, 14, 'Iconografía de Picasso', 29.70, 42.00, NULL, '[\"67252081314d5.jpg\"]'),
-(18, 15, 'Retrato de Paco de Lucía', 29.70, 42.00, NULL, '[\"6725209d5b929.jpg\"]'),
-(19, 15, 'Iconografía de Paco de Lucía', 29.70, 42.00, NULL, '[\"672520aedfe2c.jpg\"]'),
-(20, 16, 'Retrato de Rocío Jurado', 29.70, 42.00, NULL, '[\"672520d288aa7.jpg\"]'),
-(21, 16, 'Iconografía de Rocío Jurado', 29.70, 42.00, NULL, '[\"672520dfc9c55.jpg\"]'),
-(22, 17, 'Retrato de Juan Ramón Jiménez', 29.70, 42.00, NULL, '[\"67252106d7458.jpg\"]'),
-(23, 17, 'Iconografía de Juan Ramón Jiménez', 29.70, 42.00, NULL, '[\"6725213502076.jpg\"]'),
-(24, 18, 'Iconografía de Lorca', 29.70, 42.00, NULL, '[\"6725215bc89dd.jpg\"]'),
-(25, 19, 'Retrato de Velazquez', 29.70, 42.00, NULL, '[\"67252246449a2.jpg\"]'),
-(26, 20, 'Autorretrato', 60.00, 80.00, 5.00, '[\"6725246e718d7.jpg\"]'),
-(28, 25, 'Jaula frágil', 100.00, 125.00, 140.00, '[\"6725258d54287.jpg\"]'),
+INSERT INTO `piece` (`id`, `artwork_id`, `title`, `height`, `width`, `depth`, `images`) VALUES
+(1, 1, 'Descanso I', 118.9, 84.1, NULL, '[\"67251afad3fc2.jpg\"]'),
+(2, 2, 'Descanso II', 118.9, 84.1, NULL, '[\"6725192a07d6d.jpg\"]'),
+(3, 5, 'Cabeza I', 118.9, 84.1, NULL, '[\"67251b153752f.jpg\"]'),
+(4, 6, 'Cabeza II', 118.9, 84.1, NULL, '[\"67251d2b45111.jpg\"]'),
+(5, 7, 'Descanso III', 118.9, 84.1, NULL, '[\"67251d4109905.jpg\"]'),
+(6, 8, 'Descanso IV', 118.9, 84.1, NULL, '[\"67251d594960b.jpg\"]'),
+(7, 9, 'Cabeza III', 118.9, 84.1, NULL, '[\"67251d6cd453d.jpg\"]'),
+(8, 10, 'Retrato de camaron', 42, 29.7, NULL, '[\"67251fa543336.jpg\"]'),
+(9, 10, 'Iconografía de Camarón', 42, 29.7, NULL, '[\"67251fd3ba8c6.jpg\"]'),
+(10, 11, 'Retrato de Gata Cattana', 42, 29.7, NULL, '[\"67251febdf3ff.jpg\"]'),
+(11, 11, 'Iconografía de Gata Cattana', 42, 29.7, NULL, '[\"6725200421016.jpg\"]'),
+(12, 12, 'Retrato de Blas Infante', 42, 29.7, NULL, '[\"67252017b84a0.jpg\"]'),
+(13, 12, 'Iconografía de Blas Infante', 42, 29.7, NULL, '[\"6725202465a94.jpg\"]'),
+(14, 13, 'Retrato de Lola Flores', 42, 29.7, NULL, '[\"6725203f969c6.jpg\"]'),
+(15, 13, 'Iconografía de Lola Flores', 42, 29.7, NULL, '[\"67252053c1507.jpg\"]'),
+(16, 14, 'Retrato de Picasso', 42, 29.7, NULL, '[\"6725207265f96.jpg\"]'),
+(17, 14, 'Iconografía de Picasso', 42, 29.7, NULL, '[\"67252081314d5.jpg\"]'),
+(18, 15, 'Retrato de Paco de Lucía', 42, 29.7, NULL, '[\"6725209d5b929.jpg\"]'),
+(19, 15, 'Iconografía de Paco de Lucía', 42, 29.7, NULL, '[\"672520aedfe2c.jpg\"]'),
+(20, 16, 'Retrato de Rocío Jurado', 42, 29.7, NULL, '[\"672520d288aa7.jpg\"]'),
+(21, 16, 'Iconografía de Rocío Jurado', 42, 29.7, NULL, '[\"672520dfc9c55.jpg\"]'),
+(22, 17, 'Retrato de Juan Ramón Jiménez', 42, 29.7, NULL, '[\"67252106d7458.jpg\"]'),
+(23, 17, 'Iconografía de Juan Ramón Jiménez', 42, 29.7, NULL, '[\"6725213502076.jpg\"]'),
+(24, 18, 'Iconografía de Lorca', 42, 29.7, NULL, '[\"6725215bc89dd.jpg\"]'),
+(25, 19, 'Retrato de Velazquez', 42, 29.7, NULL, '[\"67252246449a2.jpg\"]'),
+(26, 20, 'Autorretrato', 80, 60, 5, '[\"6725246e718d7.jpg\"]'),
+(28, 25, 'Jaula frágil', 125, 100, 140, '[\"6725258d54287.jpg\"]'),
 (29, 29, NULL, NULL, NULL, NULL, '[\"672525b68af7d.jpg\",\"672525b68b662.jpg\",\"672525b68b96d.jpg\",\"672525b68bc99.jpg\",\"672525b68bf68.jpg\",\"672525b68c26c.jpg\",\"672525b68c5f0.jpg\",\"672525b68c95a.jpg\"]'),
-(30, 30, 'Piel rota', 87.00, 60.00, NULL, '[\"6725260e2cdaf.jpg\"]'),
+(30, 30, 'Piel rota', 60, 87, NULL, '[\"6725260e2cdaf.jpg\"]'),
 (31, 31, NULL, NULL, NULL, NULL, '[\"67252636cfde3.jpg\",\"67252636d04b2.jpg\",\"67252636d0854.jpg\",\"67252636d0bd3.jpg\",\"67252636d0e77.jpg\"]'),
-(32, 32, 'Rotura I', 29.70, 42.00, NULL, '[\"6725267aefe3f.jpg\"]'),
-(33, 33, 'Rotura II', 29.70, 42.00, NULL, '[\"67252695a5008.jpg\"]'),
-(34, 34, 'Rotura III', 29.70, 42.00, NULL, '[\"672526ad61928.jpg\"]'),
-(35, 35, 'Rotura IV', 29.70, 42.00, NULL, '[\"672526c0d1a71.jpg\"]'),
+(32, 32, 'Rotura I', 42, 29.7, NULL, '[\"6725267aefe3f.jpg\"]'),
+(33, 33, 'Rotura II', 42, 29.7, NULL, '[\"67252695a5008.jpg\"]'),
+(34, 34, 'Rotura III', 42, 29.7, NULL, '[\"672526ad61928.jpg\"]'),
+(35, 35, 'Rotura IV', 42, 29.7, NULL, '[\"672526c0d1a71.jpg\"]'),
 (36, 36, NULL, NULL, NULL, NULL, '[\"67252710f0d2d.jpg\",\"67252710f13a1.jpg\"]'),
-(37, 38, 'Herida I', 20.00, 30.00, 2.00, '[\"6725272c4f2d5.jpg\"]'),
+(37, 38, 'Herida I', 30, 20, 2, '[\"6725272c4f2d5.jpg\"]'),
 (39, 40, NULL, NULL, NULL, NULL, '[\"6725274c97e77.jpg\"]'),
 (40, 41, NULL, NULL, NULL, NULL, '[\"672527835b3a4.jpg\"]'),
 (41, 42, NULL, NULL, NULL, NULL, '[\"67252796e0a52.jpg\"]'),
 (42, 43, NULL, NULL, NULL, NULL, '[\"672527a6b689b.jpg\"]'),
 (43, 44, 'Cuna', NULL, NULL, NULL, '[]'),
-(102, 18, 'Retrato de Lorca', 29.70, 42.00, NULL, '[\"6725238097d82.jpg\"]'),
+(102, 18, 'Retrato de Lorca', 42, 29.7, NULL, '[\"6725238097d82.jpg\"]'),
 (103, 24, NULL, NULL, NULL, NULL, '[\"672524ab2082f.jpg\",\"672524ab20fb0.jpg\",\"672524ab2138a.jpg\"]'),
 (105, 56, NULL, NULL, NULL, NULL, '[\"672529740b1cd.jpg\"]'),
-(106, 39, 'Herida II', 20.00, 30.00, 2.00, '[\"67252a6565956.jpg\"]');
+(106, 39, 'Herida II', 30, 20, 2, '[\"67252a6565956.jpg\"]');
 
 -- --------------------------------------------------------
 
@@ -314,18 +339,20 @@ CREATE TABLE `user` (
   `surname` varchar(255) NOT NULL,
   `nick` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
-  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`roles`))
+  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`roles`)),
+  `token` varchar(700) DEFAULT NULL,
+  `is_valid_t` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`) VALUES
-(1, 'samurbinx@gmail.com', '$2y$13$kQUHp8LTiAI0XRMbXDL7Tew1Dr.cF7utq5cf5bFPxQars5KvlfJ2y', 'Samuel', 'Urbina Flor', 'Surbinx', '622039286', '[\"ROLE_ADMIN\"]'),
-(2, 'prueba@gmail.com', '$2y$13$xDKXsQDu2NAbMIOETrH7OeMLmtuaguPzpB4YuM7vADNPG7Eq0ovpm', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]'),
-(5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]'),
-(6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]');
+INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`, `token`, `is_valid_t`) VALUES
+(1, 'samurbinx@gmail.com', '$2y$13$kQUHp8LTiAI0XRMbXDL7Tew1Dr.cF7utq5cf5bFPxQars5KvlfJ2y', 'Samuel', 'Urbina Flor', 'Surbinx', '622039286', '[\"ROLE_ADMIN\"]', NULL, NULL),
+(2, 'prueba@gmail.com', '$2y$13$xDKXsQDu2NAbMIOETrH7OeMLmtuaguPzpB4YuM7vADNPG7Eq0ovpm', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]', NULL, NULL),
+(5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]', NULL, NULL),
+(6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -362,7 +389,23 @@ INSERT INTO `work` (`id`, `title`, `statement`, `description`, `image`) VALUES
 --
 ALTER TABLE `artwork`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_881FC576BB3453DB` (`work_id`);
+  ADD KEY `IDX_881FC576BB3453DB` (`work_id`),
+  ADD KEY `IDX_881FC576FCDAEAAA` (`order_id_id`);
+
+--
+-- Indices de la tabla `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_BA388B7A76ED395` (`user_id`);
+
+--
+-- Indices de la tabla `cart_artwork`
+--
+ALTER TABLE `cart_artwork`
+  ADD PRIMARY KEY (`cart_id`,`artwork_id`),
+  ADD KEY `IDX_73C50D711AD5CDBF` (`cart_id`),
+  ADD KEY `IDX_73C50D71DB8FFA4` (`artwork_id`);
 
 --
 -- Indices de la tabla `doctrine_migration_versions`
@@ -371,11 +414,25 @@ ALTER TABLE `doctrine_migration_versions`
   ADD PRIMARY KEY (`version`);
 
 --
+-- Indices de la tabla `favorites`
+--
+ALTER TABLE `favorites`
+  ADD PRIMARY KEY (`user_id`,`artwork_id`),
+  ADD KEY `IDX_E46960F5A76ED395` (`user_id`),
+  ADD KEY `IDX_E46960F5DB8FFA4` (`artwork_id`);
+
+--
 -- Indices de la tabla `materials`
 --
 ALTER TABLE `materials`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `order`
+--
+ALTER TABLE `order`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD KEY `IDX_F5299398A76ED395` (`user_id`);
 
 --
 -- Indices de la tabla `page`
@@ -387,7 +444,8 @@ ALTER TABLE `page`
 -- Indices de la tabla `piece`
 --
 ALTER TABLE `piece`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_44CA0B23DB8FFA4` (`artwork_id`);
 
 --
 -- Indices de la tabla `piece_materials`
@@ -418,13 +476,25 @@ ALTER TABLE `work`
 -- AUTO_INCREMENT de la tabla `artwork`
 --
 ALTER TABLE `artwork`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
+-- AUTO_INCREMENT de la tabla `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `materials`
 --
 ALTER TABLE `materials`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+
+--
+-- AUTO_INCREMENT de la tabla `order`
+--
+ALTER TABLE `order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `page`
@@ -448,7 +518,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `work`
 --
 ALTER TABLE `work`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
@@ -458,7 +528,40 @@ ALTER TABLE `work`
 -- Filtros para la tabla `artwork`
 --
 ALTER TABLE `artwork`
-  ADD CONSTRAINT `FK_881FC576BB3453DB` FOREIGN KEY (`work_id`) REFERENCES `work` (`id`);
+  ADD CONSTRAINT `FK_881FC576BB3453DB` FOREIGN KEY (`work_id`) REFERENCES `work` (`id`),
+  ADD CONSTRAINT `FK_881FC576FCDAEAAA` FOREIGN KEY (`order_id_id`) REFERENCES `order` (`id`);
+
+--
+-- Filtros para la tabla `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `FK_BA388B7A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+--
+-- Filtros para la tabla `cart_artwork`
+--
+ALTER TABLE `cart_artwork`
+  ADD CONSTRAINT `FK_73C50D711AD5CDBF` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_73C50D71DB8FFA4` FOREIGN KEY (`artwork_id`) REFERENCES `artwork` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `favorites`
+--
+ALTER TABLE `favorites`
+  ADD CONSTRAINT `FK_E46960F5A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_E46960F5DB8FFA4` FOREIGN KEY (`artwork_id`) REFERENCES `artwork` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `FK_F5299398A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+--
+-- Filtros para la tabla `piece`
+--
+ALTER TABLE `piece`
+  ADD CONSTRAINT `FK_44CA0B23DB8FFA4` FOREIGN KEY (`artwork_id`) REFERENCES `artwork` (`id`);
 
 --
 -- Filtros para la tabla `piece_materials`

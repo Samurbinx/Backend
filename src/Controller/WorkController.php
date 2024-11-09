@@ -7,7 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use App\Repository\ArtworkRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 // ESTA CLASE SOLO RECOGE DATOS FORMATO JSON
 #[Route('/work')]
@@ -57,6 +60,35 @@ class WorkController extends AbstractController
         return $response;
     }
     
-    
+    // ------------------------------ //
+    // ----------FAVORITES---------- //
+    // ------------------------------ //
+
+    #[Route('/fav', name: 'app_user_fav', methods: ['POST'])]
+    public function fav(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        
+        if (!isset($data['user_id'], $data['artwork_id'])) {
+            return new JsonResponse(['error' => 'Datos incompletos'], 400);
+        }
+
+        $user = $userRepository->find($data['user_id']);
+        $artwork = $artworkRepository->find($data['artwork_id']);
+
+        if (!$user || !$artwork) {
+            return new JsonResponse(['error' => 'Usuario o obra de arte no encontrado'], 404);
+        }
+
+        $user->addFavorite($artwork);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse([
+        'message' => 'Obra de arte añadida a favoritos',
+        'user_id' => $user->getId(),
+        'artwork_id' => $artwork->getId()
+    ], 200);
+    }
 
 }
