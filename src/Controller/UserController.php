@@ -169,12 +169,26 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         return new JsonResponse(['status' => 'User created!'], JsonResponse::HTTP_CREATED);
     }
 
-   
+    // ------------------------------ //
+    // ---------- FAVS ZONE --------- //
+    // ------------------------------ //
+    #[Route('/{user_id}/favs', name: 'user', methods: ['GET'])]
+    public function getFavs(int $user_id, UserRepository $userRepository): JsonResponse {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $data = $user->getFavoritesId();
+        if (empty($data)) {
+            return new JsonResponse(['error' => 'No favorites found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        return new JsonResponse($data);
+    }
+
 
     // ------------------------------ //
     // ----------ADMIN ZONE---------- //
     // ------------------------------ //
-    
 
     #[Route('/admin/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

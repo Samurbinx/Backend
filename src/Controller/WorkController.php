@@ -20,7 +20,7 @@ class WorkController extends AbstractController
     public function getAllWorks(WorkRepository $workRepository): JsonResponse
     {
         $works = $workRepository->findAll();
-    
+
         $data = [];
         foreach ($works as $work) {
             $data[] = $work->getWork();
@@ -44,7 +44,7 @@ class WorkController extends AbstractController
     {
         $work = $workRepository->find($id);
 
-        $imagePath = 'uploads/works/'.$work->getId().'/'.$work->getImage();
+        $imagePath = 'uploads/works/' . $work->getId() . '/' . $work->getImage();
 
 
         if (!file_exists($imagePath)) {
@@ -59,7 +59,7 @@ class WorkController extends AbstractController
 
         return $response;
     }
-    
+
     // ------------------------------ //
     // ----------FAVORITES---------- //
     // ------------------------------ //
@@ -68,27 +68,38 @@ class WorkController extends AbstractController
     public function fav(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository): Response
     {
         $data = json_decode($request->getContent(), true);
-        
+
         if (!isset($data['user_id'], $data['artwork_id'])) {
             return new JsonResponse(['error' => 'Datos incompletos'], 400);
         }
 
         $user = $userRepository->find($data['user_id']);
         $artwork = $artworkRepository->find($data['artwork_id']);
-
+        
         if (!$user || !$artwork) {
             return new JsonResponse(['error' => 'Usuario o obra de arte no encontrado'], 404);
         }
 
-        $user->addFavorite($artwork);
+        $shouldAdd = $data['shouldAdd'];
+        if ($shouldAdd) {
+            $user->addFavorite($artwork);
+            $message = 'Obra de arte añadida a favoritos';
+        } elseif (!$shouldAdd) {
+            $user->removeFavorite($artwork);
+            $message = 'Obra de arte eliminada de favoritos';
+        } else {
+            return new JsonResponse(['error' => 'Invalid action'], 400);
+        }
+
         $entityManager->persist($user);
         $entityManager->flush();
 
         return new JsonResponse([
-        'message' => 'Obra de arte añadida a favoritos',
-        'user_id' => $user->getId(),
-        'artwork_id' => $artwork->getId()
-    ], 200);
+            'message' => $message,
+            'user_id' => $user->getId(),
+            'artwork_id' => $artwork->getId()
+        ], 200);
     }
 
+    
 }

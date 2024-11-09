@@ -296,6 +296,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->Favorites;
     }
 
+    public function getFavoritesId(): array {
+        $ids = [];
+
+        foreach ($this->Favorites as $favorite) {
+            $ids[] = $favorite->getId();
+        }
+
+        return $ids;
+    }
+
+
     public function addFavorite(Artwork $favorite): static
     {
         if (!$this->Favorites->contains($favorite)) {
