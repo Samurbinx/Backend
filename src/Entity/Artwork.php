@@ -85,7 +85,6 @@ class Artwork
             'workID'=> $this->Work->getId(),
             'title'=> $this->Title,
             'creation_date'=> $this->getCreationYear(),
-            'dimensions' => $this->getDimensions(),
             'price'=> $this->Price,
             'sold'=> $this->Sold,
             'display'=> $this->Display,

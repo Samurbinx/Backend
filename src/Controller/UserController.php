@@ -35,21 +35,21 @@ class UserController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/getidbytoken', name: 'get_user_bytoken', methods: ['POST'])]
-    public function getUserByToken(Request $request, UserRepository $userRepository): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-        $token = $data['token'] ?? null;
-        if (!$token) {
-            return new JsonResponse(['error' => 'Token no proporcionado'], 400);
-        }
+    // #[Route('/getidbytoken', name: 'get_user_bytoken', methods: ['POST'])]
+    // public function getUserByToken(Request $request, UserRepository $userRepository): JsonResponse {
+    //     $data = json_decode($request->getContent(), true);
+    //     $token = $data['token'] ?? null;
+    //     if (!$token) {
+    //         return new JsonResponse(['error' => 'Token no proporcionado'], 400);
+    //     }
     
-        $user = $userRepository->findOneByToken($token);
-        if (!$user) {
-            return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
-        }
+    //     $user = $userRepository->findOneByToken($token);
+    //     if (!$user) {
+    //         return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
+    //     }
     
-        return new JsonResponse(['user_id' => $user->getId()]);
-    }
+    //     return new JsonResponse(['user_id' => $user->getId()]);
+    // }
 
 
     #[Route('/login', name: 'user_login', methods: ['POST'])]
@@ -84,7 +84,7 @@ class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new JsonResponse(['token' => $user->getToken(), 'user' => $user->getUserSafe()]);
+        return new JsonResponse(['token' => $user->getToken(), 'user' => $user->getUserSafe(), 'user_id' => $user->getId()]);
     }
 
     #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
@@ -116,7 +116,7 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     // If everything is fine, return user data and token
     return new JsonResponse([
         'token' => $token,
-        'user' => $user->getUserSafe()
+        'user' => $user->getUserSafe(), 'user_id' => $user->getId()
     ]);
 }
 
@@ -178,13 +178,22 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     // ------------------------------ //
     // ---------- SHOP ZONE --------- //
     // ------------------------------ //
-    #[Route('/{user_id}/favs', name: 'get_user_favs', methods: ['GET'])]
-    public function getFavs(int $user_id, UserRepository $userRepository): JsonResponse {
+    #[Route('/{user_id}/favsid', name: 'get_user_favsid', methods: ['GET'])]
+    public function getFavsId(int $user_id, UserRepository $userRepository): JsonResponse {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         $data = $user->getFavoritesId();
+        return new JsonResponse($data);
+    }
+    #[Route('/{user_id}/favsart', name: 'get_user_favsart', methods: ['GET'])]
+    public function getFavsArt(int $user_id, UserRepository $userRepository): JsonResponse {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $data = $user->getFavoritesJson();
         return new JsonResponse($data);
     }
 
