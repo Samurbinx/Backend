@@ -70,6 +70,16 @@ class Cart
         return $this->Artworks;
     }
 
+    public function getArtworksId(): array {
+        $ids = [];
+
+        foreach ($this->Artworks as $artwork) {
+            $ids[] = $artwork->getId();
+        }
+
+        return $ids;
+    }
+
     public function addArtwork(Artwork $artwork): static
     {
         if (!$this->Artworks->contains($artwork)) {

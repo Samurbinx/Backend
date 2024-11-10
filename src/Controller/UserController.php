@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\ArtworkRepository;
@@ -149,6 +150,11 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         $user->setNick($data->get('nick'));
         $user->setPhone($data->get('phone'));
 
+        $cart = new Cart();
+        $cart->setUserId($user);
+        $cart->setTotalAmount(0);
+        $user->setCart($cart);
+        
         $plaintextPassword = $data->get('pwd');
         $hashedPwd = $passwordHasher->hashPassword($user, $plaintextPassword);
         $user->setPassword($hashedPwd);
@@ -170,18 +176,34 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     }
 
     // ------------------------------ //
-    // ---------- FAVS ZONE --------- //
+    // ---------- SHOP ZONE --------- //
     // ------------------------------ //
-    #[Route('/{user_id}/favs', name: 'user', methods: ['GET'])]
+    #[Route('/{user_id}/favs', name: 'get_user_favs', methods: ['GET'])]
     public function getFavs(int $user_id, UserRepository $userRepository): JsonResponse {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         $data = $user->getFavoritesId();
-        if (empty($data)) {
-            return new JsonResponse(['error' => 'No favorites found'], JsonResponse::HTTP_NOT_FOUND);
+        return new JsonResponse($data);
+    }
+
+    #[Route('/{user_id}/carted', name: 'get_user_carted', methods: ['GET'])]
+    public function getCarted(int $user_id, UserRepository $userRepository): JsonResponse {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
+        $data = $user->getCartArtworksId();
+        return new JsonResponse($data);
+    }
+    #[Route('/{user_id}/cartId', name: 'get_user_cartId', methods: ['GET'])]
+    public function getCartId(int $user_id, UserRepository $userRepository): JsonResponse {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $data = $user->getCart()->getId();
         return new JsonResponse($data);
     }
 

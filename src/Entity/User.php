@@ -15,7 +15,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     private ?int $id = null;
 
   
@@ -245,6 +245,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
         return $this->cart;
     }
+
+    public function getCartArtworksId(): array {
+        return $this->cart->getArtworksId();
+    }
+
 
     public function setCart(Cart $cart): static
     {
