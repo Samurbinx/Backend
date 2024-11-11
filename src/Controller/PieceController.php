@@ -30,6 +30,7 @@ class PieceController extends AbstractController
                 'width' => $piece->getWidth(),
                 'height' => $piece->getHeight(),
                 'depth' => $piece->getDepth(),
+                'dimensions' => $piece->getDimensions(),
             ];
         }
 

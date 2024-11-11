@@ -83,6 +83,7 @@ class Artwork
         $data = [
             'id'=> $this->id,
             'workID'=> $this->Work->getId(),
+            'work_title'=> $this->Work->getTitle(),
             'title'=> $this->Title,
             'creation_date'=> $this->getCreationYear(),
             'price'=> $this->Price,
@@ -95,10 +96,11 @@ class Artwork
             $pieces[] = [
                 'id' => $piece->getId(),
                 'title' => $piece->getTitle(),
-                'materials' => $piece->getMaterialsName(),
+                'materials' => $piece->getMaterialsString(),
                 'width' => $piece->getWidth(),
                 'height' => $piece->getHeight(),
                 'depth' => $piece->getDepth(),
+                'dimensions' => $piece->getDimensions(),
                 'images' => $piece->getImages(),
             ];
         }

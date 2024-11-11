@@ -38,6 +38,13 @@ class WorkController extends AbstractController
         return new JsonResponse($data);
     }
 
+    // #[Route('/title/{id}', name: 'work_detail', methods: ['GET'])]
+    // public function getWorkTitle(string $id, WorkRepository $workRepository): JsonResponse
+    // {
+    //     $work = $workRepository->find($id);
+    //     $data = $work->getTitle();
+    //     return new JsonResponse($data);
+    // }
 
     #[Route('/{id}/img', name: 'work_index_img', methods: ['GET'])]
     public function getPageImg(WorkRepository $workRepository, string $id)

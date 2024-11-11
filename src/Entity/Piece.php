@@ -67,6 +67,7 @@ class Piece
             'width' => $this->Width,
             'height' => $this->Height,
             'depth' => $this->Depth,
+            'dimensions' => $this->getDimensions(),
         ];
     }
 
@@ -125,6 +126,15 @@ class Piece
         return $this;
     }
 
+    public function getDimensions(): ?string{
+        $dimensions = [];
+        if ($this->Width > 0) { $dimensions[] = $this->Width; }
+        if ($this->Height > 0) { $dimensions[] = $this->Height; }
+        if ($this->Depth > 0) { $dimensions[] = $this->Depth; }
+    
+        return !empty($dimensions) ? implode(" x ", $dimensions) : null;
+    }
+    
     public function getImages(): ?array
     {
         return $this->Images;
