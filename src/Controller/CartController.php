@@ -50,4 +50,32 @@ class CartController extends AbstractController
             'artwork_id' => $artwork->getId()
         ], 200);
     }
+
+    #[Route('/cart/delArtwork', name: 'app_cart_del', methods: ['POST'])]
+    public function delArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, ArtworkRepository $artworkRepository): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['cart_id'], $data['artwork_id'])) {
+            return new JsonResponse(['error' => 'Datos incompletos'], 400);
+        }
+
+        $cart = $cartRepository->find($data['cart_id']);
+        $artwork = $artworkRepository->find($data['artwork_id']);
+        
+        if (!$cart || !$artwork) {
+            return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
+        }
+
+
+        $cart->removeArtwork($artwork);
+        $entityManager->persist($cart);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'Se ha eliminado la obra del carrito',
+            'cart_id' => $cart->getId(),
+            'artwork_id' => $artwork->getId()
+        ], 200);
+    }
 }
