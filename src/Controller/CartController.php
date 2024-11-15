@@ -12,10 +12,22 @@ use App\Repository\CartRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Checkout\Session;
+
+#[Route('/cart')]
 
 class CartController extends AbstractController
 {
-    #[Route('/cart', name: 'app_cart')]
+
+    public function __construct()
+    {
+        // Clave secreta de Stripe
+        Stripe::setApiKey('sk_test_51QL60A01qslkTUyp5Up7izZk9E246evOANRPdqRYBzVvurm7H2tgVcBEK5kM24ZxuQzXjz9wkgWEwoWS5JBMFk2a00zAkNeYbE');
+    }
+
+    #[Route('/', name: 'app_cart')]
     public function index(): Response
     {
         return $this->render('cart/index.html.twig', [
@@ -23,7 +35,7 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/addArtwork', name: 'app_cart_add', methods: ['POST'])]
+    #[Route('/addArtwork', name: 'app_cart_add', methods: ['POST'])]
     public function addArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, ArtworkRepository $artworkRepository): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -51,7 +63,7 @@ class CartController extends AbstractController
         ], 200);
     }
 
-    #[Route('/cart/delArtwork', name: 'app_cart_del', methods: ['POST'])]
+    #[Route('/delArtwork', name: 'app_cart_del', methods: ['POST'])]
     public function delArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, ArtworkRepository $artworkRepository): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -78,4 +90,37 @@ class CartController extends AbstractController
             'artwork_id' => $artwork->getId()
         ], 200);
     }
+
+    #[Route('/create-payment-intent', name: 'create_payment_intent', methods: ['POST'])]
+    public function createPaymentIntent(Request $request): JsonResponse
+    {
+        // Obtener los datos de la solicitud (el cuerpo del POST)
+        $paymentData = json_decode($request->getContent(), true);
+
+        // Validar los datos (si es necesario)
+        $amount = $paymentData['amount'] ?? null;
+        $currency = $paymentData['currency'] ?? null;
+
+        if (!$amount || !$currency) {
+            return new JsonResponse(['error' => 'Missing required fields'], 400);
+        }
+
+        try {
+            // Crear el PaymentIntent con Stripe
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $amount, // La cantidad debe estar en la unidad mínima de la moneda (ejemplo: centavos en USD)
+                'currency' => $currency,
+            ]);
+
+            // Obtener el client_secret del PaymentIntent
+            $clientSecret = $paymentIntent->client_secret;
+
+            // Responder con el client_secret
+            return new JsonResponse(['client_secret' => $clientSecret]);
+        } catch (\Exception $e) {
+            // Si ocurre un error al crear el PaymentIntent, devolver un error
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
+
 }
