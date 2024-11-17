@@ -70,6 +70,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\JoinTable(name: 'favorites')] // Definir el nombre de la tabla intermedia
     private Collection $Favorites;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Address $Address = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -88,7 +91,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
             'name' => $this->Name,
             'surname' => $this->Surname,
             'nick' => $this->Nick,
-            'phone' => $this->Phone
+            'phone' => $this->Phone,
+            'address' => $this->Address ? $this->Address->getAddress() : null
         ];
     }
 
@@ -99,7 +103,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
             'name' => $this->Name,
             'surname' => $this->Surname,
             'nick' => $this->Nick,
-            'phone' => $this->Phone
+            'phone' => $this->Phone,
+            'address' => $this->Address ? $this->Address->getAddress() : null
         ];
     }
 
@@ -340,6 +345,22 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeFavorite(Artwork $favorite): static
     {
         $this->Favorites->removeElement($favorite);
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->Address;
+    }
+    public function getAddressJson(): ?Address
+    {
+        return $this->Address->getAddress();
+    }
+
+    public function setAddress(?Address $Address): static
+    {
+        $this->Address = $Address;
 
         return $this;
     }

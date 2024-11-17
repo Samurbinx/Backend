@@ -46,7 +46,7 @@ class CartController extends AbstractController
 
         $cart = $cartRepository->find($data['cart_id']);
         $artwork = $artworkRepository->find($data['artwork_id']);
-        
+
         if (!$cart || !$artwork) {
             return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
         }
@@ -74,7 +74,7 @@ class CartController extends AbstractController
 
         $cart = $cartRepository->find($data['cart_id']);
         $artwork = $artworkRepository->find($data['artwork_id']);
-        
+
         if (!$cart || !$artwork) {
             return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
         }
@@ -123,5 +123,48 @@ class CartController extends AbstractController
         }
     }
 
-    
+    #[Route('/update-amount', name: 'update-amount', methods: ['POST'])]
+    public function updateAmount(Request $request, CartRepository $cartRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Validar existencia de datos y tipos correctos
+        if (
+            !isset($data['cart_id'], $data['total_amount']) ||
+            !is_numeric($data['cart_id']) ||
+            !is_numeric($data['total_amount']) ||
+            $data['total_amount'] < 0
+        ) {
+            return new JsonResponse(['error' => 'Datos inválidos'], 400);
+        }
+
+        $cartId = (int)$data['cart_id'];
+        $totalAmount = (float)$data['total_amount'];
+
+        // Buscar el carrito por ID
+        $cart = $cartRepository->find($cartId);
+
+        if (!$cart) {
+            return new JsonResponse(['error' => 'Carrito no encontrado'], 404);
+        }
+        // Actualizar el monto total del carrito
+        $cart->setTotalAmount($totalAmount);
+        $entityManager->persist($cart);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'El monto total del carrito se ha actualizadsadasdasdo',
+            'cart_id' => $cart->getId(),
+            'total_amount' => $totalAmount
+        ], 200);
+    }
+
+
+    #[Route('/{id}/total', name: 'get_total', methods: ['GET'])]
+    public function getTotalAmount(int $id, CartRepository $cartRepository): JsonResponse
+    {
+        $cart = $cartRepository->find(id: $id);
+        $data = $cart->getTotalAmount();
+        return new JsonResponse($data);
+    }
 }
