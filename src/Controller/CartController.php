@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\CartArtwork;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\WorkRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\ArtworkRepository;
+use App\Repository\CartArtworkRepository;
 use App\Repository\CartRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,8 +53,12 @@ class CartController extends AbstractController
             return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
         }
 
+        $cartArtwork = new CartArtwork();
+        $cartArtwork->setCart($cart);
+        $cartArtwork->setArtwork($artwork);
+        $entityManager->persist($cartArtwork);
 
-        $cart->addArtwork($artwork);
+        $cart->addCartArtwork($cartArtwork);
         $entityManager->persist($cart);
         $entityManager->flush();
 
@@ -64,7 +70,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/delArtwork', name: 'app_cart_del', methods: ['POST'])]
-    public function delArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, ArtworkRepository $artworkRepository): Response
+    public function delArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -79,8 +85,15 @@ class CartController extends AbstractController
             return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
         }
 
-
-        $cart->removeArtwork($artwork);
+        $cartArtwork = $cartArtworkRepository->findOneBy([
+            'Cart' => $cart,
+            'Artwork' => $artwork,
+        ]);
+        if (!$cartArtwork) {
+            return new JsonResponse(['error' => 'La obra no está asociada al carrito'], 404);
+        }
+        
+        $cart->removeCartArtwork($cartArtwork);
         $entityManager->persist($cart);
         $entityManager->flush();
 
@@ -90,6 +103,89 @@ class CartController extends AbstractController
             'artwork_id' => $artwork->getId()
         ], 200);
     }
+
+    #[Route('/toggleSelected', name: 'app_cart_selected', methods: ['POST'])]
+    public function toggleSelected(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['cart_id'], $data['artwork_id'])) {
+            return new JsonResponse(['error' => 'Datos incompletos'], 400);
+        }
+
+        $cart = $cartRepository->find($data['cart_id']);
+        $artwork = $artworkRepository->find($data['artwork_id']);
+
+        if (!$cart || !$artwork) {
+            return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
+        }
+
+        $cartArtwork = $cartArtworkRepository->findOneBy([
+            'Cart' => $cart,
+            'Artwork' => $artwork,
+        ]);
+        if (!$cartArtwork) {
+            return new JsonResponse(['error' => 'La obra no está asociada al carrito'], 404);
+        }
+        
+        $cartArtwork->setSelected(!$cartArtwork->isSelected());
+
+        $entityManager->persist($cartArtwork);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'El estado de selección de la obra ha sido cambiado',
+            'cart_id' => $cart->getId(),
+            'artwork_id' => $artwork->getId()
+        ], 200);
+    }
+
+    
+    #[Route('/isSelected/{cart_id}/{artwork_id}', name: 'app_cart_isselected', methods: ['GET'])]
+    public function isSelected(Request $request, int $cart_id, int $artwork_id, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
+    {
+
+        if (!$cart_id || !$artwork_id) {
+            return new JsonResponse(['error' => 'Datos incompletos'], 400);
+        }
+        
+
+        $cart = $cartRepository->find($cart_id);
+        $artwork = $artworkRepository->find($artwork_id);
+
+        if (!$cart || !$artwork) {
+            return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
+        }
+
+        $cartArtwork = $cartArtworkRepository->findOneBy([
+            'Cart' => $cart,
+            'Artwork' => $artwork,
+        ]);
+        if (!$cartArtwork) {
+            return new JsonResponse(['error' => 'La obra no está asociada al carrito'], 404);
+        }
+
+        return new JsonResponse(['isSelected' => $cartArtwork->isSelected()]);
+    }
+
+    #[Route('/{cart_id}/cartedselected', name: 'get_cartedselected', methods: ['GET'])]
+public function getCartedSelected(int $cart_id, CartRepository $cartRepository): JsonResponse {
+    $cart = $cartRepository->find(id: $cart_id);
+
+    if (!$cart) {
+        return new JsonResponse(['error' => 'Cart not found'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    $data = $cart->getCartArtworksSelected();
+
+    if (empty($data)) {
+        return new JsonResponse(['error' => 'No selected artworks in cart'], JsonResponse::HTTP_OK);
+    }
+
+    return new JsonResponse($data, JsonResponse::HTTP_OK);
+}
+
+
 
     #[Route('/create-payment-intent', name: 'create_payment_intent', methods: ['POST'])]
     public function createPaymentIntent(Request $request): JsonResponse

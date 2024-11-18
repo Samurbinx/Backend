@@ -22,15 +22,22 @@ class Cart
     #[ORM\Column]
     private ?float $Total_amount = null;
 
+    // /**
+    //  * @var Collection<int, Artwork>
+    //  */
+    // #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'carts')]
+    // private Collection $Artworks;
+
     /**
-     * @var Collection<int, Artwork>
+     * @var Collection<int, CartArtwork>
      */
-    #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'carts')]
-    private Collection $Artworks;
+    #[ORM\OneToMany(targetEntity: CartArtwork::class, mappedBy: 'Cart')]
+    private Collection $cartArtworks;
 
     public function __construct()
     {
-        $this->Artworks = new ArrayCollection();
+        // $this->Artworks = new ArrayCollection();
+        $this->cartArtworks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,36 +69,76 @@ class Cart
         return $this;
     }
 
+    // /**
+    //  * @return Collection<int, Artwork>
+    //  */
+    // public function getArtworks(): Collection
+    // {
+    //     return $this->Artworks;
+    // }
+
+    // public function getArtworksId(): array {
+    //     $ids = [];
+
+    //     foreach ($this->Artworks as $artwork) {
+    //         $ids[] = $artwork->getId();
+    //     }
+
+    //     return $ids;
+    // }
+
+    // public function addArtwork(Artwork $artwork): static
+    // {
+    //     if (!$this->Artworks->contains($artwork)) {
+    //         $this->Artworks->add($artwork);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeArtwork(Artwork $artwork): static
+    // {
+    //     $this->Artworks->removeElement($artwork);
+
+    //     return $this;
+    // }
+
     /**
-     * @return Collection<int, Artwork>
+     * @return Collection<int, CartArtwork>
      */
-    public function getArtworks(): Collection
+    public function getCartArtworks(): Collection
     {
-        return $this->Artworks;
+        return $this->cartArtworks;
     }
-
-    public function getArtworksId(): array {
-        $ids = [];
-
-        foreach ($this->Artworks as $artwork) {
-            $ids[] = $artwork->getId();
+    public function getCartArtworksSelected(): array
+    {
+        $selected = [];
+        foreach ($this->cartArtworks as $cartArtwork) {
+            if ($cartArtwork->isSelected()) {
+                $selected[] = $cartArtwork->getArtwork()->getArtworkDetail();
+            }
         }
-
-        return $ids;
+        return $selected;
     }
 
-    public function addArtwork(Artwork $artwork): static
+    public function addCartArtwork(CartArtwork $cartArtwork): static
     {
-        if (!$this->Artworks->contains($artwork)) {
-            $this->Artworks->add($artwork);
+        if (!$this->cartArtworks->contains($cartArtwork)) {
+            $this->cartArtworks->add($cartArtwork);
+            $cartArtwork->setCart($this);
         }
 
         return $this;
     }
 
-    public function removeArtwork(Artwork $artwork): static
+    public function removeCartArtwork(CartArtwork $cartArtwork): static
     {
-        $this->Artworks->removeElement($artwork);
+        if ($this->cartArtworks->removeElement($cartArtwork)) {
+            // set the owning side to null (unless already changed)
+            if ($cartArtwork->getCart() === $this) {
+                $cartArtwork->setCart(null);
+            }
+        }
 
         return $this;
     }

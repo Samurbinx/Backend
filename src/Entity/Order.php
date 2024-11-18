@@ -26,7 +26,7 @@ class Order
     /**
      * @var Collection<int, Artwork>
      */
-    #[ORM\OneToMany(targetEntity: Artwork::class, mappedBy: 'Order_id')]
+    #[ORM\OneToMany(targetEntity: Artwork::class, mappedBy: 'Order')]
     private Collection $Artworks;
 
     public function __construct()

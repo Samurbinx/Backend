@@ -252,17 +252,23 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->cart;
     }
 
-    public function getCartArtworksId(): array {
-        return $this->cart->getArtworksId();
-    }
-    public function getCartJson(): array {
-        $artworks = $this->cart->getArtworks();
+    public function getCartArtworksId() {
+        $artworks = $this->cart->getCartArtworks();
         $arr = [];
         foreach ($artworks as $art) {
-            $arr[] = $art->getArtworkDetail();
+            $arr[] = $art->getArtwork()->getId();
         }
         return $arr;
     }
+    public function getCartJson(): array {
+        $artworks = $this->cart->getCartArtworks();
+        $arr = [];
+        foreach ($artworks as $art) {
+            $arr[] = $art->getArtwork()->getArtworkDetail();
+        }
+        return $arr;
+    }
+
 
     public function setCart(Cart $cart): static
     {

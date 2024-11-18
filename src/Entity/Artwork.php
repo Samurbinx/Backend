@@ -44,14 +44,14 @@ class Artwork
 
     
 
-    /**
-     * @var Collection<int, Cart>
-     */
-    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'Artworks')]
-    private Collection $carts;
+    // /**
+    //  * @var Collection<int, Cart>
+    //  */
+    // #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'Artworks')]
+    // private Collection $carts;
 
     #[ORM\ManyToOne(inversedBy: 'Artworks')]
-    private ?Order $Order_id = null;
+    private ?Order $Order = null;
 
     /**
      * @var Collection<int, User>
@@ -59,12 +59,19 @@ class Artwork
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'Favorites')]
     private Collection $FavoritedBy;
 
+    /**
+     * @var Collection<int, CartArtwork>
+     */
+    #[ORM\OneToMany(targetEntity: CartArtwork::class, mappedBy: 'Artwork')]
+    private Collection $cartArtworks;
+
 
     public function __construct()
     {
         $this->pieces = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        // $this->carts = new ArrayCollection();
         $this->FavoritedBy = new ArrayCollection();
+        $this->cartArtworks = new ArrayCollection();
     }
 
     public function getArtwork(): ?array {
@@ -248,41 +255,41 @@ class Artwork
     }
 
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCarts(): Collection
-    {
-        return $this->carts;
-    }
+    // /**
+    //  * @return Collection<int, Cart>
+    //  */
+    // public function getCarts(): Collection
+    // {
+    //     return $this->carts;
+    // }
 
-    public function addCart(Cart $cart): static
-    {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
-            $cart->addArtwork($this);
-        }
+    // public function addCart(Cart $cart): static
+    // {
+    //     if (!$this->carts->contains($cart)) {
+    //         $this->carts->add($cart);
+    //         $cart->addArtwork($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeCart(Cart $cart): static
-    {
-        if ($this->carts->removeElement($cart)) {
-            $cart->removeArtwork($this);
-        }
+    // public function removeCart(Cart $cart): static
+    // {
+    //     if ($this->carts->removeElement($cart)) {
+    //         $cart->removeArtwork($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getOrderId(): ?Order
     {
-        return $this->Order_id;
+        return $this->Order;
     }
 
-    public function setOrderId(?Order $Order_id): static
+    public function setOrderId(?Order $Order): static
     {
-        $this->Order_id = $Order_id;
+        $this->Order = $Order;
 
         return $this;
     }
@@ -309,6 +316,36 @@ class Artwork
     {
         if ($this->FavoritedBy->removeElement($favoritedBy)) {
             $favoritedBy->removeFavorite($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartArtwork>
+     */
+    public function getCartArtworks(): Collection
+    {
+        return $this->cartArtworks;
+    }
+
+    public function addCartArtwork(CartArtwork $cartArtwork): static
+    {
+        if (!$this->cartArtworks->contains($cartArtwork)) {
+            $this->cartArtworks->add($cartArtwork);
+            $cartArtwork->setArtwork($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartArtwork(CartArtwork $cartArtwork): static
+    {
+        if ($this->cartArtworks->removeElement($cartArtwork)) {
+            // set the owning side to null (unless already changed)
+            if ($cartArtwork->getArtwork() === $this) {
+                $cartArtwork->setArtwork(null);
+            }
         }
 
         return $this;

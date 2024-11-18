@@ -214,6 +214,8 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         $data = $user->getCartJson();
         return new JsonResponse($data);
     }
+   
+    
     #[Route('/{user_id}/cartId', name: 'get_user_cartId', methods: ['GET'])]
     public function getCartId(int $user_id, UserRepository $userRepository): JsonResponse {
         $user = $userRepository->find(id: $user_id);
@@ -229,7 +231,7 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
-        $data = count($user->getCart()->getArtworks());
+        $data = count($user->getCart()->getCartArtworks());
         return new JsonResponse($data);
     }
 
