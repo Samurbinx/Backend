@@ -203,6 +203,7 @@ class CartController extends AbstractController
         }
 
         try {
+            
             // Crear el PaymentIntent con Stripe
             $paymentIntent = PaymentIntent::create([
                 'amount' => $amount, // La cantidad debe estar en la unidad mínima de la moneda (ejemplo: centavos en USD)
@@ -211,7 +212,6 @@ class CartController extends AbstractController
 
             // Obtener el client_secret del PaymentIntent
             $clientSecret = $paymentIntent->client_secret;
-
             // Responder con el client_secret
             return new JsonResponse(['client_secret' => $clientSecret]);
         } catch (\Exception $e) {
@@ -220,36 +220,36 @@ class CartController extends AbstractController
         }
     }
 
-    // #[Route('/cancel-payment-intent', name: 'cancel_payment_intent', methods: ['POST'])]
-    // public function cancelPaymentIntent(Request $request): JsonResponse
-    // {
-    //     // Obtener el client_secret de la solicitud
-    //     $paymentData = json_decode($request->getContent(), true);
-    //     $clientSecret = $paymentData['client_secret'] ?? null;
+    #[Route('/cancel-payment-intent', name: 'cancel_payment_intent', methods: ['POST'])]
+    public function cancelPaymentIntent(Request $request): JsonResponse
+    {
+        // Obtener el client_secret de la solicitud
+        $paymentData = json_decode($request->getContent(), true);
+        $clientSecret = $paymentData['client_secret'] ?? null;
     
-    //     if (!$clientSecret) {
-    //         return new JsonResponse(['error' => 'Missing required client_secret'], 400);
-    //     }
+        if (!$clientSecret) {
+            return new JsonResponse(['error' => 'Missing required client_secret'], 400);
+        }
     
-    //     try {
-    //         // Recuperar el PaymentIntent utilizando el client_secret
-    //         $paymentIntent = PaymentIntent::retrieve([
-    //             'client_secret' => $clientSecret
-    //         ]);
+        try {
+            // Recuperar el PaymentIntent utilizando el client_secret
+            $paymentIntent = PaymentIntent::retrieve([
+                'client_secret' => $clientSecret
+            ]);
     
-    //         // Cancelar el PaymentIntent
-    //         $canceledPaymentIntent = $paymentIntent->cancel();
+            // Cancelar el PaymentIntent
+            $paymentIntent->cancel($clientSecret);
     
-    //         // Responder con el estado del PaymentIntent cancelado
-    //         return new JsonResponse([
-    //             'client_secret' => $canceledPaymentIntent->client_secret,
-    //             'status' => $canceledPaymentIntent->status // Puedes devolver el estado para mayor claridad
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         // Si ocurre un error al cancelar, responder con el mensaje de error
-    //         return new JsonResponse(['error' => $e->getMessage()], 500);
-    //     }
-    // }
+            // Responder con el estado del PaymentIntent cancelado
+            return new JsonResponse([
+                'client_secret' => $clientSecret,
+                'status' => $paymentIntent->status // Puedes devolver el estado para mayor claridad
+            ]);
+        } catch (\Exception $e) {
+            // Si ocurre un error al cancelar, responder con el mensaje de error
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
+    }
     
     
 

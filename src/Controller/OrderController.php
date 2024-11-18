@@ -66,12 +66,16 @@ class OrderController extends AbstractController
                 if (!$artwork) {
                     return new JsonResponse(['error' => 'Obra de arte no encontrada'], 404);
                 }
+                if ($artwork->isSold()) {
+                    return new JsonResponse(['error' => 'La obra que está intentando comprar ya está vendida'], 404);
+                }
                 if (!$artwork->isSold()) {
                     $artwork->setSold(true);
                     $artwork->setOrderId($order);
                     $entityManager->persist($artwork);
                     $entityManager->flush();
                 }
+
             }
 
 
