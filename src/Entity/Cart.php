@@ -22,12 +22,6 @@ class Cart
     #[ORM\Column]
     private ?float $Total_amount = null;
 
-    // /**
-    //  * @var Collection<int, Artwork>
-    //  */
-    // #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'carts')]
-    // private Collection $Artworks;
-
     /**
      * @var Collection<int, CartArtwork>
      */
@@ -69,40 +63,6 @@ class Cart
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, Artwork>
-    //  */
-    // public function getArtworks(): Collection
-    // {
-    //     return $this->Artworks;
-    // }
-
-    // public function getArtworksId(): array {
-    //     $ids = [];
-
-    //     foreach ($this->Artworks as $artwork) {
-    //         $ids[] = $artwork->getId();
-    //     }
-
-    //     return $ids;
-    // }
-
-    // public function addArtwork(Artwork $artwork): static
-    // {
-    //     if (!$this->Artworks->contains($artwork)) {
-    //         $this->Artworks->add($artwork);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeArtwork(Artwork $artwork): static
-    // {
-    //     $this->Artworks->removeElement($artwork);
-
-    //     return $this;
-    // }
-
     /**
      * @return Collection<int, CartArtwork>
      */
@@ -119,6 +79,17 @@ class Cart
             }
         }
         return $selected;
+    }
+ 
+
+    public function removeCartArtworksSelected()
+    {
+        foreach ($this->cartArtworks as $cartartwork) {
+            if ($cartartwork->isSelected()) {
+                $this->removeCartArtwork($cartartwork);
+            }
+        }
+       
     }
 
     public function addCartArtwork(CartArtwork $cartArtwork): static
@@ -142,4 +113,5 @@ class Cart
 
         return $this;
     }
+    
 }

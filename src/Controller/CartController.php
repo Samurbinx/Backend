@@ -92,7 +92,7 @@ class CartController extends AbstractController
         if (!$cartArtwork) {
             return new JsonResponse(['error' => 'La obra no está asociada al carrito'], 404);
         }
-        
+
         $cart->removeCartArtwork($cartArtwork);
         $entityManager->persist($cart);
         $entityManager->flush();
@@ -127,7 +127,7 @@ class CartController extends AbstractController
         if (!$cartArtwork) {
             return new JsonResponse(['error' => 'La obra no está asociada al carrito'], 404);
         }
-        
+
         $cartArtwork->setSelected(!$cartArtwork->isSelected());
 
         $entityManager->persist($cartArtwork);
@@ -140,7 +140,7 @@ class CartController extends AbstractController
         ], 200);
     }
 
-    
+
     #[Route('/isSelected/{cart_id}/{artwork_id}', name: 'app_cart_isselected', methods: ['GET'])]
     public function isSelected(Request $request, int $cart_id, int $artwork_id, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
     {
@@ -148,7 +148,7 @@ class CartController extends AbstractController
         if (!$cart_id || !$artwork_id) {
             return new JsonResponse(['error' => 'Datos incompletos'], 400);
         }
-        
+
 
         $cart = $cartRepository->find($cart_id);
         $artwork = $artworkRepository->find($artwork_id);
@@ -169,21 +169,22 @@ class CartController extends AbstractController
     }
 
     #[Route('/{cart_id}/cartedselected', name: 'get_cartedselected', methods: ['GET'])]
-public function getCartedSelected(int $cart_id, CartRepository $cartRepository): JsonResponse {
-    $cart = $cartRepository->find(id: $cart_id);
+    public function getCartedSelected(int $cart_id, CartRepository $cartRepository): JsonResponse
+    {
+        $cart = $cartRepository->find(id: $cart_id);
 
-    if (!$cart) {
-        return new JsonResponse(['error' => 'Cart not found'], JsonResponse::HTTP_NOT_FOUND);
+        if (!$cart) {
+            return new JsonResponse(['error' => 'Cart not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $data = $cart->getCartArtworksSelected();
+
+        if (empty($data)) {
+            return new JsonResponse(['error' => 'No selected artworks in cart'], JsonResponse::HTTP_OK);
+        }
+
+        return new JsonResponse($data, JsonResponse::HTTP_OK);
     }
-
-    $data = $cart->getCartArtworksSelected();
-
-    if (empty($data)) {
-        return new JsonResponse(['error' => 'No selected artworks in cart'], JsonResponse::HTTP_OK);
-    }
-
-    return new JsonResponse($data, JsonResponse::HTTP_OK);
-}
 
 
 
@@ -218,6 +219,41 @@ public function getCartedSelected(int $cart_id, CartRepository $cartRepository):
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }
     }
+
+    // #[Route('/cancel-payment-intent', name: 'cancel_payment_intent', methods: ['POST'])]
+    // public function cancelPaymentIntent(Request $request): JsonResponse
+    // {
+    //     // Obtener el client_secret de la solicitud
+    //     $paymentData = json_decode($request->getContent(), true);
+    //     $clientSecret = $paymentData['client_secret'] ?? null;
+    
+    //     if (!$clientSecret) {
+    //         return new JsonResponse(['error' => 'Missing required client_secret'], 400);
+    //     }
+    
+    //     try {
+    //         // Recuperar el PaymentIntent utilizando el client_secret
+    //         $paymentIntent = PaymentIntent::retrieve([
+    //             'client_secret' => $clientSecret
+    //         ]);
+    
+    //         // Cancelar el PaymentIntent
+    //         $canceledPaymentIntent = $paymentIntent->cancel();
+    
+    //         // Responder con el estado del PaymentIntent cancelado
+    //         return new JsonResponse([
+    //             'client_secret' => $canceledPaymentIntent->client_secret,
+    //             'status' => $canceledPaymentIntent->status // Puedes devolver el estado para mayor claridad
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         // Si ocurre un error al cancelar, responder con el mensaje de error
+    //         return new JsonResponse(['error' => $e->getMessage()], 500);
+    //     }
+    // }
+    
+    
+
+
 
     #[Route('/update-amount', name: 'update-amount', methods: ['POST'])]
     public function updateAmount(Request $request, CartRepository $cartRepository, EntityManagerInterface $entityManager): JsonResponse
