@@ -94,12 +94,14 @@ class CartController extends AbstractController
         }
 
         $cart->removeCartArtwork($cartArtwork);
+        $entityManager->remove($cartArtwork);
         $entityManager->persist($cart);
         $entityManager->flush();
 
         return new JsonResponse([
             'message' => 'Se ha eliminado la obra del carrito',
             'cart_id' => $cart->getId(),
+            'cartartwork_id' => $cartArtwork->getId(),
             'artwork_id' => $artwork->getId()
         ], 200);
     }
