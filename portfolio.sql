@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-11-2024 a las 12:14:09
+-- Tiempo de generación: 19-11-2024 a las 11:02:34
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -24,13 +24,36 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `address`
+--
+
+CREATE TABLE `address` (
+  `id` int(11) NOT NULL,
+  `street` varchar(400) NOT NULL,
+  `details` varchar(500) NOT NULL,
+  `zip_code` varchar(5) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `address`
+--
+
+INSERT INTO `address` (`id`, `street`, `details`, `zip_code`, `city`, `province`) VALUES
+(1, 'José Gil Sánchez', '2, 1º A', '11100', 'San Fernando', 'Cádiz'),
+(4, 'Calle Larios', '2, 5C', '21389', 'Cityut', 'Cádiz');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `artwork`
 --
 
 CREATE TABLE `artwork` (
   `id` int(11) NOT NULL,
   `work_id` int(11) NOT NULL,
-  `order_id_id` int(11) DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `creation_date` date DEFAULT NULL,
   `price` double DEFAULT NULL,
@@ -42,37 +65,37 @@ CREATE TABLE `artwork` (
 -- Volcado de datos para la tabla `artwork`
 --
 
-INSERT INTO `artwork` (`id`, `work_id`, `order_id_id`, `title`, `creation_date`, `price`, `sold`, `display`) VALUES
+INSERT INTO `artwork` (`id`, `work_id`, `order_id`, `title`, `creation_date`, `price`, `sold`, `display`) VALUES
 (1, 1, NULL, 'Descanso I', '2022-01-01', 169, 0, 'simple'),
 (2, 1, NULL, 'Descanso II', '2022-01-01', 267, 0, 'simple'),
-(5, 1, NULL, 'Cabeza I', '2022-01-01', 167, 1, 'simple'),
+(5, 1, NULL, 'Cabeza I', '2022-01-01', 167, 0, 'simple'),
 (6, 1, NULL, 'Cabeza II', '2022-01-01', 175, 0, 'simple'),
 (7, 1, NULL, 'Descanso III', '2022-01-01', 279, 0, 'simple'),
 (8, 1, NULL, 'Descanso IV', '2022-01-01', 160, 0, 'simple'),
-(9, 1, NULL, 'Cabeza III', '2022-01-01', 123, 1, 'simple'),
-(10, 2, NULL, 'Camarón', '2021-01-01', 171, 1, 'simple'),
-(11, 2, NULL, 'Gata Cattana', '2021-01-01', 154, 1, 'simple'),
-(12, 2, NULL, 'Blas Infante', '2021-01-01', 296, 1, 'simple'),
-(13, 2, NULL, 'Lola Flores', '2021-01-01', 249, 1, 'simple'),
+(9, 1, NULL, 'Cabeza III', '2022-01-01', 123, 0, 'simple'),
+(10, 2, NULL, 'Camarón', '2021-01-01', 171, 0, 'simple'),
+(11, 2, NULL, 'Gata Cattana', '2021-01-01', 154, 0, 'simple'),
+(12, 2, NULL, 'Blas Infante', '2021-01-01', 296, 0, 'simple'),
+(13, 2, NULL, 'Lola Flores', '2021-01-01', 249, 0, 'simple'),
 (14, 2, NULL, 'Picasso', '2021-01-01', 168, 0, 'simple'),
 (15, 2, NULL, 'Paco de Lucía', '2021-01-01', 145, 0, 'simple'),
-(16, 2, NULL, 'Rocío Jurado', '2021-01-01', 109, 1, 'simple'),
+(16, 2, NULL, 'Rocío Jurado', '2021-01-01', 109, 0, 'simple'),
 (17, 2, NULL, 'Juan Ramón Jiménez', '2021-01-01', 238, 0, 'simple'),
-(18, 2, NULL, 'Lorca', '2021-01-01', 259, 1, 'simple'),
-(19, 2, NULL, 'Velazquez', '2021-01-01', 109, 1, 'simple'),
+(18, 2, NULL, 'Lorca', '2021-01-01', 259, 0, 'simple'),
+(19, 2, NULL, 'Velazquez', '2021-01-01', 109, 0, 'simple'),
 (20, 3, NULL, 'Autorretrato', '2021-01-01', 194, 0, 'simple'),
-(24, 3, NULL, NULL, NULL, NULL, 1, 'detail'),
+(24, 3, NULL, NULL, NULL, NULL, 0, 'detail'),
 (25, 4, NULL, 'Jaula frágil', '2022-01-01', 155, 0, 'simple'),
-(29, 4, NULL, NULL, NULL, NULL, 1, 'covercarousel'),
+(29, 4, NULL, NULL, NULL, NULL, 0, 'covercarousel'),
 (30, 4, NULL, 'Piel rota', '2022-01-01', 152, 0, 'simple'),
-(31, 4, NULL, NULL, NULL, NULL, 1, 'detail'),
-(32, 4, NULL, 'Rotura I', '2022-01-01', 163, 1, 'simple'),
+(31, 4, NULL, NULL, NULL, NULL, 0, 'detail'),
+(32, 4, NULL, 'Rotura I', '2022-01-01', 163, 0, 'simple'),
 (33, 4, NULL, 'Rotura II', '2022-01-01', 181, 0, 'simple'),
-(34, 4, NULL, 'Rotura III', '2022-01-01', 238, 1, 'simple'),
-(35, 4, NULL, 'Rotura IV', '2022-01-01', 118, 1, 'simple'),
-(36, 5, NULL, 'Camino', '2024-01-01', NULL, 1, 'diptych'),
+(34, 4, NULL, 'Rotura III', '2022-01-01', 238, 0, 'simple'),
+(35, 4, NULL, 'Rotura IV', '2022-01-01', 118, 0, 'simple'),
+(36, 5, NULL, 'Camino', '2024-01-01', NULL, 0, 'diptych'),
 (38, 5, NULL, 'Costras', '2024-01-01', NULL, 0, 'diptych'),
-(39, 5, NULL, 'Herida II', NULL, NULL, 1, 'simple'),
+(39, 5, NULL, 'Herida II', NULL, NULL, 0, 'simple'),
 (40, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
 (41, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
 (42, 5, NULL, NULL, '2024-01-01', NULL, 0, NULL),
@@ -91,6 +114,17 @@ CREATE TABLE `cart` (
   `total_amount` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `total_amount`) VALUES
+(1, 9, 0),
+(3, 2, 0),
+(4, 6, 0),
+(5, 5, 0),
+(6, 10, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -98,9 +132,32 @@ CREATE TABLE `cart` (
 --
 
 CREATE TABLE `cart_artwork` (
+  `id` int(11) NOT NULL,
   `cart_id` int(11) NOT NULL,
-  `artwork_id` int(11) NOT NULL
+  `artwork_id` int(11) NOT NULL,
+  `selected` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `doctrine_migration_versions`
+--
+
+CREATE TABLE `doctrine_migration_versions` (
+  `version` varchar(191) NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `doctrine_migration_versions`
+--
+
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
+('DoctrineMigrations\\Version20241116175053', '2024-11-16 18:51:08', 60),
+('DoctrineMigrations\\Version20241118094940', '2024-11-18 10:49:44', 56),
+('DoctrineMigrations\\Version20241118101118', '2024-11-18 11:11:22', 23);
 
 -- --------------------------------------------------------
 
@@ -112,6 +169,16 @@ CREATE TABLE `favorites` (
   `user_id` int(11) NOT NULL,
   `artwork_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `favorites`
+--
+
+INSERT INTO `favorites` (`user_id`, `artwork_id`) VALUES
+(2, 10),
+(9, 1),
+(9, 2),
+(9, 5);
 
 -- --------------------------------------------------------
 
@@ -341,18 +408,20 @@ CREATE TABLE `user` (
   `phone` varchar(255) NOT NULL,
   `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`roles`)),
   `token` varchar(700) DEFAULT NULL,
-  `is_valid_t` tinyint(1) DEFAULT NULL
+  `is_valid_t` tinyint(1) DEFAULT NULL,
+  `address_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`, `token`, `is_valid_t`) VALUES
-(1, 'samurbinx@gmail.com', '$2y$13$kQUHp8LTiAI0XRMbXDL7Tew1Dr.cF7utq5cf5bFPxQars5KvlfJ2y', 'Samuel', 'Urbina Flor', 'Surbinx', '622039286', '[\"ROLE_ADMIN\"]', NULL, NULL),
-(2, 'prueba@gmail.com', '$2y$13$xDKXsQDu2NAbMIOETrH7OeMLmtuaguPzpB4YuM7vADNPG7Eq0ovpm', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]', NULL, NULL),
-(5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]', NULL, NULL),
-(6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]', NULL, NULL);
+INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`, `token`, `is_valid_t`, `address_id`) VALUES
+(2, 'prueba@gmail.com', '$2y$13$xDKXsQDu2NAbMIOETrH7OeMLmtuaguPzpB4YuM7vADNPG7Eq0ovpm', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzE5NDg3ODEsImV4cCI6MTczMTk1MjM4MSwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InBydWViYUBnbWFpbC5jb20ifQ.RplLG-Rvoj1wRrDjTLIy4Y1h8KuSgGNuHvUm3YiJZGXuFCDKn9xGuJ7pO_nf6hqVhA8-7rSdPjt0ofotuemno9gxB-GzkFmjEYqP8otRz8DSz_iPvmorYTuWTu1kZZwAV2K42uPTAZSWBVCzGWYdlBxy1QGFYjJ9gHByhQ5qgLxihOfsGVHZBBBV1CapCjFPzvvJqL_N2E6okjq9ffFksBSZIp5-xWWWjT9gP0ZWqLusmIQr-36xXq_aR_GI5WqRZXeiYJRWrReedI_fisDaH8D0-QDHkmXWGuugRo2hHLViVk6W--kW-4ol6YgCYGqVqCySGgIzcNUJ46y3-qvpVg', 1, 4),
+(5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]', NULL, NULL, NULL),
+(6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzEzNDU5NjAsImV4cCI6MTczMTM0OTU2MCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFlc21hcnRAZ21haWwuY29tIn0.h2qyyNg-6k4gTMh_oCkF3elzM3tNRfz1tCaZjPi-lh1ZMswOWz_uNJjao-_aHws4F7hg2cmJ02yFD4Hr4TdGpqWGROjWetrD-8CV6V7Q-Zs0wqcMRXEHM_r5rxWeNYhIpVEMYIZWRlWpOMPlKlCNBw-X4ty2xhkYv_eMe3EZfOuiFVpThXpabATNbbOPN-Drp2A5n6TBmuxQUp6_v8WIZd7wEAjgWsQfZvbSQeV5xcltgF2Nmz6mmB3K118IR-wru9GpMNaCYX_L18qvNBa3P0Nf5GCQU9Kv021C3jwI3N5Qx7j52-Fn3kPb66QguaIeguaDDRyU3lbmjdfbLO_dqg', 1, NULL),
+(9, 'holaa@gmail.com', '$2y$13$I9mf1FLxCTRZtkk7NcGgS.YwJXHLTAtyLPJnHmZN3EQ2Q/THS/ox2', 'holaa', 'holaa', 'holaaa', '12334543645', '[]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzExNzMyNjgsImV4cCI6MTczMTE3Njg2OCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiaG9sYWFAZ21haWwuY29tIn0.HvDM7q2V_tuyd_-bbbM3LJiRxfPTAzs0QZEPCMtmOMrEs2bGyV16QUcS_5NHOb7tWDQFqOX-MnbFAkN_4fpLOxZMQzypksgm2oTWxaWJldaRZTFMe_ZhRYUgF0ZtF4jQTDYBr6Lw8VjpHl7AYVQkDPwD86toee-2x-q2AGeqF5JQhDJUBKyX0xzL4u08VHKcn9bY8ezwNqIB86GjtGMJHku4zpitB1Bxvj5WWI6fZy-2BTuMmQNzn6fWokjA19zoiYNN-ypT982GY9U7qmytXz9WhOxCv3yzYr330RrRm3AjrWPGwszQ8QMUiJLazcCO2a_BYy2CSvXRRNDxYltP3A', 1, NULL),
+(10, 'samurbinx@gmail.com', '$2y$13$rWXCOQwnXeN/xuLfqVXXIuV7ozD8vIJGyZSoiQOwRRnx32JgyBNtm', 'Samuel', 'Urbina Flor', 'Surbinx', '622039286', '[]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzE5NDg0MzksImV4cCI6MTczMTk1MjAzOSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoic2FtdXJiaW54QGdtYWlsLmNvbSJ9.MiXMBuJGOI6CBN_OwPhf0x1VyBlLyndSlrXhbgh1KdiGEtU_zAosySxqdwtDltCeX67qviXMnBDpswRY6fNQAcnWGtnm0UjT8tM4qhAJEQnAyD9OMl5tEtWMQjRmt3_5TMn7vNVwF8NGx3ckd6rdpNCau_AW3rWTvohInX8D2eYlRhqc5XuBevGq1UUPIsjiX0K8Yy9fNAH05TNv_8Annb3Utabp5cc-MTN5xSP8TFDz9l7EF4M6ek3eDCCKeW2qPKh8oqzicAU1ruF8xtjf4clNoAJOaRAAIXa19edGIO2UgND-x5Z6BGnGNJ30WWdkpD9DdQsN4d-znK4SL7JPSw', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -385,12 +454,18 @@ INSERT INTO `work` (`id`, `title`, `statement`, `description`, `image`) VALUES
 --
 
 --
+-- Indices de la tabla `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `artwork`
 --
 ALTER TABLE `artwork`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_881FC576BB3453DB` (`work_id`),
-  ADD KEY `IDX_881FC576FCDAEAAA` (`order_id_id`);
+  ADD KEY `IDX_881FC5768D9F6D38` (`order_id`);
 
 --
 -- Indices de la tabla `cart`
@@ -403,7 +478,8 @@ ALTER TABLE `cart`
 -- Indices de la tabla `cart_artwork`
 --
 ALTER TABLE `cart_artwork`
-  ADD PRIMARY KEY (`cart_id`,`artwork_id`),
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_73C50D711AD5CDBFDB8FFA4` (`cart_id`,`artwork_id`),
   ADD KEY `IDX_73C50D711AD5CDBF` (`cart_id`),
   ADD KEY `IDX_73C50D71DB8FFA4` (`artwork_id`);
 
@@ -460,7 +536,8 @@ ALTER TABLE `piece_materials`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`);
+  ADD UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`),
+  ADD UNIQUE KEY `UNIQ_8D93D649F5B7AF75` (`address_id`);
 
 --
 -- Indices de la tabla `work`
@@ -473,6 +550,12 @@ ALTER TABLE `work`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de la tabla `artwork`
 --
 ALTER TABLE `artwork`
@@ -482,7 +565,13 @@ ALTER TABLE `artwork`
 -- AUTO_INCREMENT de la tabla `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `cart_artwork`
+--
+ALTER TABLE `cart_artwork`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `materials`
@@ -494,7 +583,7 @@ ALTER TABLE `materials`
 -- AUTO_INCREMENT de la tabla `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `page`
@@ -506,13 +595,13 @@ ALTER TABLE `page`
 -- AUTO_INCREMENT de la tabla `piece`
 --
 ALTER TABLE `piece`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `work`
@@ -528,8 +617,8 @@ ALTER TABLE `work`
 -- Filtros para la tabla `artwork`
 --
 ALTER TABLE `artwork`
-  ADD CONSTRAINT `FK_881FC576BB3453DB` FOREIGN KEY (`work_id`) REFERENCES `work` (`id`),
-  ADD CONSTRAINT `FK_881FC576FCDAEAAA` FOREIGN KEY (`order_id_id`) REFERENCES `order` (`id`);
+  ADD CONSTRAINT `FK_881FC5768D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  ADD CONSTRAINT `FK_881FC576BB3453DB` FOREIGN KEY (`work_id`) REFERENCES `work` (`id`);
 
 --
 -- Filtros para la tabla `cart`
@@ -541,8 +630,8 @@ ALTER TABLE `cart`
 -- Filtros para la tabla `cart_artwork`
 --
 ALTER TABLE `cart_artwork`
-  ADD CONSTRAINT `FK_73C50D711AD5CDBF` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_73C50D71DB8FFA4` FOREIGN KEY (`artwork_id`) REFERENCES `artwork` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_73C50D711AD5CDBF` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`),
+  ADD CONSTRAINT `FK_73C50D71DB8FFA4` FOREIGN KEY (`artwork_id`) REFERENCES `artwork` (`id`);
 
 --
 -- Filtros para la tabla `favorites`
@@ -569,6 +658,12 @@ ALTER TABLE `piece`
 ALTER TABLE `piece_materials`
   ADD CONSTRAINT `FK_AB969B333A9FC940` FOREIGN KEY (`materials_id`) REFERENCES `materials` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_AB969B33C40FCFA8` FOREIGN KEY (`piece_id`) REFERENCES `piece` (`id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `FK_8D93D649F5B7AF75` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
