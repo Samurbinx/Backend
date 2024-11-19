@@ -23,14 +23,15 @@ class Cart
     private ?float $Total_amount = null;
 
     /**
-     * @var Collection<int, Artwork>
+     * @var Collection<int, CartArtwork>
      */
-    #[ORM\ManyToMany(targetEntity: Artwork::class, inversedBy: 'carts')]
-    private Collection $Artworks;
+    #[ORM\OneToMany(targetEntity: CartArtwork::class, mappedBy: 'Cart')]
+    private Collection $cartArtworks;
 
     public function __construct()
     {
-        $this->Artworks = new ArrayCollection();
+        // $this->Artworks = new ArrayCollection();
+        $this->cartArtworks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,36 +64,54 @@ class Cart
     }
 
     /**
-     * @return Collection<int, Artwork>
+     * @return Collection<int, CartArtwork>
      */
-    public function getArtworks(): Collection
+    public function getCartArtworks(): Collection
     {
-        return $this->Artworks;
+        return $this->cartArtworks;
     }
-
-    public function getArtworksId(): array {
-        $ids = [];
-
-        foreach ($this->Artworks as $artwork) {
-            $ids[] = $artwork->getId();
+    public function getCartArtworksSelected(): array
+    {
+        $selected = [];
+        foreach ($this->cartArtworks as $cartArtwork) {
+            if ($cartArtwork->isSelected()) {
+                $selected[] = $cartArtwork->getArtwork()->getArtworkDetail();
+            }
         }
+        return $selected;
+    }
+ 
 
-        return $ids;
+    public function removeCartArtworksSelected()
+    {
+        foreach ($this->cartArtworks as $cartartwork) {
+            if ($cartartwork->isSelected()) {
+                $this->removeCartArtwork($cartartwork);
+            }
+        }
+       
     }
 
-    public function addArtwork(Artwork $artwork): static
+    public function addCartArtwork(CartArtwork $cartArtwork): static
     {
-        if (!$this->Artworks->contains($artwork)) {
-            $this->Artworks->add($artwork);
+        if (!$this->cartArtworks->contains($cartArtwork)) {
+            $this->cartArtworks->add($cartArtwork);
+            $cartArtwork->setCart($this);
         }
 
         return $this;
     }
 
-    public function removeArtwork(Artwork $artwork): static
+    public function removeCartArtwork(CartArtwork $cartArtwork): static
     {
-        $this->Artworks->removeElement($artwork);
+        if ($this->cartArtworks->removeElement($cartArtwork)) {
+            // set the owning side to null (unless already changed)
+            if ($cartArtwork->getCart() === $this) {
+                $cartArtwork->setCart(null);
+            }
+        }
 
         return $this;
     }
+    
 }

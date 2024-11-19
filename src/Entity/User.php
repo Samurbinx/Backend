@@ -70,6 +70,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\JoinTable(name: 'favorites')] // Definir el nombre de la tabla intermedia
     private Collection $Favorites;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Address $Address = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -88,7 +91,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
             'name' => $this->Name,
             'surname' => $this->Surname,
             'nick' => $this->Nick,
-            'phone' => $this->Phone
+            'phone' => $this->Phone,
+            'address' => $this->Address ? $this->Address->getAddress() : null
         ];
     }
 
@@ -99,7 +103,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
             'name' => $this->Name,
             'surname' => $this->Surname,
             'nick' => $this->Nick,
-            'phone' => $this->Phone
+            'phone' => $this->Phone,
+            'address' => $this->Address ? $this->Address->getAddress() : null
         ];
     }
 
@@ -247,17 +252,23 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->cart;
     }
 
-    public function getCartArtworksId(): array {
-        return $this->cart->getArtworksId();
-    }
-    public function getCartJson(): array {
-        $artworks = $this->cart->getArtworks();
+    public function getCartArtworksId() {
+        $artworks = $this->cart->getCartArtworks();
         $arr = [];
         foreach ($artworks as $art) {
-            $arr[] = $art->getArtworkDetail();
+            $arr[] = $art->getArtwork()->getId();
         }
         return $arr;
     }
+    public function getCartJson(): array {
+        $artworks = $this->cart->getCartArtworks();
+        $arr = [];
+        foreach ($artworks as $art) {
+            $arr[] = $art->getArtwork()->getArtworkDetail();
+        }
+        return $arr;
+    }
+
 
     public function setCart(Cart $cart): static
     {
@@ -340,6 +351,22 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function removeFavorite(Artwork $favorite): static
     {
         $this->Favorites->removeElement($favorite);
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->Address;
+    }
+    public function getAddressJson(): ?Address
+    {
+        return $this->Address->getAddress();
+    }
+
+    public function setAddress(?Address $Address): static
+    {
+        $this->Address = $Address;
 
         return $this;
     }

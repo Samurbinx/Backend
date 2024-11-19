@@ -31,7 +31,14 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'user', methods: ['GET'])]
     public function getUserById(int $id, UserRepository $userRepository): JsonResponse {
         $user = $userRepository->find(id: $id);
-        $data[] = $user->getUser();
+        $data = $user->getUser();
+        return new JsonResponse($data);
+    }
+
+    #[Route('/safe/{id}', name: 'user_safe', methods: ['GET'])]
+    public function getUserSafeById(int $id, UserRepository $userRepository): JsonResponse {
+        $user = $userRepository->find(id: $id);
+        $data = $user->getUserSafe();
         return new JsonResponse($data);
     }
 
@@ -105,7 +112,6 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     if (!$user) {
         return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
     }
-
     // Validate token expiration or session status
     $isValid = $user->isValidT(); 
 
@@ -175,6 +181,8 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         return new JsonResponse(['status' => 'User created!'], JsonResponse::HTTP_CREATED);
     }
 
+
+
     // ------------------------------ //
     // ---------- SHOP ZONE --------- //
     // ------------------------------ //
@@ -206,6 +214,8 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         $data = $user->getCartJson();
         return new JsonResponse($data);
     }
+   
+    
     #[Route('/{user_id}/cartId', name: 'get_user_cartId', methods: ['GET'])]
     public function getCartId(int $user_id, UserRepository $userRepository): JsonResponse {
         $user = $userRepository->find(id: $user_id);
@@ -221,9 +231,18 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
-        $data = count($user->getCart()->getArtworks());
+        $data = count($user->getCart()->getCartArtworks());
         return new JsonResponse($data);
     }
+
+
+
+
+
+
+
+
+
 
 
     // ------------------------------ //
