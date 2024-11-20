@@ -38,6 +38,10 @@ class Cart
     {
         return $this->id;
     }
+    public function getLength(): ?int
+    {
+        return count($this->getCartArtworks());
+    }
 
     public function getUserId(): ?User
     {
@@ -88,7 +92,7 @@ class Cart
         }
         return $selected;
     }
- 
+
 
     public function removeCartArtworksSelected()
     {
@@ -97,7 +101,6 @@ class Cart
                 $this->removeCartArtwork($cartartwork);
             }
         }
-       
     }
 
     public function addCartArtwork(CartArtwork $cartArtwork): static
@@ -121,5 +124,4 @@ class Cart
 
         return $this;
     }
-    
 }

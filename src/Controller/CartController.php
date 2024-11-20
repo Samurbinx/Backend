@@ -65,9 +65,11 @@ class CartController extends AbstractController
         return new JsonResponse([
             'message' => 'Se ha añadido la obra al carrito',
             'cart_id' => $cart->getId(),
-            'artwork_id' => $artwork->getId()
+            'artwork_id' => $artwork->getId(),
+            'cart_length' => $cart->getLength()
         ], 200);
     }
+
 
     #[Route('/delArtwork', name: 'app_cart_del', methods: ['POST'])]
     public function delArtwork(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
@@ -121,6 +123,23 @@ class CartController extends AbstractController
         }
 
         return new JsonResponse($cartArtworks, 200);
+    }
+
+    #[Route('/{cart_id}/getCartLength', name: 'app_cartlength_get', methods: ['GET'])]
+    public function getCartLength(int $cart_id, Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
+    {
+        $cart = $cartRepository->find($cart_id);
+
+        if (!$cart) {
+            return new JsonResponse(['error' => 'Carrito no encontrado'], 404);
+        }
+
+        $cartlength = $cart->getLength();
+        if (!$cartlength) {
+            return new JsonResponse(['error' => 'No hay ninguna obra en el carrito'], 404);
+        }
+
+        return new JsonResponse($cartlength, 200);
     }
 
     #[Route('/toggleSelected', name: 'app_cart_selected', methods: ['POST'])]
