@@ -106,6 +106,23 @@ class CartController extends AbstractController
         ], 200);
     }
 
+    #[Route('/{cart_id}/getCartArtworks', name: 'app_cartartwork_get', methods: ['GET'])]
+    public function getCartArtworks(int $cart_id, Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
+    {
+        $cart = $cartRepository->find($cart_id);
+
+        if (!$cart) {
+            return new JsonResponse(['error' => 'Carrito no encontrado'], 404);
+        }
+
+        $cartArtworks = $cart->getCartArtworksJson();
+        if (!$cartArtworks) {
+            return new JsonResponse(['error' => 'No hay ninguna obra en el carrito'], 404);
+        }
+
+        return new JsonResponse($cartArtworks, 200);
+    }
+
     #[Route('/toggleSelected', name: 'app_cart_selected', methods: ['POST'])]
     public function toggleSelected(Request $request, EntityManagerInterface $entityManager, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository, ArtworkRepository $artworkRepository): Response
     {
@@ -180,10 +197,6 @@ class CartController extends AbstractController
         }
 
         $data = $cart->getCartArtworksSelected();
-
-        if (empty($data)) {
-            return new JsonResponse(['error' => 'No selected artworks in cart'], JsonResponse::HTTP_OK);
-        }
 
         return new JsonResponse($data, JsonResponse::HTTP_OK);
     }

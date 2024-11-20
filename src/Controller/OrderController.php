@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
 class OrderController extends AbstractController
 {
     #[Route('/new', name: 'app_order_new', methods: ['POST'])]
-    public function newOrder(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository, CartRepository $cartRepository): Response
+    public function newOrder(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -59,7 +59,21 @@ class OrderController extends AbstractController
             $order->setUser($user);
             $order->setTotalAmount($total_amount);
             $entityManager->persist($order);
+            $entityManager->flush();
 
+            
+            // Artworks asociados al carrito actual
+            $cartArtworks = $cart->getCartArtworks();
+            foreach ($cartArtworks as $cartArtwork) {
+                if ($cartArtwork->isSelected()) {
+                    $entityManager->remove($cartArtwork);
+
+                }
+            }
+            $entityManager->persist($cart);
+            $entityManager->flush();
+
+            // Por cada obra que se está comprando
             $artworks = $data['artworks'];
             foreach ($artworks as $artwork_id) {
                 $artwork = $artworkRepository->find($artwork_id);
@@ -72,6 +86,14 @@ class OrderController extends AbstractController
                 if (!$artwork->isSold()) {
                     $artwork->setSold(true);
                     $artwork->setOrderId($order);
+
+                    // Todos los carritos de todos los usuarios en los que está esta obra
+                    $allcarts = $artwork->getCartArtworks();
+                    foreach ($allcarts as $cartArtwork) {
+                        $cartArtwork->setSelected(false);
+                        $entityManager->persist($cartArtwork);
+                    }
+
                     $entityManager->persist($artwork);
                     $entityManager->flush();
                 }
@@ -80,16 +102,6 @@ class OrderController extends AbstractController
 
 
             $entityManager->persist($order);
-            $entityManager->flush();
-
-            // $cart->removeCartArtworksSelected();
-            $cartArtworks = $cart->getCartArtworks();
-            foreach ($cartArtworks as $cartArtwork) {
-                if ($cartArtwork->isSelected()) {
-                    $entityManager->remove($cartArtwork);
-                }
-            }
-            $entityManager->persist($cart);
             $entityManager->flush();
 
             $entityManager->commit();

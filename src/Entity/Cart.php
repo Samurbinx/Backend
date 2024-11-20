@@ -70,6 +70,14 @@ class Cart
     {
         return $this->cartArtworks;
     }
+    public function getCartArtworksJson(): array
+    {
+        $array = [];
+        foreach ($this->cartArtworks as $cartArtwork) {
+            $array[] = $cartArtwork->getArtwork()->getArtworkDetail();
+        }
+        return $array;
+    }
     public function getCartArtworksSelected(): array
     {
         $selected = [];
