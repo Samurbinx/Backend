@@ -1234,23 +1234,23 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.14.5",
+            "version": "v4.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "575b251366c2a88c5f0c1562e517b5243bdc4bd2"
+                "reference": "ae4af70160783b357ccc69c81ea002b661aa3396"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/575b251366c2a88c5f0c1562e517b5243bdc4bd2",
-                "reference": "575b251366c2a88c5f0c1562e517b5243bdc4bd2",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/ae4af70160783b357ccc69c81ea002b661aa3396",
+                "reference": "ae4af70160783b357ccc69c81ea002b661aa3396",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^2.5",
-                "doctrine/orm": "^2.10|^3.0",
+                "doctrine/orm": "^2.12|^3.0",
                 "ext-json": "*",
-                "php": ">=8.0.2",
+                "php": ">=8.1",
                 "symfony/asset": "^5.4|^6.0|^7.0",
                 "symfony/cache": "^5.4|^6.0|^7.0",
                 "symfony/config": "^5.4|^6.0|^7.0",
@@ -1317,7 +1317,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.14.5"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.15.0"
             },
             "funding": [
                 {
@@ -1325,7 +1325,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-08T07:07:54+00:00"
+            "time": "2024-11-19T20:48:31+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2224,16 +2224,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v16.2.0",
+            "version": "v16.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "813ae4961755af28a13bda451689f7a6ed6498cb"
+                "reference": "48af6bc64ca8157b3fdce100e856069963bac466"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/813ae4961755af28a13bda451689f7a6ed6498cb",
-                "reference": "813ae4961755af28a13bda451689f7a6ed6498cb",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/48af6bc64ca8157b3fdce100e856069963bac466",
+                "reference": "48af6bc64ca8157b3fdce100e856069963bac466",
                 "shasum": ""
             },
             "require": {
@@ -2277,9 +2277,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v16.2.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v16.3.0"
             },
-            "time": "2024-10-29T21:15:53+00:00"
+            "time": "2024-11-20T23:30:16+00:00"
         },
         {
             "name": "symfony/asset",
