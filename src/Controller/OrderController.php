@@ -77,7 +77,7 @@ class OrderController extends AbstractController
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
             $paymentIntent->confirm([
                 'payment_method' => $paymentMethod->id, 
-                'return_url' => '', // URL a la que se redirige después del pago
+                'return_url' => 'http://localhost:4200/userdata/pedidos', // URL a la que se redirige después del pago
             ]);
 
             // Verificar que el estado del pago es 'succeeded'
