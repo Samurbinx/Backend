@@ -52,22 +52,27 @@ class CartController extends AbstractController
         if (!$cart || !$artwork) {
             return new JsonResponse(['error' => 'Carrito o obra de arte no encontrado'], 404);
         }
+        
+        try {
+            $cartArtwork = new CartArtwork();
+            $cartArtwork->setCart($cart);
+            $cartArtwork->setArtwork($artwork);
+            $entityManager->persist($cartArtwork);
 
-        $cartArtwork = new CartArtwork();
-        $cartArtwork->setCart($cart);
-        $cartArtwork->setArtwork($artwork);
-        $entityManager->persist($cartArtwork);
+            $cart->addCartArtwork($cartArtwork);
+            $entityManager->persist($cartArtwork);
+            $entityManager->persist($cart);
+            $entityManager->flush();
 
-        $cart->addCartArtwork($cartArtwork);
-        $entityManager->persist($cart);
-        $entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Se ha añadido la obra al carrito',
-            'cart_id' => $cart->getId(),
-            'artwork_id' => $artwork->getId(),
-            'cart_length' => $cart->getLength()
-        ], 200);
+            return new JsonResponse([
+                'message' => 'Se ha añadido la obra al carrito',
+                'cart_id' => $cart->getId(),
+                'artwork_id' => $artwork->getId(),
+                'cart_length' => $cart->getLength()
+            ], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Error al añadir la obra al carrito: ' . $e->getMessage()], 500);
+        }
     }
 
 
@@ -273,10 +278,10 @@ class CartController extends AbstractController
         try {
             // Recuperar el PaymentIntent usando su ID
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
-        
+
             // Cancelar el PaymentIntent
             $paymentIntent->cancel();
-        
+
             // Responder con el estado del PaymentIntent cancelado
             return new JsonResponse([
                 'payment_intent_id' => $paymentIntentId,
