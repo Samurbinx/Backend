@@ -17,6 +17,8 @@ use App\Repository\CartArtworkRepository;
 use App\Repository\CartRepository;
 use App\Entity\Order;
 use App\Repository\UserRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Stripe\Stripe;
@@ -99,6 +101,8 @@ class OrderController extends AbstractController
 
             $order->setUser($user);
             $order->setTotalAmount($total_amount);
+            $order->setCreatedAt(new DateTimeImmutable('now'));
+            $order->setStatus('Pagado');
             $entityManager->persist($order);
             $entityManager->flush();
 

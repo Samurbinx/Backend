@@ -29,38 +29,24 @@ class UserController extends AbstractController
 {
 
     #[Route('/{id}', name: 'user', methods: ['GET'])]
-    public function getUserById(int $id, UserRepository $userRepository): JsonResponse {
+    public function getUserById(int $id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $id);
         $data = $user->getUser();
         return new JsonResponse($data);
     }
 
     #[Route('/safe/{id}', name: 'user_safe', methods: ['GET'])]
-    public function getUserSafeById(int $id, UserRepository $userRepository): JsonResponse {
+    public function getUserSafeById(int $id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $id);
         $data = $user->getUserSafe();
         return new JsonResponse($data);
     }
 
-    // #[Route('/getidbytoken', name: 'get_user_bytoken', methods: ['POST'])]
-    // public function getUserByToken(Request $request, UserRepository $userRepository): JsonResponse {
-    //     $data = json_decode($request->getContent(), true);
-    //     $token = $data['token'] ?? null;
-    //     if (!$token) {
-    //         return new JsonResponse(['error' => 'Token no proporcionado'], 400);
-    //     }
-    
-    //     $user = $userRepository->findOneByToken($token);
-    //     if (!$user) {
-    //         return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
-    //     }
-    
-    //     return new JsonResponse(['user_id' => $user->getId()]);
-    // }
-
-
     #[Route('/login', name: 'user_login', methods: ['POST'])]
-    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, JWTTokenManagerInterface $jwtTokenManager, EntityManagerInterface $entityManager, SessionInterface $session): JsonResponse {
+    public function login(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, JWTTokenManagerInterface $jwtTokenManager, EntityManagerInterface $entityManager, SessionInterface $session): JsonResponse
+    {
         $data = json_decode($request->getContent(), true);
 
         // Validar datos de entrada
@@ -70,7 +56,7 @@ class UserController extends AbstractController
         $email = $data['email'];
         $password = $data['pwd'];
         // Buscar usuario por correo electrónico
-        $user = $userRepository->findOneByEmail($email); 
+        $user = $userRepository->findOneByEmail($email);
 
         if (!$user) {
             return new JsonResponse('User not found', JsonResponse::HTTP_NOT_FOUND);
@@ -85,7 +71,7 @@ class UserController extends AbstractController
         // Configurar datos de sesión
         $session->set('user_id', $user->getId());
         $session->set('user_token', $token);
-        
+
         $user->setToken($token);
         $user->setValidT(true);
         $entityManager->persist($user);
@@ -95,54 +81,37 @@ class UserController extends AbstractController
     }
 
     #[Route('/login-token', name: 'user_login_token', methods: ['POST'])]
-public function loginByToken(Request $request, UserRepository $userRepository, LoggerInterface $loggerInterface): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
+    public function loginByToken(Request $request, UserRepository $userRepository, LoggerInterface $loggerInterface): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
 
-    // Validate incoming data
-    if (!isset($data['token'])) {
-        return new JsonResponse(['error' => 'Missing token'], JsonResponse::HTTP_BAD_REQUEST);
+        // Validate incoming data
+        if (!isset($data['token'])) {
+            return new JsonResponse(['error' => 'Missing token'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $token = $data['token'];
+
+        // Find the user by token
+        $user = $userRepository->findOneByToken($token);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        // Validate token expiration or session status
+        $isValid = $user->isValidT();
+
+        if (!$isValid) {
+            return new JsonResponse(['error' => 'Session ended'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        // If everything is fine, return user data and token
+        return new JsonResponse([
+            'token' => $token,
+            'user' => $user->getUserSafe(),
+            'user_id' => $user->getId()
+        ]);
     }
-
-    $token = $data['token'];
-
-    // Find the user by token
-    $user = $userRepository->findOneByToken($token);
-
-    if (!$user) {
-        return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
-    }
-    // Validate token expiration or session status
-    $isValid = $user->isValidT(); 
-
-    if (!$isValid) {
-        return new JsonResponse(['error' => 'Session ended'], JsonResponse::HTTP_UNAUTHORIZED);
-    }
-
-    // If everything is fine, return user data and token
-    return new JsonResponse([
-        'token' => $token,
-        'user' => $user->getUserSafe(), 'user_id' => $user->getId()
-    ]);
-}
-
-
-    // #[Route('/login-session', name: 'user_login_session', methods: ['POST'])]
-    // public function loginSession(SessionInterface $session, UserRepository $userRepository): JsonResponse {
-    //     $userId = $session->get('user_id');
-    //     $token = $session->get('user_token');
-
-    //     if (!$userId) {
-    //         return new JsonResponse('User not authenticated', JsonResponse::HTTP_UNAUTHORIZED);
-    //     }
-    //     if (!$token) {
-    //         return new JsonResponse('Session ended', JsonResponse::HTTP_UNAUTHORIZED);
-    //     }
-
-    //     $user = $userRepository->find($userId);
-
-    //     return new JsonResponse(['token' => $token, 'user' => $user->getUserSafe()]);
-    // }
 
     #[Route('/new', name: 'user_new', methods: ['POST'])]
     public function createUser(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
@@ -160,7 +129,7 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         $cart->setUserId($user);
         $cart->setTotalAmount(0);
         $user->setCart($cart);
-        
+
         $plaintextPassword = $data->get('pwd');
         $hashedPwd = $passwordHasher->hashPassword($user, $plaintextPassword);
         $user->setPassword($hashedPwd);
@@ -182,12 +151,84 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     }
 
 
+    #[Route(path: '/update/{user_id}', name: 'user_update', methods: ['POST'])]
+    public function updateUser(Request $request, int $user_id, UserRepository $userRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        $data = $request->getPayload();
+
+        $user = $userRepository->find($user_id);
+        $user->setEmail($data->get('email'));
+        $user->setName($data->get('name'));
+        $user->setSurname($data->get('surname'));
+        $user->setNick($data->get('nick'));
+        $user->setPhone($data->get('phone'));
+
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'User updated!'], JsonResponse::HTTP_CREATED);
+    }
+
+    #[Route(path: '/updatepwd/{user_id}', name: 'user_update_pwd', methods: ['POST'])]
+    public function updatePwd(Request $request, int $user_id, UserPasswordHasherInterface $hasher,  UserRepository $userRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        $data = $request->getPayload();
+
+        if (!isset($data)) {
+            return new JsonResponse(['error' => 'Missing data'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $user = $userRepository->find($user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $currentPWD = $data->get('pwd');
+        // Validar la contraseña
+        if (!$hasher->isPasswordValid($user, $currentPWD)) {
+            return new JsonResponse(['message' => 'La contraseña actual no es correcta'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        // Encriptar la contraseña
+        $newPWD = $data->get('npwd');
+        $hashedPwd = $passwordHasher->hashPassword($user, $newPWD);
+        $user->setPassword($hashedPwd);
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+            $errorMessages = [];
+            foreach ($errors as $error) {
+                $errorMessages[] = $error->getMessage();
+            }
+            return new JsonResponse(['errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'Password updated!'], JsonResponse::HTTP_CREATED);
+    }
+
+
 
     // ------------------------------ //
     // ---------- SHOP ZONE --------- //
     // ------------------------------ //
     #[Route('/{user_id}/favsid', name: 'get_user_favsid', methods: ['GET'])]
-    public function getFavsId(int $user_id, UserRepository $userRepository): JsonResponse {
+    public function getFavsId(int $user_id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
@@ -196,7 +237,8 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         return new JsonResponse($data);
     }
     #[Route('/{user_id}/favsart', name: 'get_user_favsart', methods: ['GET'])]
-    public function getFavsArt(int $user_id, UserRepository $userRepository): JsonResponse {
+    public function getFavsArt(int $user_id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
@@ -206,7 +248,8 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     }
 
     #[Route('/{user_id}/carted', name: 'get_user_carted', methods: ['GET'])]
-    public function getCarted(int $user_id, UserRepository $userRepository): JsonResponse {
+    public function getCarted(int $user_id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
@@ -214,10 +257,11 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         $data = $user->getCartJson();
         return new JsonResponse($data);
     }
-   
-    
+
+
     #[Route('/{user_id}/cartId', name: 'get_user_cartId', methods: ['GET'])]
-    public function getCartId(int $user_id, UserRepository $userRepository): JsonResponse {
+    public function getCartId(int $user_id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
@@ -226,12 +270,24 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
         return new JsonResponse($data);
     }
     #[Route('/{user_id}/cartlength', name: 'get_user_cartlength', methods: ['GET'])]
-    public function getCartLength(int $user_id, UserRepository $userRepository): JsonResponse {
+    public function getCartLength(int $user_id, UserRepository $userRepository): JsonResponse
+    {
         $user = $userRepository->find(id: $user_id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         $data = count($user->getCart()->getCartArtworks());
+        return new JsonResponse($data);
+    }
+
+    #[Route('/{user_id}/orders', name: 'orders', methods: ['GET'])]
+    public function getOrders(int $user_id, UserRepository $userRepository): JsonResponse
+    {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $data = $user->getOrdersJson();
         return new JsonResponse($data);
     }
 
@@ -298,7 +354,7 @@ public function loginByToken(Request $request, UserRepository $userRepository, L
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }

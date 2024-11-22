@@ -290,6 +290,14 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->orders;
     }
 
+    public function getOrdersJson(): array {
+        $arr = [];
+        foreach ($this->orders as $order) {
+            $arr[] = $order->getOrderDetails();
+        }
+        return $arr;
+    }
+
     public function addOrder(Order $order): static
     {
         if (!$this->orders->contains($order)) {

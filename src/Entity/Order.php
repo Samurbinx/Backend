@@ -29,9 +29,33 @@ class Order
     #[ORM\OneToMany(targetEntity: Artwork::class, mappedBy: 'Order')]
     private Collection $Artworks;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->Artworks = new ArrayCollection();
+    }
+
+    public function getOrderDetails(): ?array {
+        $data = [
+            'id'=> $this->id,
+            'user_id'=> $this->getUser()->getId(),
+            'total_amount'=> $this->Total_amount,
+            'created_at'=> $this->getDate(),
+            'status'=> $this->status,
+        ];
+        $artworks = [];
+     
+        foreach ($this->getArtworks() as $artwork) {
+            $artworks[] = $artwork->getArtworkDetail();
+        }
+        $data['artworks'] = $artworks;
+    
+        return $data;
     }
 
     public function getId(): ?int
@@ -89,6 +113,39 @@ class Order
                 $artwork->setOrderId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    
+    public function getDate(): ?string
+    {
+        if ($this->created_at) {
+            return $this->created_at->format("Y-m-d H:i:s");
+        }
+        return null;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
