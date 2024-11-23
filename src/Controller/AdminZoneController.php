@@ -19,6 +19,7 @@ use App\Form\PageType;
 use App\Repository\WorkRepository;
 use App\Repository\ArtworkRepository;
 use App\Repository\MaterialsRepository;
+use App\Repository\OrderRepository;
 use App\Repository\PieceRepository;
 use App\Repository\PageRepository;
 use App\Repository\UserRepository;
@@ -750,4 +751,16 @@ class AdminZoneController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
+
+
+     // --------- ORDER ---------- //
+     #[Route('/order', name: 'app_order_index', methods: ['GET'])]
+     public function order(OrderRepository $orderRepository): Response
+     {
+         return $this->render('order/index.html.twig', [
+             'orders' => $orderRepository->findAll(),
+         ]);
+     }
+
+
 }
