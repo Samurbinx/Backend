@@ -9,12 +9,14 @@ use App\Entity\Artwork;
 use App\Entity\Materials;
 use App\Entity\Piece;
 use App\Entity\Page;
+use App\Entity\User;
 
 use App\Form\WorkType;
 use App\Form\ArtworkType;
 use App\Form\PieceType;
 use App\Form\MaterialsType;
 use App\Form\PageType;
+use App\Form\UserType;
 
 use App\Repository\WorkRepository;
 use App\Repository\ArtworkRepository;
@@ -410,10 +412,9 @@ class AdminZoneController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Recoge los materiales de la request y los añade a la obra
             $selectedM = $request->request->get('selectedMaterials');
-
             $selectedMaterials = json_decode($selectedM, true); // true para obtener un array asociativo
-            $piece->removeAllMaterials();
             if ($selectedMaterials) {
+                $piece->removeAllMaterials();
                 foreach ($selectedMaterials as $material) {
                     $newmaterial = $materialsRepository->findOneBy(['Name' => $material]);
                     $piece->addMaterial($newmaterial);
@@ -465,6 +466,7 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
+    
 
     #[Route('/piece/{id}', name: 'app_piece_delete', methods: ['POST'])]
     public function deletePiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, string $id): Response
@@ -504,19 +506,21 @@ class AdminZoneController extends AbstractController
         $artwork = $artworkRepository->find($id);
         $work = $artwork->getWork();
         $workid = $work->getId();
+
         $materials = $materialsRepository->findAll();
+        $SMstr = $piece->getMaterialsString();
 
         // Sort materials alphabetical
-        usort($materials, function ($a, $b) {
-            return strcmp($a->getName(), $b->getName());
-        });
+        // usort($materials, function ($a, $b) {
+        //     return strcmp($a->getName(), $b->getName());
+        // });
 
         if ($form->isSubmitted() && $form->isValid()) {
             $piece->setArtwork($artwork);
 
             $entityManager->persist($piece);
             $entityManager->flush();
-            
+
             // Recoge los materiales de la request y los añade a la obra
             $selectedM = $request->request->get('selectedMaterials');
             $selectedMaterials = json_decode($selectedM, true); // true para obtener un array asociativo
@@ -572,6 +576,7 @@ class AdminZoneController extends AbstractController
             'artwork' => $artwork,
             'work' => $work,
             'materials' => $materials,
+            'SMstr' => $SMstr,
         ]);
     }
 
@@ -618,16 +623,16 @@ class AdminZoneController extends AbstractController
     }
 
     #[Route('/materials/{id}', name: 'app_material_delete', methods: ['POST'])]
-    public function deleteMaterial(Request $request, Materials $materials, EntityManagerInterface $entityManager): Response {
-        
+    public function deleteMaterial(Request $request, Materials $materials, EntityManagerInterface $entityManager): Response
+    {
+
         if ($this->isCsrfTokenValid('delete' . $materials->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->beginTransaction();
 
             try {
                 $entityManager->remove($materials);
-                $entityManager->flush();    
+                $entityManager->flush();
                 $entityManager->commit();
-
             } catch (\Exception $e) {
                 // Rollback changes if an exception occurs
                 $entityManager->rollback();
@@ -681,7 +686,7 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
-    
+
 
     // --------- PAGES ---------- //
     #[Route('/page/{id}', name: 'app_page_show', methods: ['GET'])]
@@ -751,16 +756,79 @@ class AdminZoneController extends AbstractController
             'users' => $userRepository->findAll(),
         ]);
     }
+    #[Route('/user/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    public function userNew(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-     // --------- ORDER ---------- //
-     #[Route('/order', name: 'app_order_index', methods: ['GET'])]
-     public function order(OrderRepository $orderRepository): Response
-     {
-         return $this->render('order/index.html.twig', [
-             'orders' => $orderRepository->findAll(),
-         ]);
-     }
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        }
 
+        return $this->render('user/new.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
 
+    #[Route('/user/{id}', name: 'app_user_show', methods: ['GET'])]
+    public function userShow(User $user): Response
+    {
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/user/admin/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    public function userEdit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/user/{id}', name: 'app_user_delete', methods: ['POST'])]
+    public function userDelete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // --------- ORDER ---------- //
+    #[Route('/order', name: 'app_order_index', methods: ['GET'])]
+    public function order(OrderRepository $orderRepository): Response
+    {
+        return $this->render('order/index.html.twig', [
+            'orders' => $orderRepository->findAll(),
+        ]);
+    }
+    #[Route('/order/{id}', name: 'app_order_delete', methods: ['POST'])]
+    public function orderDelete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

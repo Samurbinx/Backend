@@ -97,11 +97,18 @@ select {
    background-color: var(--neutral-200);
    
    overflow: auto;
-   padding: 20px;
+   padding: 10px 20px;
+}
+#imageContainer > div {
+   display: flex;
+   flex-direction: column;
+   max-height: 300px;
+   max-width: 200px;
+   margin: 20px;
 }
 
 #imagePreview {
-   min-width: 300px;
+   min-width: 200px;
    width: auto;
    max-width: 90%;
 

@@ -7,9 +7,9 @@
     <h1>Usuario {{ user.Name }}</h1>
     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
 </div>
-    <table class="table">
+    <table class="user_table">
         <tbody>
-            <tr>
+            <tr class="user_row">
                 <th>Id</th>
                 <td>{{ user.id }}</td>
             </tr>
@@ -41,7 +41,6 @@
     </table>
 
 <div id="delwork">
-    <a href="{{ path('app_user_index') }}" class="btn back">Atrás</a>
     <div>{{ include('user/_delete_form.html.twig') }}</div>
 </div>
 {% endblock %}

@@ -27,7 +27,7 @@
 		<!-- Aquí se muestran los materiales seleccionados y el botón para abrir el modal -->
 		<div id="materials_body">
 			<label for="selected_materials">Materiales</label>
-			<input type="text" disabled id="selected_materials">
+         <input type="text"  id="SMstr" value="{{ SMstr }}" disabled>
 
 			<!-- Botón para abrir el modal -->
 			<button type="button" class="btn primary" data-bs-toggle="modal" data-bs-target="#pieceModal">Seleccionar materiales</button>
@@ -45,45 +45,44 @@
 
 <!-- Modal para el formulario de app_piece_new -->
 <div class="modal fade" id="pieceModal" tabindex="-1" aria-labelledby="pieceModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="pieceModalLabel">Materiales</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pieceModalLabel">Materiales</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-			<div class="modal-body">
-				<div class="modal-body-left">
-					<div id="temporalM"></div>
-					{% for material in materials %}
-					<div class="material-checkbox-div" id="existingM">
-						<div>
-							<input type="checkbox" id="{{material.Name}}" class="material-checkbox">
-							<label for="{{material.Name}}">{{ material.Name }}</label>
-						</div>
-				
-					</div>
-					{% endfor %}
-				</div>
+            <div class="modal-body">
+                <div class="modal-body-left">
+                    {% for material in materials %}
+                    <div class="material-checkbox-div" id="existingM">
+                        <input type="checkbox" id="{{material.Name}}" class="material-checkbox {% if material in piece.Materials %} checked {% endif %}" {% if material in piece.Materials %} checked {% endif %}>
+                        <label for="{{material.Name}}">{{ material.Name }}</label>
+                    </div>
+                    {% endfor %}
+                    <div id="temporalM"></div>
+                </div>
 
-				<div class="modal-add-material">
-					<p class="add-material-p">Añadir nuevo material</p>
-					<div>
-						<input type="text" id="add-material-text" placeholder="Ej: Óleo">
-						<button type="button" id="add-material-btn" class="btn primary" onclick="addM()">Añadir material</button>
-					</div>
-					<p class="error" id="material-error"></p>
-				</div>
-			</div>
+                <div class="modal-add-material">
+                    <p class="add-material-p">Añadir nuevo material</p>
+                    <div>
+                        <input type="text" id="add-material-text" placeholder="Ej: Óleo">
+                        <button type="button" id="add-material-btn" class="btn primary" onclick="addM()">Añadir material</button>
+                    </div>
+                    <p class="error" id="material-error"></p>
+                </div>
+            </div>
 
-			<div class="modal-footer">
-				<button type="button" class="btn ok" data-bs-dismiss="modal" onclick="saveMaterials()">Aceptar</button>
-			</div>
-		</div>
-	</div>
+            <div class="modal-footer">
+                <button type="button" class="btn ok" data-bs-dismiss="modal" onclick="saveMaterials()">Aceptar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
+
+<script src="{{ asset('js/editpiece.js') }}"></script>
 
 
 

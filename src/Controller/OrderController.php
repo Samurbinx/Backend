@@ -30,7 +30,7 @@ use Stripe\PaymentMethod;
 class OrderController extends AbstractController
 {
     // EN ESTE SE INTENTA IMPLEMENTAR LA CONFIRMACIÓN DEL PAGO AQUI
-    #[Route('/new', name: 'app_order_new', methods: ['POST'])]
+    #[Route('/new', name: 'order_new', methods: ['POST'])]
     public function newOrder(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository): Response
     {
 
@@ -102,6 +102,8 @@ class OrderController extends AbstractController
             $order->setUser($user);
             $order->setTotalAmount($total_amount);
             $order->setCreatedAt(new DateTimeImmutable('now'));
+            $userAddress = $user->getAddressJson();
+            $order->setAddress($userAddress);
             $order->setStatus('Pagado');
             $entityManager->persist($order);
             $entityManager->flush();

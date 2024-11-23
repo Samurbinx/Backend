@@ -35,6 +35,9 @@ class Order
     #[ORM\Column(length: 10)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 255)]
+    private ?array $address = [];
+
     public function __construct()
     {
         $this->Artworks = new ArrayCollection();
@@ -47,6 +50,7 @@ class Order
             'total_amount'=> $this->Total_amount,
             'created_at'=> $this->getDate(),
             'status'=> $this->status,
+            'address'=> $this->getAddress(),
         ];
         $artworks = [];
      
@@ -147,6 +151,17 @@ class Order
     {
         $this->status = $status;
 
+        return $this;
+    }
+
+    public function getAddress(): ?array
+    {
+        return $this->address;
+    }
+
+    public function setAddress(array $address): static
+    {
+        $this->address = $address;
         return $this;
     }
 }

@@ -183,23 +183,31 @@ checkboxes.forEach(function (checkbox) {
 });
 
 // Funcionamiento de la vista de las imagenes
-document.getElementById('piece_Images').addEventListener('change', function (event) {
-   const files = event.target.files;
-   const imageContainer = document.getElementById('imageContainer');
+// document.getElementById('piece_Images').addEventListener('change', function (event) {
+//    const files = event.target.files;
+//    const imageContainer = document.getElementById('modalimages');
 
-   if (files) {
-      for (let i = 0; i < files.length; i++) {
-         const file = files[i];
-         if (file.type.match('image.*')) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-               const imageElement = document.createElement('img');
-               imageElement.src = e.target.result;
-               imageElement.id = "imagePreview";
-               imageContainer.appendChild(imageElement);
-            };
-            reader.readAsDataURL(file);
-         }
-      }
-   }
-});
+//    if (files) {
+//       for (let i = 0; i < files.length; i++) {
+//          const file = files[i];
+//          if (file.type.match('image.*')) {
+//             const reader = new FileReader();
+//             reader.onload = function (e) {
+//                const imageElement = document.createElement('img');
+//                imageElement.style.maxHeight = '150px';
+//                imageElement.src = e.target.result;
+//                imageContainer.appendChild(imageElement);
+//             };
+//             reader.readAsDataURL(file);
+//          }
+//       }
+//    }
+// });
+
+// document.getElementById("imageModalAcceptBtn").addEventListener("click", function() {
+//    // Encuentra el formulario (el que tiene id 'form')
+//    var form = document.getElementById("form");
+
+//    // Envía el formulario
+//    form.submit();
+// });

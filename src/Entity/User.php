@@ -221,6 +221,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return array_unique($roles);
     }
 
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
     public function getToken(): ?string
     {
         return $this->token;
@@ -367,7 +373,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
         return $this->Address;
     }
-    public function getAddressJson(): ?Address
+    public function getAddressJson(): ?array
     {
         return $this->Address->getAddress();
     }

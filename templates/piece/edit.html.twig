@@ -40,8 +40,10 @@
     <div id="imageContainer">
         {% if piece.Images is not empty %}
         {% for image in piece.Images %}
-        <img src="{{ asset('uploads/works/' ~ artwork.work.id ~ '/' ~ artwork.id ~'/'~ piece.id ~'/'~ image) }}"
-            id="imagePreview">
+        <div>
+        <img src="{{ asset('uploads/works/' ~ artwork.work.id ~ '/' ~ artwork.id ~'/'~ piece.id ~'/'~ image) }}" id="imagePreview">
+        <button>Eliminar</button>
+    </div>
         {% endfor %}
         {% endif %}
     </div>
@@ -88,25 +90,26 @@
 
 <script src="{{ asset('js/editpiece.js') }}"></script>
 <script>
-    document.getElementById('piece_Images').addEventListener('change', function (event) {
-        const files = event.target.files;
-        const imageContainer = document.getElementById('imageContainer');
+    // document.getElementById('piece_Images').addEventListener('change', function (event) {
+    //     const files = event.target.files;
+    //     const imageContainer = document.getElementById('imageContainer');
 
-        if (files) {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (file.type.match('image.*')) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const imageElement = document.createElement('img');
-                        imageElement.src = e.target.result;
-                        imageElement.style.maxHeight = '200px';
-                        imageContainer.appendChild(imageElement);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        }
-    });
+    //     if (files) {
+    //         for (let i = 0; i < files.length; i++) {
+    //             const file = files[i];
+    //             if (file.type.match('image.*')) {
+    //                 const reader = new FileReader();
+    //                 reader.onload = function (e) {
+    //                     const imageElement = document.createElement('img');
+    //                     imageElement.src = e.target.result;
+    //                     imageElement.className = 'imagePreview';
+    //                     imageElement.style.maxHeight = '200px';
+    //                     // imageContainer.appendChild(imageElement);
+    //                 };
+    //                 reader.readAsDataURL(file);
+    //             }
+    //         }
+    //     }
+    // });
 </script>
 {% endblock %}

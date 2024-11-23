@@ -22,10 +22,10 @@
         <tr>
             <td>{{ order.id }}</td>
             <td>{{ order.User.id }}</td>
-            <td>{{ order.created_at }}</td>
-            <td>{{ order.Total_amount }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.totalAmount }} €</td>
             <td class="actions">
-                {{ include('user/_delete_form.html.twig') }}
+                {{ include('order/_delete_form.html.twig') }}
             </td>
         </tr>
 
