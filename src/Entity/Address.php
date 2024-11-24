@@ -28,6 +28,17 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $Province = null;
 
+    #[ORM\ManyToOne(inversedBy: 'allAddress')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $recipient = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $phone = null;
+
+
 
     
     public function getAddress(): ?array {
@@ -38,6 +49,8 @@ class Address
             'zipcode'=> $this->ZIP_Code,
             'city'=> $this->City,
             'province'=> $this->Province,
+            'recipient'=> $this->recipient,
+            'phone'=> $this->phone,
         ];
     }
 
@@ -106,4 +119,42 @@ class Address
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRecipient(): ?string
+    {
+        return $this->recipient;
+    }
+
+    public function setRecipient(string $recipient): static
+    {
+        $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+
 }

@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Entity\Cart;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\AddressRepository;
 use App\Repository\ArtworkRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-
+use function PHPSTORM_META\map;
 
 #[Route('/address')]
 class AddressController extends AbstractController
@@ -37,6 +38,37 @@ class AddressController extends AbstractController
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
         $data = $user->getAddressJson();
+        return new JsonResponse($data);
+    }
+
+    #[Route('/{address_id}/del', name: 'del_address', methods: ['POST'])]
+    public function delAddress(int $address_id, AddressRepository $addressRepository, EntityManagerInterface $entityManagerInterface): JsonResponse
+    {
+        $address = $addressRepository->find(id: $address_id);
+        if (!$address) {
+            return new JsonResponse(['error' => 'address not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $entityManagerInterface->remove($address);
+        $entityManagerInterface->flush();
+
+        
+        return new JsonResponse([
+            'message' => 'Se ha eliminado la dirección',
+        ], 200);
+    }
+
+    #[Route('/alladdress/{user_id}', name: 'get_user_alladdress', methods: ['GET'])]
+    public function getAllAddress(int $user_id, UserRepository $userRepository): JsonResponse
+    {
+        $user = $userRepository->find(id: $user_id);
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        $data = [];
+        foreach ($user->getAllAddress() as $address) {
+            $data[] = $address->getAddress();
+
+        }
         return new JsonResponse($data);
     }
 

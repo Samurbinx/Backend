@@ -290,7 +290,4 @@ class UserController extends AbstractController
         $data = $user->getOrdersJson();
         return new JsonResponse($data);
     }
-
-
-    
 }

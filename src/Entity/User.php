@@ -73,10 +73,18 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Address $Address = null;
 
+    /**
+     * @var Collection<int, Address>
+     */
+    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $allAddress;
+
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->Favorites = new ArrayCollection();
+        $this->allAddress = new ArrayCollection();
     }
 
 
@@ -385,6 +393,37 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Address>
+     */
+    public function getAllAddress(): Collection
+    {
+        return $this->allAddress;
+    }
+
+    public function addAllAddress(Address $allAddress): static
+    {
+        if (!$this->allAddress->contains($allAddress)) {
+            $this->allAddress->add($allAddress);
+            $allAddress->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAllAddress(Address $allAddress): static
+    {
+        if ($this->allAddress->removeElement($allAddress)) {
+            // set the owning side to null (unless already changed)
+            if ($allAddress->getUser() === $this) {
+                $allAddress->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
 
 
 
