@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}Orders index{% endblock %}
 
 {% block body %}
 <div id="show_header">
-    <h1>Usuarios</h1>
+    <h1>Pedidos</h1>
 </div>
 <table class="table">
     <thead>
         <tr>
             <th>ID pedido</th>
             <th>ID usuario</th>
+            <th>Estado</th>
             <th>Fecha</th>
             <th>Precio total</th>
             <th>Acciones</th>
@@ -22,10 +23,12 @@
         <tr>
             <td>{{ order.id }}</td>
             <td>{{ order.User.id }}</td>
+            <td>{{ order.Estado }}</td>
             <td>{{ order.date }}</td>
             <td>{{ order.totalAmount }} €</td>
             <td class="actions">
-                {{ include('order/_delete_form.html.twig') }}
+                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} Ver más</a>
+                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
             </td>
         </tr>
 

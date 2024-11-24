@@ -7,38 +7,28 @@
     <h1>Usuario {{ user.Name }}</h1>
     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
 </div>
-    <table class="user_table">
-        <tbody>
-            <tr class="user_row">
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ user.Name }}</td>
-            </tr>
-            <tr>
-                <th>Apellido</th>
-                <td>{{ user.Surname }}</td>
-            </tr>
-            <tr>
-                <th>Nick</th>
-                <td>{{ user.Nick }}</td>
-            </tr>
-            <tr>
-                <th>Teléfono</th>
-                <td>{{ user.Phone }}</td>
-            </tr>
-            <tr>
-                <th>Admin</th>
-                <td>{{ 'ROLE_ADMIN' in user.roles ? 'SI' : 'NO' }}</td>
-            </tr>
-        </tbody>
-    </table>
+
+<div id="user_form">
+    <div>
+        <div>
+            <h3>Datos del usuario</h3>
+            <p><b>Nombre:</b> {{ user.name }}</p>
+            <p><b>Apellidos:</b> {{ user.surname }}</p>
+            <p><b>Email:</b> {{ user.email }}</p>
+            <p><b>Nick:</b> {{ user.nick }}</p>
+            <p><b>Teléfono:</b> {{ user.phone }}</p>
+        </div>
+        <div>
+            <h3>Dirección de envío</h3>
+            <p><b>Dirección: </b> {{ user.address.street }}</p>
+            <p><b>Detalles de la dirección: </b> {{ user.address.details }}</p>
+            <p><b>Código postal: </b> {{ user.address.zipcode }}</p>
+            <p><b>Ciudad: </b> {{ user.address.city }}</p>
+            <p><b>Provincia: </b> {{ user.address.province }}</p>
+        </div>
+    </div>
+</div>
+
 
 <div id="delwork">
     <div>{{ include('user/_delete_form.html.twig') }}</div>

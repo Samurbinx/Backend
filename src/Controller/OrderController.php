@@ -104,7 +104,7 @@ class OrderController extends AbstractController
             $order->setCreatedAt(new DateTimeImmutable('now'));
             $userAddress = $user->getAddressJson();
             $order->setAddress($userAddress);
-            $order->setStatus('Pagado');
+            $order->setStatus('pending');
             $entityManager->persist($order);
             $entityManager->flush();
 

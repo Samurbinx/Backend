@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order{% endblock %}
+
+{% block body %}
+
+<p><a href="{{ path('app_order_index') }}">Pedidos</a> &#60 Nº {{ order.id }}</p>
+
+<div id="show_header">
+    <h1>Detalles del pedido Nº {{order.id}}</h1>
+    <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar
+        pedido</a>
+</div>
+<div id="order_body">
+    <div id="firstblock">
+        <div class="block">
+            <h3>Datos del pedido</h3>
+            <div class="sublock">
+                <div class="data">
+                    <p><b>ID Pedido: </b>{{ order.id }}</p>
+                    <p><b>Estado: </b>{{ order.Estado}}</p>
+                </div>
+                <div class="data">
+                    <p><b>Fecha: </b>{{ order.date }}</p>
+                    <p><b>Precio total: </b>{{ order.totalAmount }} €</p>
+                </div>
+            </div>
+            <p><b>Dirección de entrega: </b>{{ order.addressstring }} €</p>
+        </div>
+
+        <div class="block">
+            <h3>Datos del usuario</h3>
+            <div class="sublock">
+                <div class="data">
+                    <p><b>ID: </b><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.id }}</a></p>
+                    <p><b>Email: </b>{{ user.email }}</p>
+                </div>
+                <div class="data">
+                    <p><b>Nombre completo: </b>{{ user.name }} {{user.surname}} </p>
+                    <p><b>Teléfono: </b>{{ user.phone }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table_block block">
+        <h3>Datos del producto</h3>
+        <table class="order_table table">
+            <tr>
+                <th>ID producto</th>
+                <th>Título</th>
+                <th>Precio</th>
+            </tr>
+            {% for artwork in artworks %}
+            <tr>
+                <td><a href="{{ path('app_artwork_show', {'id': artwork.id}) }}">{{ artwork.id }}</a></td>
+                <td>{{artwork.title}}</td>
+                <td>{{artwork.price}} €</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

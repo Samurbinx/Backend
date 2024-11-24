@@ -10,6 +10,8 @@ use App\Entity\Materials;
 use App\Entity\Piece;
 use App\Entity\Page;
 use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\Address;
 
 use App\Form\WorkType;
 use App\Form\ArtworkType;
@@ -17,6 +19,8 @@ use App\Form\PieceType;
 use App\Form\MaterialsType;
 use App\Form\PageType;
 use App\Form\UserType;
+use App\Form\OrderType;
+use App\Form\AddressType;
 
 use App\Repository\WorkRepository;
 use App\Repository\ArtworkRepository;
@@ -25,6 +29,7 @@ use App\Repository\OrderRepository;
 use App\Repository\PieceRepository;
 use App\Repository\PageRepository;
 use App\Repository\UserRepository;
+use App\Repository\AddressRepository;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -784,21 +789,41 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
+
     #[Route('/user/admin/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function userEdit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function userEdit(Request $request, User $user, string $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, [
+            'email' => $user->getEmail(),
+            'name' => $user->getName(),
+            'surname' => $user->getSurname(),
+            'nick' => $user->getNick(),
+            'phone' => $user->getPhone(),
+            'address' => $user->getAddress(),
+        ]);        
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+
+            $user->setEmail($data['email']);
+            $user->setName($data['name']);
+            $user->setSurname($data['surname']);
+            $user->setNick($data['nick']);
+            $user->setPhone($data['phone']);
+            $user->setAddress($data['address']);
+
+            $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
+            'user' => $user
         ]);
     }
 
@@ -821,14 +846,63 @@ class AdminZoneController extends AbstractController
             'orders' => $orderRepository->findAll(),
         ]);
     }
-    #[Route('/order/{id}', name: 'app_order_delete', methods: ['POST'])]
-    public function orderDelete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+
+    #[Route('/order/{id}', name: 'app_order_show', methods: ['GET'])]
+    public function showOrder(Order $order): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->get('_token'))) {
-            $entityManager->remove($user);
+        $user = $order->getUser();
+        $artworks = $order->getArtworks();
+        return $this->render('order/show.html.twig', [
+            'order' => $order,
+            'user' => $user,
+            'artworks' => $artworks,
+
+        ]);
+    }
+ 
+
+    #[Route('/order/{id}/edit', name: 'app_order_edit', methods: ['GET','POST'])]
+    public function editOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
+    {
+        $address = $order->getAddress();
+        $form = $this->createForm(OrderType::class, [
+            'status' => $order->getStatus(),
+            'street' => $address['street'],
+            'details' => $address['details'],
+            'zipcode' => $address['zipcode'],
+            'city' => $address['city'],
+            'province' => $address['province'],
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $address = [
+                'street' => $data['street'],
+                'details' => $data['details'],
+                'zipcode' => $data['zipcode'],
+                'city' => $data['city'],
+                'province' => $data['province'],
+            ];
+
+            $order->setStatus($data['status']);
+            $order->setAddress($address);
+
+            // Guardar cambios en la base de datos
+            $entityManager->persist($order);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Order updated successfully!');
+
+            return $this->redirectToRoute('app_order_show', ['id' => $order->getId()], Response::HTTP_SEE_OTHER);
+
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('order/edit.html.twig', [
+            'form' => $form->createView(),
+            'order' => $order
+        ]);
     }
 }

@@ -16,16 +16,24 @@
     {{ include('user/_delete_form.html.twig') }}
 </div>
 
-<div id="user_form">
+<div>
+    {{ form_start(form, { 'attr': { 'id': 'user_form' } }) }}
     <div>
-        {{ form_start(form, { 'attr': { 'id': 'form' } }) }}
-        {{ form_widget(form) }}
-        <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
-        {{ form_end(form) }}
+        <div>
+            <h3>Datos del usuario</h3>
+            {{ form_row(form.name) }}
+            {{ form_row(form.surname) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.nick) }}
+            {{ form_row(form.phone) }}
+        </div>
+        <div>
+            <h3>Dirección de envio</h3>
+            {{ form_row(form.address)}}
+        </div>
+     
     </div>
-    <div>
-        Editar dirección
-    </div>
-    
+    <button class="btn save page">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>
+    {{ form_end(form) }}
 </div>
 {% endblock %}

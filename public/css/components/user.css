@@ -5,7 +5,7 @@
    padding: 5px 10px;
 }
 
-#user_form {
+#user_form > div {
    max-width: 100%;
 
    min-height: fit-content;
@@ -15,8 +15,23 @@
    display: flex;
    flex-direction: row;
    flex-wrap: nowrap;
-}
-#user_form > div {
    margin-bottom: 20px;
-   max-height: inherit;
 }
+#user_form > div > div {
+   min-width: 500px;
+   width: 350px;
+   max-width: fit-content;
+
+   margin-right: 50px;
+   padding: 30px;
+
+   background-color: var(--neutral-200);
+   margin-right: 20px;
+}
+#user_form h3 {
+   margin-bottom: 20px;
+}
+#user_form p {
+   margin-bottom: 10px;
+}
+
