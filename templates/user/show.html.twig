@@ -19,12 +19,34 @@
             <p><b>Teléfono:</b> {{ user.phone }}</p>
         </div>
         <div>
-            <h3>Dirección de envío</h3>
+            <h3>Dirección de envío predeterminada</h3>
+            {% if user.address %}
+            <p><b>Destinatario: </b> {{ user.address.recipient }}</p>
             <p><b>Dirección: </b> {{ user.address.street }}</p>
             <p><b>Detalles de la dirección: </b> {{ user.address.details }}</p>
             <p><b>Código postal: </b> {{ user.address.zipcode }}</p>
             <p><b>Ciudad: </b> {{ user.address.city }}</p>
             <p><b>Provincia: </b> {{ user.address.province }}</p>
+            <p><b>Teléfono: </b> {{ user.address.phone }}</p>
+            {% else %}
+            <p>Este usuario aún no ha añadido su dirección de envío.</p>
+            {% endif %}
+        </div>
+        <div>
+            <h3>Otras direcciones de envío</h3>
+            {% if alladdress %}
+            {% for address in alladdress %}
+            {% if address != user.address %}
+            <div class="otheraddress">
+                <p><b>Destinatario: </b> {{ user.address.recipient }}</p>
+                <p><b>Dirección: </b></p>
+                <p> {{ address.street }}, {{ address.details }} </p>
+                <p> {{ address.zipcode }} - {{ address.city }}, {{ address.province }} </p>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

@@ -35,3 +35,11 @@
    margin-bottom: 10px;
 }
 
+.otheraddress {
+   margin-bottom: 10px;
+   border-bottom: 1px solid black;
+}
+.otheraddress > p {
+   margin-bottom: 5px;
+}
+

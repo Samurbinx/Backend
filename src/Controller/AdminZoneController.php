@@ -786,6 +786,7 @@ class AdminZoneController extends AbstractController
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'alladdress' => $user->getAllAddress()
         ]);
     }
 
