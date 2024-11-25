@@ -51,7 +51,7 @@ class AddressController extends AbstractController
         $entityManagerInterface->remove($address);
         $entityManagerInterface->flush();
 
-        
+
         return new JsonResponse([
             'message' => 'Se ha eliminado la dirección',
         ], 200);
@@ -67,7 +67,6 @@ class AddressController extends AbstractController
         $data = [];
         foreach ($user->getAllAddress() as $address) {
             $data[] = $address->getAddress();
-
         }
         return new JsonResponse($data);
     }
@@ -81,16 +80,17 @@ class AddressController extends AbstractController
         }
 
         $data = $request->getPayload();
-        if ($user->getAddress()) {
-            $address = $user->getAddress();
-        } else {
-            $address = new Address();
-        }
+        
+        $address = new Address();
+
+        $address->setUser($user);
         $address->setStreet($data->get('street'));
         $address->setDetails($data->get('details'));
         $address->setZIPCode($data->get('zipcode'));
         $address->setCity($data->get('city'));
         $address->setProvince($data->get('province'));
+        $address->setRecipient($data->get('recipient'));
+        $address->setPhone($data->get('phone'));
 
         $errors = $validator->validate($address);
 
@@ -105,25 +105,51 @@ class AddressController extends AbstractController
         $entityManager->persist($address);
         $entityManager->flush();
 
-        $user->setAddress($address);
-        $entityManager->persist($user);
+        // $user->setAddress($address);
+        // $entityManager->persist($user);
         $entityManager->flush();
 
         return new JsonResponse(['status' => 'address created!'], JsonResponse::HTTP_CREATED);
     }
 
 
-    #[Route('/{user_id}/edit', name: 'address_edit', methods: ['POST'])]
-    public function editAddress(int $user_id, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    #[Route('/setdefault', name: 'set_default_address', methods: ['POST'])]
+    public function setDefault(UserRepository $userRepository, AddressRepository $addressRepository, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $user = $userRepository->find(id: $user_id);
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['user_id'], $data['address_id'])) {
+            return new JsonResponse(['error' => 'Datos incompletos'], 400);
+        }
+
+        $user = $userRepository->find(id: $data['user_id']);
         if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $address = $addressRepository->find(id: $data['address_id']);
+        if (!$address) {
+            return new JsonResponse(['error' => 'Address not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+        
+        $user->setAddress($address);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse($data);
+    }
+
+
+    #[Route('/{address_id}/edit', name: 'address_edit', methods: ['POST'])]
+    public function editAddress(int $address_id, Request $request, EntityManagerInterface $entityManager, AddressRepository $addressRepository, ValidatorInterface $validator, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    {
+        $address = $addressRepository->find(id: $address_id);
+        if (!$address) {
             return new JsonResponse(['error' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data = $request->getPayload();
 
-        $address = $user->getAddress();
         $address->setStreet($data->get('street'));
         $address->setDetails($data->get('details'));
         $address->setZIPCode($data->get('zipcode'));
@@ -143,10 +169,6 @@ class AddressController extends AbstractController
         $entityManager->persist($address);
         $entityManager->flush();
 
-        $user->setAddress($address);
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return new JsonResponse(['status' => 'address created!'], JsonResponse::HTTP_CREATED);
+        return new JsonResponse(['status' => 'address edited!'], JsonResponse::HTTP_CREATED);
     }
 }
