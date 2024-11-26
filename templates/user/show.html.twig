@@ -38,7 +38,7 @@
             {% for address in alladdress %}
             {% if address != user.address %}
             <div class="otheraddress">
-                <p><b>Destinatario: </b> {{ user.address.recipient }}</p>
+                <p><b>Destinatario: </b> {{ address.recipient }}</p>
                 <p><b>Dirección: </b></p>
                 <p> {{ address.street }}, {{ address.details }} </p>
                 <p> {{ address.zipcode }} - {{ address.city }}, {{ address.province }} </p>

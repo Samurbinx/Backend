@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2024 a las 11:02:34
+-- Tiempo de generación: 26-11-2024 a las 10:21:07
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,16 +33,22 @@ CREATE TABLE `address` (
   `details` varchar(500) NOT NULL,
   `zip_code` varchar(5) NOT NULL,
   `city` varchar(255) NOT NULL,
-  `province` varchar(255) NOT NULL
+  `province` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `recipient` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `address`
 --
 
-INSERT INTO `address` (`id`, `street`, `details`, `zip_code`, `city`, `province`) VALUES
-(1, 'José Gil Sánchez', '2, 1º A', '11100', 'San Fernando', 'Cádiz'),
-(4, 'Calle Larios', '2, 5C', '21389', 'Cityut', 'Cádiz');
+INSERT INTO `address` (`id`, `street`, `details`, `zip_code`, `city`, `province`, `user_id`, `recipient`, `phone`) VALUES
+(7, 'Calle José Gil Sánchez', 'Bloque 2, 1º A', '11100', 'San Fernando', 'Cádiz', 11, 'Samuel Urbina Flor', '+34 6229387439'),
+(8, 'Camino del aguacate', '21 A', '11100', 'Chiclana', 'Cádiz', 11, 'Alejandra Quirós Creo', '+34 345869345'),
+(25, 'Calle alcornocales', 'N4, 1ºA', '11100', 'San fernando', 'Cádiz', 2, 'Pablo delgado suárez', '4238672134'),
+(26, 'calle san marcos', '23', '11200', 'Sanfernando', 'Cadiz', 2, 'Ana maria estrada', '1236312123'),
+(28, 'Mi casa ', '3º, D', '54232', 'Marbella', 'Málaga', 11, 'Alba Sánchez', '534256232341');
 
 -- --------------------------------------------------------
 
@@ -119,11 +125,10 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `total_amount`) VALUES
-(1, 9, 0),
-(3, 2, 0),
+(3, 2, 267),
 (4, 6, 0),
 (5, 5, 0),
-(6, 10, 0);
+(7, 11, 168);
 
 -- --------------------------------------------------------
 
@@ -155,9 +160,7 @@ CREATE TABLE `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20241116175053', '2024-11-16 18:51:08', 60),
-('DoctrineMigrations\\Version20241118094940', '2024-11-18 10:49:44', 56),
-('DoctrineMigrations\\Version20241118101118', '2024-11-18 11:11:22', 23);
+('DoctrineMigrations\\Version20241124161720', '2024-11-24 17:53:46', 37);
 
 -- --------------------------------------------------------
 
@@ -175,10 +178,10 @@ CREATE TABLE `favorites` (
 --
 
 INSERT INTO `favorites` (`user_id`, `artwork_id`) VALUES
+(2, 7),
 (2, 10),
-(9, 1),
-(9, 2),
-(9, 5);
+(11, 1),
+(11, 6);
 
 -- --------------------------------------------------------
 
@@ -207,7 +210,10 @@ INSERT INTO `materials` (`id`, `name`) VALUES
 (118, 'Grafito'),
 (119, 'Betadine'),
 (120, 'Madera'),
-(121, 'Cinta');
+(121, 'Cinta'),
+(122, 'Sa'),
+(123, 'Hola'),
+(124, 'Nuevo');
 
 -- --------------------------------------------------------
 
@@ -218,7 +224,10 @@ INSERT INTO `materials` (`id`, `name`) VALUES
 CREATE TABLE `order` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `total_amount` double NOT NULL
+  `total_amount` double NOT NULL,
+  `created_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  `status` varchar(10) NOT NULL,
+  `address` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`address`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -417,11 +426,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`, `token`, `is_valid_t`, `address_id`) VALUES
-(2, 'prueba@gmail.com', '$2y$13$xDKXsQDu2NAbMIOETrH7OeMLmtuaguPzpB4YuM7vADNPG7Eq0ovpm', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzE5NDg3ODEsImV4cCI6MTczMTk1MjM4MSwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InBydWViYUBnbWFpbC5jb20ifQ.RplLG-Rvoj1wRrDjTLIy4Y1h8KuSgGNuHvUm3YiJZGXuFCDKn9xGuJ7pO_nf6hqVhA8-7rSdPjt0ofotuemno9gxB-GzkFmjEYqP8otRz8DSz_iPvmorYTuWTu1kZZwAV2K42uPTAZSWBVCzGWYdlBxy1QGFYjJ9gHByhQ5qgLxihOfsGVHZBBBV1CapCjFPzvvJqL_N2E6okjq9ffFksBSZIp5-xWWWjT9gP0ZWqLusmIQr-36xXq_aR_GI5WqRZXeiYJRWrReedI_fisDaH8D0-QDHkmXWGuugRo2hHLViVk6W--kW-4ol6YgCYGqVqCySGgIzcNUJ46y3-qvpVg', 1, 4),
+(2, 'prueba@gmail.com', '$2y$13$Dl826L3K55TlnJSB2Ub9tuACKAxWE6cfGDPG58MMR4UMrxfJ7Mo7a', 'prueba', 'prueba', 'prueba', '987987987', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzI1NjEyODQsImV4cCI6MTczMjU2NDg4NCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InBydWViYUBnbWFpbC5jb20ifQ.JZez7NFaGcQAmrFTzZxQXC9fFTPtowNMj9soZGh2bjHWjJrfm34LjAuEiBT8ntLFS1dt69vaIyoTVnqT8hd4-tFiFYa7JobHofGW-1VkMOU_lfr83QxfI90YoxTHRAqBOFccG8AEbnyMnyTCYOBjJRaOEu6fbbxmgnsZ-BdIK-qqiWUKt9GtZu4izRUlgiHcP4C9XlIal2zBL9MAHdAnSUmYdPrH4fgL_0rQhO2_2kNC7fVp-IH4Qjj0RS4PtFVCXhpj1xhOp7DNk2h-x3OCIFFaZJwKWah9hmmnuD4b3mfihf7sWONWbc52XFW3krK3ooxQXqYo4uXiQyY-7ZP5nA', 1, 26),
 (5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]', NULL, NULL, NULL),
 (6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzEzNDU5NjAsImV4cCI6MTczMTM0OTU2MCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFlc21hcnRAZ21haWwuY29tIn0.h2qyyNg-6k4gTMh_oCkF3elzM3tNRfz1tCaZjPi-lh1ZMswOWz_uNJjao-_aHws4F7hg2cmJ02yFD4Hr4TdGpqWGROjWetrD-8CV6V7Q-Zs0wqcMRXEHM_r5rxWeNYhIpVEMYIZWRlWpOMPlKlCNBw-X4ty2xhkYv_eMe3EZfOuiFVpThXpabATNbbOPN-Drp2A5n6TBmuxQUp6_v8WIZd7wEAjgWsQfZvbSQeV5xcltgF2Nmz6mmB3K118IR-wru9GpMNaCYX_L18qvNBa3P0Nf5GCQU9Kv021C3jwI3N5Qx7j52-Fn3kPb66QguaIeguaDDRyU3lbmjdfbLO_dqg', 1, NULL),
-(9, 'holaa@gmail.com', '$2y$13$I9mf1FLxCTRZtkk7NcGgS.YwJXHLTAtyLPJnHmZN3EQ2Q/THS/ox2', 'holaa', 'holaa', 'holaaa', '12334543645', '[]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzExNzMyNjgsImV4cCI6MTczMTE3Njg2OCwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiaG9sYWFAZ21haWwuY29tIn0.HvDM7q2V_tuyd_-bbbM3LJiRxfPTAzs0QZEPCMtmOMrEs2bGyV16QUcS_5NHOb7tWDQFqOX-MnbFAkN_4fpLOxZMQzypksgm2oTWxaWJldaRZTFMe_ZhRYUgF0ZtF4jQTDYBr6Lw8VjpHl7AYVQkDPwD86toee-2x-q2AGeqF5JQhDJUBKyX0xzL4u08VHKcn9bY8ezwNqIB86GjtGMJHku4zpitB1Bxvj5WWI6fZy-2BTuMmQNzn6fWokjA19zoiYNN-ypT982GY9U7qmytXz9WhOxCv3yzYr330RrRm3AjrWPGwszQ8QMUiJLazcCO2a_BYy2CSvXRRNDxYltP3A', 1, NULL),
-(10, 'samurbinx@gmail.com', '$2y$13$rWXCOQwnXeN/xuLfqVXXIuV7ozD8vIJGyZSoiQOwRRnx32JgyBNtm', 'Samuel', 'Urbina Flor', 'Surbinx', '622039286', '[]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzE5NDg0MzksImV4cCI6MTczMTk1MjAzOSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoic2FtdXJiaW54QGdtYWlsLmNvbSJ9.MiXMBuJGOI6CBN_OwPhf0x1VyBlLyndSlrXhbgh1KdiGEtU_zAosySxqdwtDltCeX67qviXMnBDpswRY6fNQAcnWGtnm0UjT8tM4qhAJEQnAyD9OMl5tEtWMQjRmt3_5TMn7vNVwF8NGx3ckd6rdpNCau_AW3rWTvohInX8D2eYlRhqc5XuBevGq1UUPIsjiX0K8Yy9fNAH05TNv_8Annb3Utabp5cc-MTN5xSP8TFDz9l7EF4M6ek3eDCCKeW2qPKh8oqzicAU1ruF8xtjf4clNoAJOaRAAIXa19edGIO2UgND-x5Z6BGnGNJ30WWdkpD9DdQsN4d-znK4SL7JPSw', 1, 1);
+(11, 'samurbinx@gmail.com', '$2y$13$ClAT30knDKxkRNNMZS4Ek.J2tpufBddTguT3hBumB4XM7YXJyrQsW', 'Samuel', 'Urbina Flor', 'Samuel', '622039286', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzI2MTExMDgsImV4cCI6MTczMjYxNDcwOCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InNhbXVyYmlueEBnbWFpbC5jb20ifQ.XtaRn_jVmVGlITuncBC4ERldPvtcYXLXsutFrUMV1277n7b5wik7bVW_tvPsYeEhOWIcIQqblHfkRknkYYsBJtegVDcmnhzPoPFoNae1DTdfqhQfV08DvPGYcozkwBjspQUboONR5122y0qhzR49aOGUzB6B5iLyi9fpjJBneU9YN1knzRZJss7mfWt9TYrAdgXYxHEMz5tz5IHrZYbIQPoV11UQ6IUvojWBFAXzi6KB4--7VmS32e7Ae47bxEI75bNtCHw1T30OthOkAma3AuXOcWU1syCJGsAcRt7bebPnL4mo4GKGo-X4_up4G_oi32SsmmoQcVbDO1ScpUH6CA', 1, 28);
 
 -- --------------------------------------------------------
 
@@ -457,7 +465,8 @@ INSERT INTO `work` (`id`, `title`, `statement`, `description`, `image`) VALUES
 -- Indices de la tabla `address`
 --
 ALTER TABLE `address`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_D4E6F81A76ED395` (`user_id`);
 
 --
 -- Indices de la tabla `artwork`
@@ -553,7 +562,7 @@ ALTER TABLE `work`
 -- AUTO_INCREMENT de la tabla `address`
 --
 ALTER TABLE `address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `artwork`
@@ -565,25 +574,25 @@ ALTER TABLE `artwork`
 -- AUTO_INCREMENT de la tabla `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `cart_artwork`
 --
 ALTER TABLE `cart_artwork`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
 
 --
 -- AUTO_INCREMENT de la tabla `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT de la tabla `order`
 --
 ALTER TABLE `order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT de la tabla `page`
@@ -595,13 +604,13 @@ ALTER TABLE `page`
 -- AUTO_INCREMENT de la tabla `piece`
 --
 ALTER TABLE `piece`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `work`
@@ -612,6 +621,12 @@ ALTER TABLE `work`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `address`
+--
+ALTER TABLE `address`
+  ADD CONSTRAINT `FK_D4E6F81A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `artwork`
