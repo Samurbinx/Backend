@@ -105,8 +105,8 @@ class AddressController extends AbstractController
         $entityManager->persist($address);
         $entityManager->flush();
 
-        // $user->setAddress($address);
-        // $entityManager->persist($user);
+        $user->setAddress($address);
+        $entityManager->persist($user);
         $entityManager->flush();
 
         return new JsonResponse(['status' => 'address created!'], JsonResponse::HTTP_CREATED);
@@ -150,11 +150,13 @@ class AddressController extends AbstractController
 
         $data = $request->getPayload();
 
+        $address->setRecipient($data->get('recipient'));
         $address->setStreet($data->get('street'));
         $address->setDetails($data->get('details'));
         $address->setZIPCode($data->get('zipcode'));
         $address->setCity($data->get('city'));
         $address->setProvince($data->get('province'));
+        $address->setPhone($data->get('phone'));
 
         $errors = $validator->validate($address);
 
