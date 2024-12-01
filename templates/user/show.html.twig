@@ -17,6 +17,9 @@
             <p><b>Email:</b> {{ user.email }}</p>
             <p><b>Nick:</b> {{ user.nick }}</p>
             <p><b>Teléfono:</b> {{ user.phone }}</p>
+            <p><b>Admin:</b> 
+            {{ 'ROLE_ADMIN' in user.roles ? 'SI' : 'NO' }}
+            </p>
         </div>
         <div>
             <h3>Dirección de envío predeterminada</h3>

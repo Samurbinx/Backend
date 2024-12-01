@@ -40,6 +40,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 // ESTA CLASE RECOGE TODOS LAS CRUD NECESARIAS PARA LAS TWIG DE LA ZONA DE ADMINISTRACIÓN
 // PROYECTOS, OBRAS, PÁGINAS, USUARIOS Y TIENDA
 #[Route('/aesma')]
@@ -812,7 +814,7 @@ class AdminZoneController extends AbstractController
 
 
     #[Route('/user/admin/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function userEdit(Request $request, User $user, string $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    public function userEdit(Request $request, User $user, string $id, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserType::class, [
             'email' => $user->getEmail(),
@@ -821,6 +823,8 @@ class AdminZoneController extends AbstractController
             'nick' => $user->getNick(),
             'phone' => $user->getPhone(),
             'address' => $user->getAddress(),
+            'roles' => $user->getRoles(),
+            'password' => $user->getPassword(),
         ]);
         $form->handleRequest($request);
 
@@ -835,6 +839,12 @@ class AdminZoneController extends AbstractController
             $user->setNick($data['nick']);
             $user->setPhone($data['phone']);
             $user->setAddress($data['address']);
+            $user->setRoles($data['roles']);
+
+            $plaintextPassword = $data['password'];
+            $hashedPwd = $passwordHasher->hashPassword($user, $plaintextPassword);
+            $user->setPassword($hashedPwd);
+
 
             $entityManager->persist($user);
             $entityManager->flush();

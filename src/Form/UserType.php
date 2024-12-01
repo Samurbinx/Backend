@@ -21,16 +21,16 @@ class UserType extends AbstractType
             ->add('address', AddressType::class, [
                 'label' => false,
                 'mapped' => true,
-            ]);
-            // ->add('roles', ChoiceType::class, [
-            //     'label' => 'Roles',
-            //     'choices' => [
-            //         'Administrador' => 'ROLE_ADMIN',
-            //     ],
-            //     'multiple' => true,
-            //     'expanded' => true,
-            // ])
-            // ->add('password', null, ['label' => 'Contraseña']);
+            ])
+            ->add('roles', ChoiceType::class, [
+                'label' => 'Roles',
+                'choices' => [
+                    'Administrador' => 'ROLE_ADMIN',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            ->add('password', null, ['label' => 'Contraseña']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
