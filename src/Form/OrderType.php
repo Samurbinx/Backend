@@ -41,7 +41,9 @@ class OrderType extends AbstractType
             ->add('details', TextType::class, ['label' => 'Detalles de dirección', 'required' => false])
             ->add('zipcode', TextType::class, ['label' => 'Código postal'])
             ->add('city', TextType::class, ['label' => 'Ciudad'])
-            ->add('province', TextType::class, ['label' => 'Provincia']);
+            ->add('province', TextType::class, ['label' => 'Provincia'])
+            ->add('recipient', TextType::class, ['label' => 'Destinatario'])
+            ->add('phone', TextType::class, ['label' => 'Teléfono']);
     }
 
 

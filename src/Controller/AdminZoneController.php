@@ -41,6 +41,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Psr\Log\LoggerInterface;
 
 // ESTA CLASE RECOGE TODOS LAS CRUD NECESARIAS PARA LAS TWIG DE LA ZONA DE ADMINISTRACIÓN
 // PROYECTOS, OBRAS, PÁGINAS, USUARIOS Y TIENDA
@@ -893,7 +896,7 @@ class AdminZoneController extends AbstractController
 
 
     #[Route('/order/{id}/edit', name: 'app_order_edit', methods: ['GET', 'POST'])]
-    public function editOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
+    public function editOrder(Request $request, Order $order, EntityManagerInterface $entityManager, MailerInterface $mailer, LoggerInterface $logger): Response
     {
         $address = $order->getAddress();
         $form = $this->createForm(OrderType::class, [
@@ -903,6 +906,8 @@ class AdminZoneController extends AbstractController
             'zipcode' => $address['zipcode'],
             'city' => $address['city'],
             'province' => $address['province'],
+            'recipient' => $address['recipient'],
+            'phone' => $address['phone'],
         ]);
 
         $form->handleRequest($request);
@@ -916,8 +921,24 @@ class AdminZoneController extends AbstractController
                 'zipcode' => $data['zipcode'],
                 'city' => $data['city'],
                 'province' => $data['province'],
+                'recipient' => $data['recipient'],
+                'phone' => $data['phone'],
             ];
-
+            if ($order->getStatus() != $data['status']) {
+                try {
+                    $user = $order->getUser();
+                    $email = (new Email())
+                        ->from('samurbinx@gmail.com')
+                        ->to($user->getEmail())
+                        ->subject('AESMA')
+                        ->text('El estado de su pedido ha sido actualizado: ' . "\n\n" . 'Nº Pedido: ' . $order->getId() . "\n\n" . 'Estado: ' . $data['status']);
+        
+                    $mailer->send($email);
+        
+                } catch (\Exception $e) {
+                    $logger->error('Error sending email: ' . $e->getMessage());
+                }
+            }
             $order->setStatus($data['status']);
             $order->setAddress($address);
 
