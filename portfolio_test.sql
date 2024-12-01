@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-12-2024 a las 19:35:13
+-- Tiempo de generación: 01-12-2024 a las 19:46:20
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `portfolio`
 --
+
+
 CREATE DATABASE IF NOT EXISTS portfolio;
 USE portfolio;
 
@@ -47,11 +49,7 @@ CREATE TABLE `address` (
 
 INSERT INTO `address` (`id`, `street`, `details`, `zip_code`, `city`, `province`, `user_id`, `recipient`, `phone`) VALUES
 (7, 'Calle José Gil Sánchez', 'Bloque 2, 1º A', '11100', 'San Fernando', 'Cádiz', 11, 'Samuel Urbina Flor', '+34 6229387439'),
-(8, 'Camino del aguacate', '21 A', '11100', 'Chiclana', 'Cádiz', 11, 'Alejandra Quirós Creo', '+34 345869345'),
-(26, 'calle san marcos', '23', '11200', 'Sanfernando', 'Cadiz', 2, 'Ana maria estrada', '+34 622039286'),
-(28, 'Mi casa ', '3º, D', '54232', 'Marbella', 'Málaga', 11, 'Alba Sánchez', '534256232341'),
-(30, 'Calle José Gil Sánchez', 'Calle José Gil Sánchez', '11100', 'Cadiz', 'CÁDIZ', 2, 'Otra', '622039286'),
-(33, 'Calle José Gil Sánchez', 'Calle José Gil Sánchez', '11100', 'Cadiz', 'CÁDIZ', 2, 'fsd', '622039286');
+(26, 'Calle San Marcos', '23', '11200', 'Sanfernando', 'Cadiz', 2, 'Ana maria estrada', '+34 622039286');
 
 -- --------------------------------------------------------
 
@@ -89,24 +87,7 @@ INSERT INTO `artwork` (`id`, `work_id`, `order_id`, `title`, `creation_date`, `p
 (14, 2, NULL, 'Picasso', '2021-01-01', 168, 0, 'simple'),
 (15, 2, NULL, 'Paco de Lucía', '2021-01-01', 145, 0, 'simple'),
 (16, 2, NULL, 'Rocío Jurado', '2021-01-01', 109, 0, 'simple'),
-(17, 2, NULL, 'Juan Ramón Jiménez', '2021-01-01', 238, 0, 'simple'),
-(20, 3, NULL, 'Autorretrato', '2021-01-01', 194, 0, 'simple'),
-(24, 3, NULL, NULL, NULL, NULL, 1, 'detail'),
-(25, 4, NULL, 'Jaula frágil', '2022-01-01', 155, 0, 'simple'),
-(29, 4, NULL, NULL, NULL, NULL, 1, 'covercarousel'),
-(30, 4, NULL, 'Piel rota', '2022-01-01', 152, 0, 'simple'),
-(31, 4, NULL, NULL, NULL, NULL, 1, 'detail'),
-(32, 4, NULL, 'Rotura I', '2022-01-01', 163, 0, 'simple'),
-(33, 4, NULL, 'Rotura II', '2022-01-01', 181, 0, 'simple'),
-(34, 4, NULL, 'Rotura III', '2022-01-01', 238, 0, 'simple'),
-(35, 4, NULL, 'Rotura IV', '2022-01-01', 118, 0, 'simple'),
-(36, 5, NULL, 'Camino', '2024-01-01', NULL, 1, 'diptych'),
-(38, 5, NULL, 'Costras', '2024-01-01', NULL, 1, 'diptych'),
-(39, 5, NULL, 'Herida II', NULL, NULL, 1, 'simple'),
-(40, 5, NULL, NULL, '2024-01-01', NULL, 1, 'simple'),
-(41, 5, NULL, NULL, '2024-01-01', NULL, 1, 'simple'),
-(42, 5, NULL, NULL, '2024-01-01', NULL, 1, 'simple'),
-(43, 5, NULL, NULL, '2024-01-01', NULL, 1, 'simple');
+(17, 2, NULL, 'Juan Ramón Jiménez', '2021-01-01', 238, 0, 'simple');
 
 -- --------------------------------------------------------
 
@@ -125,10 +106,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `user_id`, `total_amount`) VALUES
-(3, 2, 171),
+(3, 2, 0),
 (4, 6, 0),
-(5, 5, 0),
-(7, 11, 167);
+(7, 11, 0);
 
 -- --------------------------------------------------------
 
@@ -142,15 +122,6 @@ CREATE TABLE `cart_artwork` (
   `artwork_id` int(11) NOT NULL,
   `selected` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Volcado de datos para la tabla `cart_artwork`
---
-
-INSERT INTO `cart_artwork` (`id`, `cart_id`, `artwork_id`, `selected`) VALUES
-(259, 7, 7, 0),
-(260, 7, 5, 1),
-(280, 3, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -201,15 +172,6 @@ CREATE TABLE `favorites` (
   `artwork_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `favorites`
---
-
-INSERT INTO `favorites` (`user_id`, `artwork_id`) VALUES
-(2, 1),
-(11, 1),
-(11, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -226,21 +188,10 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `name`) VALUES
-(104, 'Óleo'),
 (105, 'Tinta china'),
-(107, 'Acuarela'),
 (111, 'Gouache'),
 (112, 'Ferricianuro de potasio'),
-(114, 'Citrato de amonio e hierro'),
-(116, 'Escayola'),
-(117, 'Tela'),
-(118, 'Grafito'),
-(119, 'Betadine'),
-(120, 'Madera'),
-(121, 'Cinta'),
-(122, 'Sa'),
-(123, 'Hola'),
-(124, 'Nuevo');
+(114, 'Citrato de amonio e hierro');
 
 -- --------------------------------------------------------
 
@@ -324,24 +275,7 @@ INSERT INTO `piece` (`id`, `artwork_id`, `title`, `height`, `width`, `depth`, `i
 (20, 16, 'Retrato de Rocío Jurado', 42, 29.7, NULL, '[\"672520d288aa7.jpg\"]'),
 (21, 16, 'Iconografía de Rocío Jurado', 42, 29.7, NULL, '[\"672520dfc9c55.jpg\"]'),
 (22, 17, 'Retrato de Juan Ramón Jiménez', 42, 29.7, NULL, '[\"67252106d7458.jpg\"]'),
-(23, 17, 'Iconografía de Juan Ramón Jiménez', 42, 29.7, NULL, '[\"6725213502076.jpg\"]'),
-(26, 20, 'Autorretrato', 80, 60, 5, '[\"6725246e718d7.jpg\"]'),
-(28, 25, 'Jaula frágil', 125, 100, 140, '[\"6725258d54287.jpg\"]'),
-(29, 29, NULL, NULL, NULL, NULL, '[\"672525b68af7d.jpg\",\"672525b68b662.jpg\",\"672525b68b96d.jpg\",\"672525b68bc99.jpg\",\"672525b68bf68.jpg\",\"672525b68c26c.jpg\",\"672525b68c5f0.jpg\",\"672525b68c95a.jpg\"]'),
-(30, 30, 'Piel rota', 60, 87, NULL, '[\"6725260e2cdaf.jpg\"]'),
-(31, 31, NULL, NULL, NULL, NULL, '[\"67252636cfde3.jpg\",\"67252636d04b2.jpg\",\"67252636d0854.jpg\",\"67252636d0bd3.jpg\",\"67252636d0e77.jpg\"]'),
-(32, 32, 'Rotura I', 42, 29.7, NULL, '[\"6725267aefe3f.jpg\"]'),
-(33, 33, 'Rotura II', 42, 29.7, NULL, '[\"67252695a5008.jpg\"]'),
-(34, 34, 'Rotura III', 42, 29.7, NULL, '[\"672526ad61928.jpg\"]'),
-(35, 35, 'Rotura IV', 42, 29.7, NULL, '[\"672526c0d1a71.jpg\"]'),
-(36, 36, NULL, NULL, NULL, NULL, '[\"67252710f0d2d.jpg\",\"67252710f13a1.jpg\"]'),
-(37, 38, 'Herida I', 30, 20, 2, '[\"6725272c4f2d5.jpg\"]'),
-(39, 40, NULL, NULL, NULL, NULL, '[\"6725274c97e77.jpg\"]'),
-(40, 41, NULL, NULL, NULL, NULL, '[\"672527835b3a4.jpg\"]'),
-(41, 42, NULL, NULL, NULL, NULL, '[\"67252796e0a52.jpg\"]'),
-(42, 43, NULL, NULL, NULL, NULL, '[\"672527a6b689b.jpg\"]'),
-(103, 24, NULL, NULL, NULL, NULL, '[\"672524ab2082f.jpg\",\"672524ab20fb0.jpg\",\"672524ab2138a.jpg\"]'),
-(106, 39, 'Herida II', 30, 20, 2, '[\"67252a6565956.jpg\"]');
+(23, 17, 'Iconografía de Juan Ramón Jiménez', 42, 29.7, NULL, '[\"6725213502076.jpg\"]');
 
 -- --------------------------------------------------------
 
@@ -404,18 +338,7 @@ INSERT INTO `piece_materials` (`piece_id`, `materials_id`) VALUES
 (22, 105),
 (22, 111),
 (23, 105),
-(23, 111),
-(26, 104),
-(28, 116),
-(30, 117),
-(32, 118),
-(33, 118),
-(34, 118),
-(35, 118),
-(36, 120),
-(36, 121),
-(37, 119),
-(106, 119);
+(23, 111);
 
 -- --------------------------------------------------------
 
@@ -443,7 +366,6 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `email`, `password`, `name`, `surname`, `nick`, `phone`, `roles`, `token`, `is_valid_t`, `address_id`) VALUES
 (2, 'samuelurbinaflor@gmail.com', '$2y$13$AVaoXV3jpFMSdas6ik97ZeOWO.pqmJ6kL1d0Qph0iwqcX.a1z0WTi', 'prueba', 'prueba', 'prueba', '987987987', '[]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzMwNzQ5NTEsImV4cCI6MTczMzA3ODU1MSwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InBydWViYUBnbWFpbC5jb20ifQ.HkIKMWGG5GkY4yTY4oLlm_tDCtSv4boN-_-iP-8DcHDb08etzSGgkP1mq9qG8v9eibwF7e5_KZhII_8r2uZiwIqd40WS4uR2_AYu4xNFNv8kzwgzTcrY_aYOHOYX-EIUPjdDlrnW7ddDOuMPMDw_kixlwv1ZMBPAXz6LH1MZNsbwsUcSGN4_uybq-9OaoJMl6Z9Ktc9xIlnYkhTMzpijw12Yg0JD0G58qU_0mIbdjIrix2oTYUPlNXXb4rBaf8D5YH8tU9DXIUoE9PO0xhi_LvHTVkblz3GeBUVjy9EvVbrkEzAtUjDSeERYu-xisymi2QhP9NfSyNG5vXm3_9n_PA', 1, 26),
-(5, 'movil@gmail.com', '$2y$13$dW25L8AbI4EKqj4ACEJEt.xYv/XElATxiATq8b6OJBmkS5voneuh6', 'Movil', 'Movil', 'movilmovil', '31298998', '[]', NULL, NULL, NULL),
 (6, 'aesmart@gmail.com', '$2y$13$G3LhGcHSX8jP2IeyEnlYiem6TdPdWBAKDrHVvNZxkg3vasH9DzrdW', 'AESMART', 'Administración', 'AESMART', '622039221', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzEzNDU5NjAsImV4cCI6MTczMTM0OTU2MCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFlc21hcnRAZ21haWwuY29tIn0.h2qyyNg-6k4gTMh_oCkF3elzM3tNRfz1tCaZjPi-lh1ZMswOWz_uNJjao-_aHws4F7hg2cmJ02yFD4Hr4TdGpqWGROjWetrD-8CV6V7Q-Zs0wqcMRXEHM_r5rxWeNYhIpVEMYIZWRlWpOMPlKlCNBw-X4ty2xhkYv_eMe3EZfOuiFVpThXpabATNbbOPN-Drp2A5n6TBmuxQUp6_v8WIZd7wEAjgWsQfZvbSQeV5xcltgF2Nmz6mmB3K118IR-wru9GpMNaCYX_L18qvNBa3P0Nf5GCQU9Kv021C3jwI3N5Qx7j52-Fn3kPb66QguaIeguaDDRyU3lbmjdfbLO_dqg', 1, NULL),
 (11, 'samurbinx@gmail.com', '$2y$13$ClAT30knDKxkRNNMZS4Ek.J2tpufBddTguT3hBumB4XM7YXJyrQsW', 'Samuel', 'Urbina Flor', 'Samuel', '622039286', '[\"ROLE_ADMIN\"]', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzI5NzI3MzgsImV4cCI6MTczMjk3NjMzOCwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6InNhbXVyYmlueEBnbWFpbC5jb20ifQ.g9elKBppVMcd4osTyDJVzNEdI1kPcERYPlMuQt_nWwQPS2XYmhJ314yfsBj0ArHm6R2H73XWUSQkaKQiszj0fq46uNTC4e8dtRI-HczSDr_5jyRG_X6y1IPli9GF8Q2Gtb1H5EHZhiZDS-uNnE4Y_y0buMdb-kiuwAlbwaj-NP0ckvZlyPZ0sEVlBIVbfk0AbR54r0sGi6T5cq1q-rwb7cmxhwZiGgVcDehBusmIpjldT8nGC5SdQrMCq_zUVxd4ekpnT06qXieYUUso8Ykume7jS2xtcy6HZEQvQbgi8CAE0ymOtIhiiUuOojDK7Tv0k5HbBmw3M983-p45YnBpcQ', 1, 7);
 
@@ -467,10 +389,7 @@ CREATE TABLE `work` (
 
 INSERT INTO `work` (`id`, `title`, `statement`, `description`, `image`) VALUES
 (1, 'Oasis', 'Ramifico mis pensamientos intrusivos a la velocidad de la luz, al igual que una célula cancerosa por el cuerpo, esas ideas atraviesan toda mi cabeza. Me siento perseguida por mi misma en una carrera que no acaba.\r\nLo que más me sirve para callar mi cabeza es tumbarme al sol, su calor recorre todo mi cuerpo, sintiéndome como si estuviera en una incubadora. Cuando ya me siento mejor, cuando ya hay silencio, abro los ojos y veo todo azul a causa del sol.\r\n\r\nPor este color, que me ha acompañado en tantos momentos de autorregulación emocional, elegí la cianotipia como material para trabajar. Es una mezcla de citrato férrico amoniacal y ferricianuro prosaico.\r\n\r\nAl hacer las primeras pruebas con el material me sentí identificada con él. Cuando se hace la mezcla de estas dos sustancias tóxicas, se crea un color verde radiactivo, ácido y agresivo. Cuando el líquido ya está seco en el soporte es hora de sacarlo al sol, rápidamente me pongo encima de él, aplasto todo mi cuerpo mi cuerpo sobre el papel, y a la vez contra el suelo . Poco a poco su tono cambia de un azul tenue a uno más intenso, pero aún sigue sucio. No es hasta que lo baño en agua oxigenada, cuando se ven los colores de la cianotipia. Ahí es cuando abro los ojos y veo el mundo de una tonalidad azul apacible.', 'Cianotípia', 'oasis-portada-672518d62261a.jpg'),
-(2, 'Andalucía', 'Este proyecto consta de diez retratos de artistas andaluces, hechos con un falso grabado, y otros diez dibujos, que representan lo que me inspiran esos artistas y el sitio donde nacieron, haciendo así un “tour” por toda Andalucía. Por lo que, en este proyecto no me he inspirado en un artista en concreto sino en cada bailaora, cantao’, poeta o pintor andaluz. Por lo que cada retrato va de la mano con su respectiva ilustración en la que se describe visualmente al artista y la pureza de su ciudad natal.\r\n\r\nEn este proyecto quiero contar el amor que tenemos los andaluces por nuestro hogar, costumbres y raíces. Por ello he escogido retratar a Lola flores, una jerezana y representación de todas las bailaoras y cantaoras, ellas difundieron un mensaje que iba más allá de las palabras y que representó en sus orígenes el lamento del pueblo gitano y morisco. Por otra parte, hay retratos de folclóricas como Rocío Jurado, la piedra más dura de Chipiona a ella ningún hombre le hizo sombra y artísticamente era una grandísima creadora. También tenemos a Gata Cattana, una Cordobesa, poetisa, rapera y politóloga , la representa sus letras cargados con mensajes feministas y contra la andaluzofobia. No nos puede faltar, el retrato de Blas Infante, poeta y político que luchó, y consiguió la independencia de Andalucía, su bandera y su himno. Para terminar nombraremos a los artistas andaluces más reconocidos como Lorca, Camarón, Juan Ramón Jimenez, Paco de Lucia, Picasso o Velazquez.\r\n\r\nEste trabajo, a parte de ser un listado de los grandes artistas andaluces, también es una queja a la a la andaluzofobia y a las típicas ideas que se tiene de los andaluces, en Andalucía se aprende, se vive y sobre todo se lucha.', 'Falso grabado', 'andalucia-portada-672523d02f695.jpg'),
-(3, 'Autorretrato', NULL, 'Cuadro único', 'autorretrato-portada-67252548a3d0b.jpg'),
-(4, 'Jaula frágil', 'Partí de la idea de la feminidad. Quise, en un primer momento, describir este término a nivel social. No llegué a nada claro, así que acoté el rango y decidí hablar de que era la feminidad para mí. Escribí en relación. Mi concepto de lo femenino, pero cada frase que escribía la terminaba tachando. Entre en un bucle intenso donde buscaba las palabras concretas para poder captaresa idea. Al final me di por vencida, no encontré las palabras. No me daba cuenta que no podía escribir las palabras correctas cuando no las hay. No se pueden buscar palabras que no existen. Seguramente, si yo me siento mujer es porque me han educado para ser una.\r\n\r\nEn ese bucle en el que entré, en el momento me incomodaba, pero ahora veo un gran tema donde indagar. Esa es una de las primeras ideas, ese bucle y la tensión que me generó.\r\nPor otra parte veo necesario tratar el género.Tanto lo femenino como lo masculino son construcciones sociales, esa idea la tenía clara, de ahí venían mis contradicciones mentales al querer tratar en un inicio la “feminidad”. Se nos asigna un género al nacer, normalmente a partir de nuestro sexo. Luego, según este, se nos educa de una u otra manera, creando roles discriminatorios y etiquetas que nos encierran en algo que, realmente, no existe.\r\nEl género es la idea primaria del proyecto, pero otra muy importante es la de encierro. Aunque me quiera salir de la “jaula” género femenino, me metería en otra ya sea de no fluido o de trans masculino. Aquí se repite ese bucle que es necesario romper.\r\n\r\nBourdieu habla sobre el habitús. El habitus es como nuestra forma de ser que aprendemos de la sociedad. Son las cosas que hacemos y pensamos porque así nos han enseñado desde pequeños. Nuestra mente y cuerpo se acostumbran a estas formas de actuar y pensar. Aunque parece que nacemos con ello, en realidad lo aprendemos de cómo la sociedad funciona. Se refiere a lo que aprendemos y queda con nosotros por mucho tiempo. El género obviamente está muy implicado en este término.\r\nPara mi, contra más conscientes seamos del habitus, de los roles de género y del mal de estos, más fácil se nos hará salir de esas construcciones. Pudiendo así movernos con más libertad.', 'Escultura, arte textil y cuerpo.', 'jaula-fragil-portada-6725255d6f2da.jpg'),
-(5, 'Un intento más', 'Arreglar algo roto, algo que está tan destruido, derrumbado y en la ruina que es completamente inútil e inservible. Pero haces todo lo que esté en tu mano para, por lo\r\nmenos, intentar repararlo. ¿Por qué esa fijación por desear curar lo incurable? ¿Por qué querer tanto arreglar aquello que está obviamente destrozado, poniendo tanto de ti que llegue hasta herirte? Yo lo veo como un acto melancólico, un deseo a que todo esté como antes, como antes de que se rompiera.Y que, con gestos de de mimo, cuidado y ternura, pueda llegar a estar como nuevo, pero eso nunca sucede. \r\n\r\nSe juntan ideas contrarias, lo irreparable y la reparación, creando así piezas utópicas en las que se refleja la angustia del querer y no poder. El modo de trabajo acompaña totalmente a esta acción o intento descontrolado de reparar. Se crean piezas a través de la basura pero primero estas pasan por un filtro humano(el mío). Cuando la recojo siento que dejan de estar abandonadas, pienso en ella, la atiendo, la cuido, intento ver lo que necesita para que vuelva a ser algo más que basura. Intento que sean válidas, útiles, reformadas, pero mis intentos quedan en nada, sigue siendo basura.\r\nEl resultado son unas piezas que, aunque, son de materiales duros como la madera o la escayola, dan la sensación de fragilidad.Se ha creado así una atmósfera cálida en la que, evoca a las ruinas y los escombros pero a la vez a la carnalidad de una herida que se está curando lentamente.\r\n\r\nEn el mundo ya hay suficiente dolor. Prácticamente todos los días escuchamos que se ha iniciado una nueva guerra, un nuevo asesinato, una nueva injusticia. Hay tanto\r\ndolor que se está resquebrajando todo, empeorando la situación a cada día que pasa. Sumando, que vivimos en una sociedad que nos exige la rapidez continua, en la\r\nque ni siquiera podemos pararnos a pensar que está pasando realmente. Y mucho menos podemos pararnos a intentar arreglar lo que está ocurriendo.\r\nPersonalmente, cuando me entero de algunas de las desgracias que rompen el mundo un poco más, me atropella un sentimiento de impotencia. ¿Y yo que puedo hacer\r\npara solucionarlo? Normalmente me enfado porque no puedo arreglar nada, la solución no está en mi mano, así que prefiero mirar a otro lado, esperar que alguien lo\r\nsolucione.\r\n\r\nEste proyecto nace de esta frustración. Decido arreglar, curar, mimar, reparar con ternura lo que necesite de mi ayuda.\r\nCreo pequeñas intervenciones, piezas objetuales, dibujo y esculturas que giran en torno a este tema. Un tema que se ramifica desembocando en otros en forma de eco o resuene. Creo una conjunto de piezas cálidas que desembocan en lo humano, aunque el material no sea muy cárnico, como por ejemplo la cinta es plástica y fría pero se hacen arrugas que llegan a parecer piel.\r\n\r\nOlga Tokarczuk, en su escrito El narrador tierno habla de la importancia de la ternura y el mimo, como no podré escribirlo mejor que ella dejo aquí un pedacito de su\r\ntexto: “La ternura es la forma más modesta de amor. Es el tipo de amor que no aparece en las Escrituras o en los evangelios, nadie lo jura, nadie lo cita. No tiene\r\nemblemas o símbolos especiales, ni conduce a la delincuencia ni a la envidia inmediata.\r\nAparece donde miramos de cerca y con cuidado a otro ser, a algo que no es nuestro «yo».\r\nLa ternura es espontánea y desinteresada; va mucho más allá del sentimiento de empatía. En cambio, es el compartir consciente, aunque quizás un poco melancólico,\r\ndel destino común. La ternura es una profunda preocupación emocional por otro ser, su fragilidad, su naturaleza única y su falta de inmunidad al sufrimiento y los efectos\r\ndel tiempo. La ternura percibe los lazos que nos conectan, las similitudes y la similitud entre nosotros. Es una forma de mirar que muestra al mundo como vivo,\r\ninterconectado, cooperando y codependiente de sí mismo.”\r\nMe gusta pensar que con este cuidado al prójimo, en mi caso al objeto que “salvo” del olvido. Con ese tiempo que dedico en cuidar, mimar, reparo y rescato también me\r\nestoy rescatando a mi .', 'Objeto e instalación', 'un-intento-mas-portada-672526e4333f2.jpg');
+(2, 'Andalucía', 'Este proyecto consta de diez retratos de artistas andaluces, hechos con un falso grabado, y otros diez dibujos, que representan lo que me inspiran esos artistas y el sitio donde nacieron, haciendo así un “tour” por toda Andalucía. Por lo que, en este proyecto no me he inspirado en un artista en concreto sino en cada bailaora, cantao’, poeta o pintor andaluz. Por lo que cada retrato va de la mano con su respectiva ilustración en la que se describe visualmente al artista y la pureza de su ciudad natal.\r\n\r\nEn este proyecto quiero contar el amor que tenemos los andaluces por nuestro hogar, costumbres y raíces. Por ello he escogido retratar a Lola flores, una jerezana y representación de todas las bailaoras y cantaoras, ellas difundieron un mensaje que iba más allá de las palabras y que representó en sus orígenes el lamento del pueblo gitano y morisco. Por otra parte, hay retratos de folclóricas como Rocío Jurado, la piedra más dura de Chipiona a ella ningún hombre le hizo sombra y artísticamente era una grandísima creadora. También tenemos a Gata Cattana, una Cordobesa, poetisa, rapera y politóloga , la representa sus letras cargados con mensajes feministas y contra la andaluzofobia. No nos puede faltar, el retrato de Blas Infante, poeta y político que luchó, y consiguió la independencia de Andalucía, su bandera y su himno. Para terminar nombraremos a los artistas andaluces más reconocidos como Lorca, Camarón, Juan Ramón Jimenez, Paco de Lucia, Picasso o Velazquez.\r\n\r\nEste trabajo, a parte de ser un listado de los grandes artistas andaluces, también es una queja a la a la andaluzofobia y a las típicas ideas que se tiene de los andaluces, en Andalucía se aprende, se vive y sobre todo se lucha.', 'Falso grabado', 'andalucia-portada-672523d02f695.jpg');
 
 --
 -- Índices para tablas volcadas
