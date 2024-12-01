@@ -12,6 +12,7 @@ use App\Entity\Page;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Entity\Address;
+use App\Entity\EmailConfig;
 
 use App\Form\WorkType;
 use App\Form\ArtworkType;
@@ -21,6 +22,7 @@ use App\Form\PageType;
 use App\Form\UserType;
 use App\Form\OrderType;
 use App\Form\AddressType;
+use App\Form\EmailConfigType;
 
 use App\Repository\WorkRepository;
 use App\Repository\ArtworkRepository;
@@ -38,7 +40,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Attribute\Route;
-
 // ESTA CLASE RECOGE TODOS LAS CRUD NECESARIAS PARA LAS TWIG DE LA ZONA DE ADMINISTRACIÓN
 // PROYECTOS, OBRAS, PÁGINAS, USUARIOS Y TIENDA
 #[Route('/aesma')]
@@ -56,6 +57,25 @@ class AdminZoneController extends AbstractController
 
     }
 
+    // Configuración del email corporativo
+    #[Route('/email-config', name: 'app_email_config')]
+    public function edit(Request $request, EntityManagerInterface $em): Response
+    {
+        $config = $em->getRepository(EmailConfig::class)->find(1) ?? new EmailConfig();
+
+        $form = $this->createForm(EmailConfigType::class, $config);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($config);
+            $em->flush();
+            $this->addFlash('success', 'Configuración actualizada');
+        }
+
+        return $this->render('contact/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     // --------- PROYECTOS ---------- //
     #[Route('/work', name: 'app_work_index', methods: ['GET'])]
@@ -471,7 +491,7 @@ class AdminZoneController extends AbstractController
         ]);
     }
 
-    
+
 
     #[Route('/piece/{id}', name: 'app_piece_delete', methods: ['POST'])]
     public function deletePiece(Request $request, Piece $piece, EntityManagerInterface $entityManager, string $id): Response
@@ -801,9 +821,9 @@ class AdminZoneController extends AbstractController
             'nick' => $user->getNick(),
             'phone' => $user->getPhone(),
             'address' => $user->getAddress(),
-        ]);        
+        ]);
         $form->handleRequest($request);
-        
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -860,9 +880,9 @@ class AdminZoneController extends AbstractController
 
         ]);
     }
- 
 
-    #[Route('/order/{id}/edit', name: 'app_order_edit', methods: ['GET','POST'])]
+
+    #[Route('/order/{id}/edit', name: 'app_order_edit', methods: ['GET', 'POST'])]
     public function editOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
     {
         $address = $order->getAddress();
@@ -898,7 +918,6 @@ class AdminZoneController extends AbstractController
             $this->addFlash('success', 'Order updated successfully!');
 
             return $this->redirectToRoute('app_order_show', ['id' => $order->getId()], Response::HTTP_SEE_OTHER);
-
         }
 
         return $this->render('order/edit.html.twig', [

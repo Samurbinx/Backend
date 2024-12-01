@@ -34,7 +34,7 @@ class ContactController extends AbstractController
             }
             
             $email = (new Email())
-                ->from($data['email'])
+                ->from('samurbinx@gmail.com')
                 ->to('samurbinx@gmail.com') // Reemplaza esto con tu dirección de correo
                 ->subject('AESMA')
                 ->text('De: ' . $data['name'] . ' ' . $data['surname'] . "\n\n" . 'Teléfono: ' . $data['phone'] . "\n\n" . 'Mensaje: ' . $data['desc']);
