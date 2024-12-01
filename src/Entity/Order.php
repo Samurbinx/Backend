@@ -215,4 +215,24 @@ class Order
         $this->address = $address;
         return $this;
     }
+
+    public function getRecipient(): ?string
+    {
+        // Verificamos si el array de dirección existe y contiene las claves necesarias
+        $address = $this->address;
+        
+        // Concatenamos de manera segura los valores de la dirección
+        $recipient = isset($address['recipient']) ? $address['recipient'] : '';
+        return $recipient;
+        
+    }
+    public function getPhone(): ?string
+    {
+        // Verificamos si el array de dirección existe y contiene las claves necesarias
+        $address = $this->address;
+        
+        // Concatenamos de manera segura los valores de la dirección
+        $phone = isset($address['phone']) ? $address['phone'] : '';
+        return $phone;        
+    }
 }

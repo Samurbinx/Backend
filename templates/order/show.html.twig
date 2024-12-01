@@ -25,7 +25,9 @@
                     <p><b>Precio total: </b>{{ order.totalAmount }} €</p>
                 </div>
             </div>
-            <p><b>Dirección de entrega: </b>{{ order.addressstring }} €</p>
+            <p><b>Destinatario: </b>{{ order.recipient }}</p>
+            <p><b>Dirección de entrega: </b>{{ order.addressstring }} </p>
+            <p><b>Teléfono: </b>{{ order.phone }} </p>
         </div>
 
         <div class="block">
