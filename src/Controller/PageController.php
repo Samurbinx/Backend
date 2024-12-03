@@ -18,6 +18,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/page')]
 class PageController extends AbstractController
 {
+    
 
     #[Route('/{id}', name: 'page_index', methods: ['GET'])]
     public function getPage(PageRepository $pageRepository, string $id): JsonResponse
@@ -25,7 +26,7 @@ class PageController extends AbstractController
         $page = $pageRepository->find($id);
         $data = "";
         if ($page) {
-            $data = $page->getPage();            
+            $data = $page->getPage();  
         }
         return new JsonResponse($data);
     }

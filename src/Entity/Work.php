@@ -48,7 +48,7 @@ class Work
             'statement'=> $this->Statement,
             'description'=> $this->Description,
             'image'=> $this->Image,
-            'url'=>"http://127.0.0.1:8080/work/$id/img"
+            'url'=>'http://192.168.1.135:8080/work/'.$this->id.'/img'
         ];
     }
 

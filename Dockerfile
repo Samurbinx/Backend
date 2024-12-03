@@ -1,23 +1,38 @@
-# Usar la imagen oficial de PHP 8.2 con FPM
-FROM php:8.2-fpm
+# Usamos una imagen oficial de PHP con Apache
+FROM php:8.2-apache
 
-# Establecer el directorio de trabajo dentro del contenedor
-WORKDIR /var/www/html
+# Habilitar módulos necesarios de Apache
+RUN a2enmod rewrite
 
-# Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y libpq-dev git unzip && \
-    docker-php-ext-install pdo pdo_mysql
+RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+RUN echo "ServerName 192.168.1.135" >> /etc/apache2/apache2.conf
 
-# Instalar Composer para gestionar dependencias de PHP
+# Instalar dependencias del sistema operativo
+RUN apt-get update && apt-get install -y \
+    libxml2-dev \
+    libicu-dev \
+    libpq-dev \
+    git \
+    unzip \
+    && docker-php-ext-install xml intl pdo pdo_mysql
+
+
+# Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copiar el contenido de tu proyecto dentro del contenedor
-COPY . .
 
-# Instalar las dependencias de Symfony
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Copiar el código de tu backend Symfony al contenedor
+COPY . /var/www/html/
 
-# Exponer el puerto 9000 para PHP-FPM
-EXPOSE 9000
+# Establecer el directorio de trabajo
+WORKDIR /var/www/html
 
-CMD ["php-fpm"]
+# Instalar las dependencias de Symfony usando Composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Exponer el puerto 80 (el puerto estándar para HTTP)
+EXPOSE 80
+
+# Iniciar Apache en el contenedor
+CMD ["apache2-foreground"]
+

@@ -44,8 +44,8 @@ class Page
             'id'=> $this->id,
             'image'=> $this->Image,
             'title'=> $this->Title,
-            'subtitle'=> $this->Subtitle,     
-            'url'=>"http://127.0.0.1:8080/page/$id/img"
+            'subtitle'=> $this->Subtitle, 
+            'url'=>'http://192.168.1.135:8080/page/'.$this->id.'/img'
         ];
     }
     public function getId(): ?int
