@@ -36,15 +36,38 @@
    display: flex;
    align-items: center;
 }
-
 .table th {
    background-color: var(--neutral-300);
 }
 
+.trcol {
+   display: flex;
+   flex-direction: column;
+}
 /* --- Actions --- */
 .actions {
    display: flex;
    align-items: center;
    flex-wrap: wrap;
 }
+@media (width <= 740px) {
+   th.actions {
+      min-width: 140px !important;
+      width: 140px !important;
+      max-width: 140px !important;
+   }
+   td.actions {
+      min-width: 140px !important;
+      width: 140px !important;
+      max-width: 140px !important;
+   }
+}
 
+@media (width <= 400px) {
+  td.textwrap {
+      min-width: 0 !important;
+      width: auto !important;
+      max-width: 50vw;
+      text-wrap: wrap !important;
+   }
+}

@@ -5,11 +5,11 @@
 {% block body %}
 <div id="show_header">
     <h1>Usuario {{ user.Name }}</h1>
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }}<span class="PC"> Editar</span></a>
 </div>
 
 <div id="user_form">
-    <div>
+    <div id="user_body">
         <div>
             <h3>Datos del usuario</h3>
             <p><b>Nombre:</b> {{ user.name }}</p>

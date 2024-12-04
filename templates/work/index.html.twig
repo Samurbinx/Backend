@@ -6,7 +6,7 @@
 {% block body %}
 <div id="show_header">
     <h1>Proyectos</h1>
-    <a href="{{ path('app_work_new') }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} Crear nuevo proyecto</a>
+    <a href="{{ path('app_work_new') }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} <span class="PC">Crear nuevo proyecto</span></a>
 </div>
 
 <table class="table">
@@ -21,7 +21,7 @@
         <tr>
             <td>{{ work.Title }}</td>
             <td class="actions">
-                <a href="{{ path('app_work_show', {'id': work.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} Ver más</a>
+                <a href="{{ path('app_work_show', {'id': work.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} <span class="PC">Ver más</span></a>
                 <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
                 {{ include('work/_delete_form.html.twig') }}
             </td>

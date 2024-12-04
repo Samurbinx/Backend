@@ -120,8 +120,11 @@ select {
 
 
 /* --- RESPONSIVE DESINGS BREAKPOINTS --- */
-@media screen and (max-width: 620px) {
-
+@media screen and (max-width: 435px) {
+   form#form, #imageContainer, #imagePreview {
+      min-width: 0;
+      width: 100%;
+   }
 }
 @media screen and (max-width: 1050px){
    #body_form {

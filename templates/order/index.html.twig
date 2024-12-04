@@ -10,11 +10,10 @@
     <thead>
         <tr>
             <th>ID pedido</th>
-            <th>ID usuario</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-            <th>Precio total</th>
-            <th>Acciones</th>
+            <th class="PC">ID usuario</th>
+            <th class="PC">Estado</th>
+            <th class="PC">Precio total</th>
+            <th class="actions">Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -22,12 +21,11 @@
         {% for order in orders %}
         <tr>
             <td>{{ order.id }}</td>
-            <td>{{ order.User.id }}</td>
-            <td>{{ order.Estado }}</td>
-            <td>{{ order.date }}</td>
-            <td>{{ order.totalAmount }} €</td>
+            <td class="PC">{{ order.User.id }}</td>
+            <td class="PC">{{ order.Estado }}</td>
+            <td class="PC">{{ order.totalAmount }} €</td>
             <td class="actions">
-                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} Ver más</a>
+                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn show">{{ ux_icon('bi:eye') }}</a>
                 <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
             </td>
         </tr>

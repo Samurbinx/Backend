@@ -8,8 +8,7 @@
 
 <div id="show_header">
     <h1>Detalles del pedido Nº {{order.id}}</h1>
-    <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar
-        pedido</a>
+    <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }}<span class="PC"> Editar pedido</span></a>
 </div>
 <div id="order_body">
     <div id="firstblock">
@@ -25,9 +24,11 @@
                     <p><b>Precio total: </b>{{ order.totalAmount }} €</p>
                 </div>
             </div>
-            <p><b>Destinatario: </b>{{ order.recipient }}</p>
-            <p><b>Dirección de entrega: </b>{{ order.addressstring }} </p>
-            <p><b>Teléfono: </b>{{ order.phone }} </p>
+            <div class="fulldata">
+                <p><b>Destinatario: </b>{{ order.recipient }}</p>
+                <p><b>Dirección de entrega: </b>{{ order.addressstring }} </p>
+                <p><b>Teléfono: </b>{{ order.phone }} </p>
+            </div>
         </div>
 
         <div class="block">

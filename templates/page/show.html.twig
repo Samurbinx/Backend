@@ -5,7 +5,7 @@
 {% block body %}
 <div id="show_header">
     <h1>{{ page.Name }}</h1>
-    <a href="{{ path('app_page_edit', {'id': page.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar</a>
+    <a href="{{ path('app_page_edit', {'id': page.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }} <span class="PC">Editar</span></a>
 </div>
 
 {% if page.id == "1" or page.id == "4" %}
@@ -18,26 +18,23 @@
 
 {% if page.id == "2" %}
     <div id="page_contact" class="page_body">
-        <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}');"
-            id="contact_img" class="page_img"></div>
-        <div id="contactForm" class="page_inf">
-            <div>
+        <div class="page_inf">
                 <h3>{{ page.title }}</h3>
                 <p>{{ page.Subtitle }}</p>
-            </div>
-            <div id="form_shadow"></div>
         </div>
+        <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}');"
+            id="contact_img" class="page_img"></div>
     </div>
 {% endif %}
 
 {% if page.id == "3" %}
 <div id="page_about" class="page_body">
-  <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}');"
-            id="about_img" class="page_img"></div>
-    <div id="about_inf" class="page_inf">
+ <div class="page_inf">
         <h3>{{ page.title }}</h3>
         <pre>{{ page.Subtitle }}</pre>
     </div>
+  <div style="background-image: url('{{ asset('uploads/pages/' ~ page.Name ~ '/' ~ page.Image) }}');" id="about_img"></div>
+   
 </div>
 {% endif %}
 <br>

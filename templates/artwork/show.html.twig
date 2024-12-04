@@ -11,8 +11,7 @@
 
 <div id="show_header">
     <h1>Obra: {{ artwork.Title }}</h1>
-    <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }}
-        Editar</a>
+    <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} <span class="PC">Editar</span></a>
 </div>
 <div id="artwork_inf">
     <div>
@@ -53,7 +52,7 @@
     <form method="post" action="{{ path('app_artwork_delete', {'id': artwork.id}) }}"
         onsubmit="return confirm('¿Seguro que desea borrar esta obra?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.id) }}">
-        <button class="btn del">{{ ux_icon('bi:trash') }} Eliminar obra</button>
+        <button class="btn del">{{ ux_icon('bi:trash') }} <span class="PC">Eliminar obra</span></button>
     </form>
 
 </div>
@@ -61,8 +60,7 @@
 <div>
     <div id="show_header">
         <h2>Piezas</h2>
-        <a href="{{ path('app_piece_new', {'id': artwork.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }}
-            Añadir pieza</a>
+        <a href="{{ path('app_piece_new', {'id': artwork.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} <span class="PC">Añadir pieza</span></a>
     </div>
 
     <div id="artwork_pieces">
@@ -79,11 +77,11 @@
             </div>
             <div class="show_pieces_data">
                 <table class="simple_table">
-                    <tr>
+                    <tr class="trcol">
                         <th>Título</th>
                         <td>{{ piece.title ? piece.title : 'Sin título' }}</td>
                     </tr>
-                    <tr>
+                    <tr class="trcol">
                         <th>Materiales</th>
                         <td>
                         {%if piece.materials|length == 0 %}
@@ -93,7 +91,6 @@
                             {{ material.name }}<br>
                             {% endfor %}
                         {% endif %}
-
                         </td>
                     </tr>
                     <tr>
@@ -111,7 +108,7 @@
 
                 </table>
                 <div class="show_pieces_buttons">
-                    <a href="{{ path('app_piece_edit', {'id': piece.id}) }}" class="btn edit">Editar</a>
+                    <a href="{{ path('app_piece_edit', {'id': piece.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}<span class="PC">Editar</span></a>
                     {{ include('piece/_delete_form.html.twig') }}
                 </div>
             </div>

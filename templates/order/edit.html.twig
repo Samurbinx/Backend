@@ -18,13 +18,15 @@
       {{ form_widget(form.status) }}
    </div>
 
-   <div>
-      <h4>Dirección de envío</h4>
+   <h4 class="overflorTitle">Dirección de envío</h4>
+   <div class="overflowForm">
       {{ form_row(form.street) }}
       {{ form_row(form.details) }}
       {{ form_row(form.zipcode) }}
       {{ form_row(form.city) }}
       {{ form_row(form.province) }}
+      {{ form_row(form.recipient) }}
+      {{ form_row(form.phone) }}
    </div>
 
    <button class="btn save">{{ ux_icon('bi:save') }} {{ button_label|default('Guardar cambios') }}</button>

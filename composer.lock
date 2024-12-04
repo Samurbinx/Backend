@@ -1234,16 +1234,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.18.0",
+            "version": "v4.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "c1b694c1890d6f20858802d201cd7199212dc42a"
+                "reference": "6333f18fba576964496cb9ca10492e92edd32126"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/c1b694c1890d6f20858802d201cd7199212dc42a",
-                "reference": "c1b694c1890d6f20858802d201cd7199212dc42a",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/6333f18fba576964496cb9ca10492e92edd32126",
+                "reference": "6333f18fba576964496cb9ca10492e92edd32126",
                 "shasum": ""
             },
             "require": {
@@ -1271,7 +1271,8 @@
                 "symfony/twig-bundle": "^5.4|^6.0|^7.0",
                 "symfony/uid": "^5.4|^6.0|^7.0",
                 "symfony/ux-twig-component": "^2.21",
-                "symfony/validator": "^5.4|^6.0|^7.0"
+                "symfony/validator": "^5.4|^6.0|^7.0",
+                "twig/twig": "^3.15"
             },
             "require-dev": {
                 "doctrine/doctrine-fixtures-bundle": "^3.4|3.5.x-dev",
@@ -1318,7 +1319,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.18.0"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.19.0"
             },
             "funding": [
                 {
@@ -1326,7 +1327,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-28T19:54:15+00:00"
+            "time": "2024-12-03T19:43:37+00:00"
         },
         {
             "name": "egulias/email-validator",

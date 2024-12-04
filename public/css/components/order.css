@@ -3,12 +3,24 @@
    flex-direction: row;
    flex-wrap: wrap;
    justify-content: space-around;
+   width: 100%;
+   gap: 50px;
 }
-
 #firstblock {
-   width: 40%;
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
 }
-
+#order_body > div {
+   flex: 1;
+   min-width: 400px;
+}
+.fulldata {
+   padding: 20px;
+}
+.fulldata > p {
+   margin: 10px 0 0 0;
+}
 .block {
    border: 2px solid var(--neutral-300);
    margin-bottom: 30px;
@@ -62,4 +74,25 @@
 }
 .order_table td {
    background-color: white;
+}
+.overflowForm {
+   max-height:100%;
+   overflow: scroll;
+}
+.overflorTitle {
+margin: 20px 0 0 0;
+}
+@media (width <=500px) {
+   #order_body > div {
+      flex: 1;
+      min-width: 100%;
+   }
+   .sublock {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+   }
+   .data {
+      width: 100%;
+   }
 }

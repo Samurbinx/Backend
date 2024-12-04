@@ -1,10 +1,13 @@
-a.page {
+/* a.page {
    height: fit-content;
    font-size: large;
    padding: 10px;
    text-transform: uppercase;
+} */
+.page_body {
+   min-width: 70vw;
+   min-height: 70vh;
 }
-
 #page_body_form {
    display: flex;
    flex-direction: row;
@@ -32,54 +35,32 @@ a.page {
 /* CONTACT */
 #page_contact {
    display: flex;
-   flex-wrap: nowrap;
+   flex-direction: column;
    justify-content: center;
 
    margin: 0px auto;
    width: fit-content;
+   
 }
 #contact_img {
-   min-height: 650px !important;
-   width: 300px;
+   flex: 1;
+   height: 100%;
+   width: 100%;
    margin-right: 50px;
 
    background-position: center;
    background-size: cover;
 }
 
-#contactForm {
-   min-height: 100% !important;
-   min-width: none;
-   width: 400px;
-
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-}
-
-#form_shadow {
-   background-color: rgb(212, 212, 212);
-   flex: 1;
-}
-
 
 /* ABOUT */
 #page_about {
    display: flex;
-   justify-content: center;
-   flex: 1;
-   max-height: 600px;
-   max-width: 100%;
-   width: fit-content;
-   margin: 0 auto;
-}
-
-#about_inf {
-   min-height: 100% !important;
-
-   display: flex;
-   flex-direction: column;
+   flex-direction: row;
    justify-content: space-between;
+   width: 100%;
+   height: 100%;
+   margin: 0 auto;
 }
 
 #page_about pre {
@@ -87,20 +68,41 @@ a.page {
    line-height: 1.5em;
    font-family: "Lexend", sans-serif !important;
 
-
    overflow: hidden;
    text-wrap: wrap;
 
+   flex: 1;
    min-height: 100% !important;
    min-width: fit-content !important;
    width: min-content;
-
 }
 #about_img {
-   min-height: 650px !important;
-   width: 300px;
-   margin-right: 50px;
-
+   height: 90%;
+   width: 50%;
+   flex: 1;
+   margin-left: 50px;
    background-position: center;
    background-size: cover;
+}
+@media (width < 1000px){
+   #page_about {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+   }
+   #about_img {
+      min-height: 300px;
+      height: 100%;
+      width: 100%;
+      flex: 1;
+      margin-left: 0;
+      background-position: center;
+      background-size: cover;
+   }
+#page_contact, #page_about {
+   padding: 15px;
+}
 }

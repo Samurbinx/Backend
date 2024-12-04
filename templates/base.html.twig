@@ -28,7 +28,7 @@
 
 <body>
     <div class="header">
-        <p class="list_menu" onclick="openMenu()" id="list_menu">{{ ux_icon('bi:list') }}</p> 
+        <button class="mobile btn" data-bs-toggle="offcanvas" href="#offcanvas" aria-controls="offcanvas" type="button">{{ ux_icon('bi:list') }}</button> 
         <a href="http://localhost:4200/home" target="_blank" id="brand">ANA ESTRADA MACÍAS</a>
         <a href="http://localhost:4200/home" target="_blank" id="brand_small">AESMA</a>
         <div class="second_header">
@@ -48,21 +48,34 @@
             <a href="{{ path('app_materials_index') }}">Materiales</a>
             <a href="{{ path('app_user_index') }}">Usuarios</a>
             <a href="{{ path('app_order_index') }}">Pedidos</a>
-            <a href="{{ path('app_email_config') }}">Email empresa</a>
         </div>
-    
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasLabel">AESMA</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p><a href="{{ path('app_page_show', {'id': 1}) }}">Inicio</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 2}) }}">Contacto</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 3}) }}">Sobre mí</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 4}) }}">Login</a></p>
+                <br>
+                <p><a href="{{ path('app_work_index') }}">Proyectos</a></p>
+                <p><a href="{{ path('app_materials_index') }}">Materiales</a></p>
+                <p><a href="{{ path('app_user_index') }}">Usuarios</a></p>
+                <p><a href="{{ path('app_order_index') }}">Pedidos</a></p>
+                <br>
+                <p><a href="{{ path('app_logout')}}">{{ ux_icon('tabler:logout') }}</a> Cerrar sesión</p>
+                    
+            </div>
+          </div>
         <div class="content">
-            <div id="blurr" onclick="closeMenu()"></div>
             {% block body %}{% endblock %}
         </div>
     </div>
 
     <script>
  
-        function openMenu() {
-            document.getElementById("sidebar").style.display = "block";
-            document.getElementById("blurr").style.display = "block";
-        }
 
     </script>
 </body>

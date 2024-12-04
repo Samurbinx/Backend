@@ -5,14 +5,14 @@
 {% block body %}
 <div id="show_header">
     <h1>Materiales</h1>
-    <a href="{{ path('app_materials_new') }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} Añadir material</a>
+    <a href="{{ path('app_materials_new') }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} <span class="PC">Añadir material</span></a>
 </div>
 
 <table class="table">
     <thead>
         <tr>
             <th>Título</th>
-            <th>Piezas</th>
+            <th class="PC">Piezas</th>
             <th class="actions">Acciones</th>
         </tr>
     </thead>
@@ -20,9 +20,9 @@
         {% for material in materials %}
         <tr>
             <td>{{ material.name }}</td>
-            <td>{{ material.Pieces|length }}</td>
+            <td class="PC">{{ material.Pieces|length }}</td>
             <td class="actions">
-                <a href="{{ path('app_materials_show', {'id': material.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} Ver más</a>
+                <a href="{{ path('app_materials_show', {'id': material.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} <span class="PC">Ver más</span></a>
                 <a href="{{ path('app_materials_edit', {'id': material.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
                 {{ include('materials/_delete_form.html.twig') }}
             </td>

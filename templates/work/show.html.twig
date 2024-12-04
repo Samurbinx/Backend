@@ -5,10 +5,9 @@
 {% block body %}
 
 <p><a href="{{ path('app_work_index') }}">Proyectos</a> &#60 {{ work.Title }}</p>
-
 <div id="show_header">
     <h1>{{work.Title}}</h1>
-    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }} Editar proyecto</a>
+    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }} <span class="PC">Editar proyecto</span></a>
 </div>
 
 <div id="work_body">
@@ -39,44 +38,41 @@
 
   <form method="post" action="{{ path('app_work_delete', {'id': work.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar este proyecto? (Se borrarán también sus obras)');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ work.id) }}">
-    <button class="btn del">{{ ux_icon('bi:trash') }} Eliminar proyecto </button>
+    <button class="btn del">{{ ux_icon('bi:trash') }} <span class="PC">Eliminar proyecto </span></button>
 </form>
 
     
     <div id="piece_body">
         <div id="show_header">
             <h2>Obras</h2>
-            <a href="{{ path('app_artwork_new', {'id': work.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} Añadir obra</a>
+            <a href="{{ path('app_artwork_new', {'id': work.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} <span class="PC">Añadir obra</span></a>
         </div>
         <table class="table">
-            <tbody>
+        <thead>
                 <tr>
                     <th>Título</th>
-                    <th>Año</th>
-                    <th>Precio</th>
-                    <th>Vendido</th>
-                    <th>Acciones</th>
+                    <th class="PC">Precio</th>
+                    <th class="PC">Vendido</th>
+                    <th class="actions">Acciones</th>
                 </tr>
+        </thead>
+
+            <tbody>
                 {% for artwork in work.artworks %}
                 <tr>
                     <td>
                         {{ artwork.title ? artwork.title : 'Sin título' }}
                     </td>
-                    <td>
-                        {{ artwork.creationDate ? artwork.creationDate|date('Y') : 'Año desconocido' }}
-                    </td>
-                    <td>
+                    <td class="PC">
                         {{ artwork.price ? artwork.price ~ '€' : '0.00€' }}
                     </td>
-                    <td>
+                    <td class="PC">
                         {{ artwork.sold ? 'Vendido' : 'A la venta' }}
                     </td>
                     <td class="actions">
-                        <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show">Ver
-                            detalles</a>
+                        <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} </a>
                         <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
                         {{ include('artwork/_delete_form.html.twig') }}
-
                     </td>
                 </tr>
                 {% endfor %}

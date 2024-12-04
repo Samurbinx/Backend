@@ -1,11 +1,13 @@
 .user_table {
    margin-bottom: 20px;
 }
-.user_table th, td {
+
+.user_table th,
+.user_table td {
    padding: 5px 10px;
 }
 
-#user_form > div {
+#user_form>div {
    max-width: 100%;
 
    min-height: fit-content;
@@ -14,32 +16,41 @@
 
    display: flex;
    flex-direction: row;
-   flex-wrap: nowrap;
+   flex-wrap: wrap;
+   gap: 50px;
    margin-bottom: 20px;
+   justify-content: space-between;
 }
-#user_form > div > div {
-   min-width: 500px;
-   width: 350px;
-   max-width: fit-content;
 
-   margin-right: 50px;
+#user_form>div>div {
    padding: 30px;
-
+   flex: 1;
+   min-width: fit-content;
    background-color: var(--neutral-200);
-   margin-right: 20px;
 }
+
 #user_form h3 {
    margin-bottom: 20px;
 }
+
 #user_form p {
    margin-bottom: 10px;
 }
 
 .otheraddress {
-   margin-bottom: 10px;
-   border-bottom: 1px solid black;
+   padding: 10px 0;
+   border-top: 1px solid rgb(190, 190, 190);
 }
-.otheraddress > p {
+
+.otheraddress>p {
    margin-bottom: 5px;
 }
 
+@media (width <=400px) {
+   #user_form>div>div {
+      padding: 15px;
+   }
+#user_form>div {
+   gap: 15px;
+}
+}
