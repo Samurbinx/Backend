@@ -7,7 +7,7 @@
 <p><a href="{{ path('app_work_index') }}">Proyectos</a> &#60 {{ work.Title }}</p>
 <div id="show_header">
     <h1>{{work.Title}}</h1>
-    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }} <span class="PC">Editar proyecto</span></a>
+    <a href="{{ path('app_work_edit', {'id': work.id}) }}" class="btn edit"><i class="bi bi-pencil"></i> <span class="PC">Editar proyecto</span></a>
 </div>
 
 <div id="work_body">
@@ -38,14 +38,14 @@
 
   <form method="post" action="{{ path('app_work_delete', {'id': work.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar este proyecto? (Se borrarán también sus obras)');">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ work.id) }}">
-    <button class="btn del">{{ ux_icon('bi:trash') }} <span class="PC">Eliminar proyecto </span></button>
+    <button class="btn del"><i class="bi bi-trash"></i> <span class="PC">Eliminar proyecto </span></button>
 </form>
 
     
     <div id="piece_body">
         <div id="show_header">
             <h2>Obras</h2>
-            <a href="{{ path('app_artwork_new', {'id': work.id}) }}" class="btn new page">{{ ux_icon('bi:folder-plus') }} <span class="PC">Añadir obra</span></a>
+            <a href="{{ path('app_artwork_new', {'id': work.id}) }}" class="btn new page"><i class="bi bi-folder-plus"></i> <span class="PC">Añadir obra</span></a>
         </div>
         <table class="table">
         <thead>
@@ -70,8 +70,8 @@
                         {{ artwork.sold ? 'Vendido' : 'A la venta' }}
                     </td>
                     <td class="actions">
-                        <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show">{{ ux_icon('bi:eye') }} </a>
-                        <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
+                        <a href="{{ path('app_artwork_show', {'id': artwork.id}) }}" class="btn show"><i class="bi bi-eye"></i> </a>
+                        <a href="{{ path('app_artwork_edit', {'id': artwork.id}) }}" class="btn edit"><i class="bi bi-pencil"></i></a>
                         {{ include('artwork/_delete_form.html.twig') }}
                     </td>
                 </tr>

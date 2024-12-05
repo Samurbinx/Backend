@@ -1,0 +1,5 @@
+# config/packages/webpack_encore.yaml
+webpack_encore:
+    output_path: '%kernel.project_dir%/public/build'  # La ruta donde Webpack colocará los archivos generados
+    builds:
+        app: 'public/build/manifest.json'  # El archivo manifest.json que se usa para referenciar los assets

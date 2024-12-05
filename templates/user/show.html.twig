@@ -5,7 +5,7 @@
 {% block body %}
 <div id="show_header">
     <h1>Usuario {{ user.Name }}</h1>
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page">{{ ux_icon('bi:pencil') }}<span class="PC"> Editar</span></a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit page"><i class="bi bi-pencil"></i><span class="PC"> Editar</span></a>
 </div>
 
 <div id="user_form">

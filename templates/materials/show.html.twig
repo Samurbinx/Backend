@@ -5,7 +5,7 @@
 <div id="show_header">
     <h1>{{ material.name }}</h1>
     <div class="material_header">
-        <a href="{{ path('app_materials_edit', {'id': material.id}) }}" class="btn edit">{{ ux_icon('bi:pencil')}}</a>
+        <a href="{{ path('app_materials_edit', {'id': material.id}) }}" class="btn edit"><i class="bi bi-pencil"></i></a>
         {{ include('materials/_delete_form.html.twig') }}
     </div>
 </div>

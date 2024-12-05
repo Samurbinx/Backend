@@ -4,79 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administración AESMA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Bootstrap Bundle (JS + Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="{{ asset('css/general/styles.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/general/buttons.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/general/forms.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/general/tables.css') }}" rel="stylesheet"/>
+   <!-- Archivos CSS generados por Webpack -->
+    {{ encore_entry_link_tags('styles') }}
+    {{ encore_entry_link_tags('buttons') }}
+    {{ encore_entry_link_tags('forms') }}
+    {{ encore_entry_link_tags('tables') }}
+    {{ encore_entry_link_tags('page') }}
+    {{ encore_entry_link_tags('artwork') }}
+    {{ encore_entry_link_tags('piece') }}
+    {{ encore_entry_link_tags('work') }}
+    {{ encore_entry_link_tags('material') }}
+    {{ encore_entry_link_tags('user') }}
+    {{ encore_entry_link_tags('order') }}
 
-    <link href="{{ asset('css/components/page.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/artwork.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/piece.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/work.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/material.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/user.css') }}" rel="stylesheet"/>
-    <link href="{{ asset('css/components/order.css') }}" rel="stylesheet"/>
-    
-
-
+    <!-- Archivos JavaScript generados por Webpack -->
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('editpiece') }}
+    {{ encore_entry_script_tags('newpiece') }}
 </head>
-
 <body>
     <div class="header">
-        <button class="mobile btn" data-bs-toggle="offcanvas" href="#offcanvas" aria-controls="offcanvas" type="button">{{ ux_icon('bi:list') }}</button> 
+        <button class="mobile btn" data-bs-toggle="offcanvas" href="#offcanvas" aria-controls="offcanvas" type="button"><i class="bi bi-list"></i></button> 
         <a href="http://localhost:4200/home" target="_blank" id="brand">ANA ESTRADA MACÍAS</a>
         <a href="http://localhost:4200/home" target="_blank" id="brand_small">AESMA</a>
         <div class="second_header">
             <p id="welcome_msg">Bienvenido, {{ app.user.nick }}!</p>
-            <a id="logout_icon" href="{{ path('app_logout')}}">{{ ux_icon('tabler:logout') }}</a>
+            <a id="logout_icon" href="{{ path('app_logout')}}"><i class="bi bi-box-arrow-right"></i></a>
         </div>
     </div>
 
     <div class="body">
         <div class="sidebar" id="sidebar">
-            <a href="{{ path('app_page_show', {'id': 1}) }}">Inicio</a>
-            <a href="{{ path('app_page_show', {'id': 2}) }}">Contacto</a>
-            <a href="{{ path('app_page_show', {'id': 3}) }}">Sobre mí</a>
-            <a href="{{ path('app_page_show', {'id': 4}) }}">Login</a>
+            <a href="{{ path('app_page_show', {'id': 1}) }}"><i class="bi bi-house-door"></i> Inicio</a>
+            <a href="{{ path('app_page_show', {'id': 2}) }}"><i class="bi bi-envelope"></i> Contacto</a>
+            <a href="{{ path('app_page_show', {'id': 3}) }}"><i class="bi bi-person"></i> Sobre mí</a>
+            <a href="{{ path('app_page_show', {'id': 4}) }}"><i class="bi bi-person-lock"></i> Login</a>
             <br>
-            <a href="{{ path('app_work_index') }}">Proyectos</a>
-            <a href="{{ path('app_materials_index') }}">Materiales</a>
-            <a href="{{ path('app_user_index') }}">Usuarios</a>
-            <a href="{{ path('app_order_index') }}">Pedidos</a>
+            <a href="{{ path('app_work_index') }}"><i class="bi bi-columns-gap"></i> Proyectos</a>
+            <a href="{{ path('app_materials_index') }}"><i class="bi bi-brush"></i> Materiales</a>
+            <a href="{{ path('app_user_index') }}"><i class="bi bi-person-lines-fill"></i> Usuarios</a>
+            <a href="{{ path('app_order_index') }}"><i class="bi bi-cart-check"></i> Pedidos</a>
         </div>
+
+        <!-- Offcanvas for mobile menu -->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
             <div class="offcanvas-header">
               <h5 class="offcanvas-title" id="offcanvasLabel">AESMA</h5>
               <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <p><a href="{{ path('app_page_show', {'id': 1}) }}">Inicio</a></p>
-                <p><a href="{{ path('app_page_show', {'id': 2}) }}">Contacto</a></p>
-                <p><a href="{{ path('app_page_show', {'id': 3}) }}">Sobre mí</a></p>
-                <p><a href="{{ path('app_page_show', {'id': 4}) }}">Login</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 1}) }}"><i class="bi bi-house-door"></i> Inicio</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 2}) }}"><i class="bi bi-envelope"></i> Contacto</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 3}) }}"><i class="bi bi-person"></i> Sobre mí</a></p>
+                <p><a href="{{ path('app_page_show', {'id': 4}) }}"><i class="bi bi-person-lock"></i> Login</a></p>
                 <br>
-                <p><a href="{{ path('app_work_index') }}">Proyectos</a></p>
-                <p><a href="{{ path('app_materials_index') }}">Materiales</a></p>
-                <p><a href="{{ path('app_user_index') }}">Usuarios</a></p>
-                <p><a href="{{ path('app_order_index') }}">Pedidos</a></p>
+                <p><a href="{{ path('app_work_index') }}"><i class="bi bi-columns-gap"></i> Proyectos</a></p>
+                <p><a href="{{ path('app_materials_index') }}"><i class="bi bi-brush"></i> Materiales</a></p>
+                <p><a href="{{ path('app_user_index') }}"><i class="bi bi-person-lines-fill"></i> Usuarios</a></p>
+                <p><a href="{{ path('app_order_index') }}"><i class="bi bi-cart-check"></i> Pedidos</a></p>
                 <br>
-                <p><a href="{{ path('app_logout')}}">{{ ux_icon('tabler:logout') }}</a> Cerrar sesión</p>
-                    
+                <p><a href="{{ path('app_logout')}}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión </a></p>
             </div>
           </div>
+          
         <div class="content">
             {% block body %}{% endblock %}
         </div>
     </div>
-
-    <script>
- 
-
-    </script>
 </body>
 </html>

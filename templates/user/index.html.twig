@@ -26,8 +26,8 @@
                 <td class="PC">{{ user.Phone }}</td>
                 <td class="PC">{{ 'ROLE_ADMIN' in user.roles ? 'SI' : 'NO' }}</td>
                 <td class="actions">
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn show">{{ ux_icon('bi:eye') }}</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn show"><i class="bi bi-eye"></i></a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn edit"><i class="bi bi-pencil"></i></a>
                     {{ include('user/_delete_form.html.twig') }}
                 </td>
             </tr>

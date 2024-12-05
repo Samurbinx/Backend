@@ -73,6 +73,7 @@ body {
 
 #logout_icon {
    justify-content: end;
+   font-size: 15px;
 }
 
 /* --- Sidebar --- */

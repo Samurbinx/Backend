@@ -5,7 +5,7 @@
 <div id="show_header">
     <h1>{{ material.name }}</h1>
     <div class="material_header">
-        <a href="{{ path('app_materials_show', {'id': material.id}) }}" class="btn edit">{{ ux_icon('bi:pencil')}}</a>
+        <a href="{{ path('app_materials_show', {'id': material.id}) }}" class="btn edit"><i class="bi bi-pencil"></i></a>
         {{ include('materials/_delete_form.html.twig') }}
     </div>
 </div>
@@ -14,7 +14,7 @@
     <div>
         {{ form_start(form, { 'attr': { 'id': 'form' , 'class': 'mat'} }) }}
         {{ form_row(form.Name) }}
-        <button type="submit" class="btn btn-success">{{ ux_icon('bi:save') }} Guardar</button>
+        <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Guardar</button>
         {{ form_end(form) }}
     </div>
 </div>

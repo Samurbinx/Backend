@@ -25,8 +25,8 @@
             <td class="PC">{{ order.Estado }}</td>
             <td class="PC">{{ order.totalAmount }} €</td>
             <td class="actions">
-                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn show">{{ ux_icon('bi:eye') }}</a>
-                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit">{{ ux_icon('bi:pencil') }}</a>
+                <a href="{{ path('app_order_show', {'id': order.id}) }}" class="btn show"><i class="bi bi-eye"></i></a>
+                <a href="{{ path('app_order_edit', {'id': order.id}) }}" class="btn edit"><i class="bi bi-pencil"></i></a>
             </td>
         </tr>
 
