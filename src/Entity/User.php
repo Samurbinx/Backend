@@ -19,7 +19,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(unique: true)]
     private ?int $id = null;
 
-  
+
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -41,7 +41,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(length: 255)]
     private ?string $Phone = null;
 
-      /**
+    /**
      * @var  list<string> The user roles
      */
     #[ORM\Column]
@@ -88,10 +88,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     }
 
 
- 
 
 
-    public function getUser(): ?array {
+
+    public function getUser(): ?array
+    {
         return [
             'id' => $this->id,
             'email' => $this->email,
@@ -104,7 +105,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         ];
     }
 
-    public function getUserSafe(): ?array {
+    public function getUserSafe(): ?array
+    {
         return [
             'id' => $this->id,
             'email' => $this->email,
@@ -235,6 +237,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->getRoles());
+    }
+
+
     public function getToken(): ?string
     {
         return $this->token;
@@ -259,14 +267,15 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this;
     }
 
-  
+
 
     public function getCart(): ?Cart
     {
         return $this->cart;
     }
 
-    public function getCartArtworksId() {
+    public function getCartArtworksId()
+    {
         $artworks = $this->cart->getCartArtworks();
         $arr = [];
         foreach ($artworks as $art) {
@@ -274,7 +283,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         }
         return $arr;
     }
-    public function getCartJson(): array {
+    public function getCartJson(): array
+    {
         $artworks = $this->cart->getCartArtworks();
         $arr = [];
         foreach ($artworks as $art) {
@@ -304,7 +314,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->orders;
     }
 
-    public function getOrdersJson(): array {
+    public function getOrdersJson(): array
+    {
         $arr = [];
         foreach ($this->orders as $order) {
             $arr[] = $order->getOrderDetails();
@@ -342,15 +353,17 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->Favorites;
     }
 
-    public function getFavoritesJson(): array {
+    public function getFavoritesJson(): array
+    {
         $arr = [];
         foreach ($this->Favorites as $fav) {
             $arr[] = $fav->getArtworkDetail();
         }
         return $arr;
     }
-    
-    public function getFavoritesId(): array {
+
+    public function getFavoritesId(): array
+    {
         $ids = [];
 
         foreach ($this->Favorites as $favorite) {
@@ -422,10 +435,4 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
         return $this;
     }
-
-   
-
-
-
 }
-

@@ -35,6 +35,13 @@ class UserController extends AbstractController
         $data = $user->getUser();
         return new JsonResponse($data);
     }
+    #[Route('/isadmin/{id}', name: 'user_isadmin', methods: ['GET'])]
+    public function getisadmin(int $id, UserRepository $userRepository): JsonResponse
+    {
+        $user = $userRepository->find(id: $id);
+        $data = $user->isAdmin();
+        return new JsonResponse($data);
+    }
 
     #[Route('/safe/{id}', name: 'user_safe', methods: ['GET'])]
     public function getUserSafeById(int $id, UserRepository $userRepository): JsonResponse
