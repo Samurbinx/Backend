@@ -4,7 +4,14 @@ FROM php:8.2-apache
 # Habilitar módulos necesarios de Apache
 RUN a2enmod rewrite
 
-RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+# RUN sed -i 's|/var/www/html|/var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+
+# Copiar el archivo de configuración de Symfony
+COPY apache.conf /etc/apache2/sites-available/apache.conf
+
+# Deshabilitar configuración predeterminada y habilitar la nueva
+RUN a2dissite 000-default.conf && a2ensite apache.conf
+
 RUN echo "ServerName 192.168.1.135" >> /etc/apache2/apache2.conf
 
 # Instalar dependencias del sistema operativo
