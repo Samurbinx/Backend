@@ -24,14 +24,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Stripe\PaymentMethod;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
+use function PHPSTORM_META\map;
 
 #[Route('/order')]
 class OrderController extends AbstractController
 {
     // EN ESTE SE INTENTA IMPLEMENTAR LA CONFIRMACIÓN DEL PAGO AQUI
     #[Route('/new', name: 'order_new', methods: ['POST'])]
-    public function newOrder(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, ArtworkRepository $artworkRepository, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository): Response
+    public function newOrder(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, UserRepository $userRepository, ArtworkRepository $artworkRepository, CartRepository $cartRepository, CartArtworkRepository $cartArtworkRepository): Response
     {
 
         $data = json_decode($request->getContent(), true);
@@ -74,7 +77,7 @@ class OrderController extends AbstractController
 
             $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
             $paymentIntent->confirm([
-                'payment_method' => $paymentMethod->id, 
+                'payment_method' => $paymentMethod->id,
                 'return_url' => 'http://localhost:4200/userdata/pedidos', // URL a la que se redirige después del pago
             ]);
 
@@ -150,6 +153,15 @@ class OrderController extends AbstractController
             $entityManager->flush();
 
             $entityManager->commit();
+
+            $email = (new Email())
+                ->from('samurbinx@gmail.com')
+                ->to($user->getEmail())
+                ->subject('AESMA')
+                ->text($order->getMSG());
+
+            $mailer->send($email);
+
             return new JsonResponse([
                 'message' => 'Se ha completado el pedido',
                 'order' => $order,

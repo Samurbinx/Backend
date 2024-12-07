@@ -63,6 +63,23 @@ class Order
         return $data;
     }
 
+    public function getMSG(): ?string
+    {
+        $orderId = $this->getId();
+        $orderStatus = $this->getStatus();
+        $artworks = $this->getArtworks()->map(function ($artwork) {
+            return $artwork->getMSG();
+        })->toArray(); 
+
+        $artworksList = implode(', ', $artworks);
+
+        $message = 'Su pedido ha sido realizado con éxito: ' . "\n\n" .
+            'Nº Pedido: ' . $orderId . "\n\n" .
+            'Estado: ' . $orderStatus . "\n\n" .
+            'Obras adquiridas: ' . $artworksList;
+
+        return $message;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -194,20 +211,20 @@ class Order
     }
 
     public function getAddressString(): ?string
-{
-    // Verificamos si el array de dirección existe y contiene las claves necesarias
-    $address = $this->address;
-    
-    // Concatenamos de manera segura los valores de la dirección
-    $street = isset($address['street']) ? $address['street'] : '';
-    $details = isset($address['details']) ? $address['details'] : '';
-    $zipcode = isset($address['zipcode']) ? $address['zipcode'] : '';
-    $city = isset($address['city']) ? $address['city'] : '';
-    $province = isset($address['province']) ? $address['province'] : '';
-    
-    // Devolvemos la dirección como una cadena
-    return $street . ' ' . $details . ', ' . $zipcode . ' - ' . $city . ', ' . $province;
-}
+    {
+        // Verificamos si el array de dirección existe y contiene las claves necesarias
+        $address = $this->address;
+
+        // Concatenamos de manera segura los valores de la dirección
+        $street = isset($address['street']) ? $address['street'] : '';
+        $details = isset($address['details']) ? $address['details'] : '';
+        $zipcode = isset($address['zipcode']) ? $address['zipcode'] : '';
+        $city = isset($address['city']) ? $address['city'] : '';
+        $province = isset($address['province']) ? $address['province'] : '';
+
+        // Devolvemos la dirección como una cadena
+        return $street . ' ' . $details . ', ' . $zipcode . ' - ' . $city . ', ' . $province;
+    }
 
 
     public function setAddress(array $address): static
@@ -220,19 +237,18 @@ class Order
     {
         // Verificamos si el array de dirección existe y contiene las claves necesarias
         $address = $this->address;
-        
+
         // Concatenamos de manera segura los valores de la dirección
         $recipient = isset($address['recipient']) ? $address['recipient'] : '';
         return $recipient;
-        
     }
     public function getPhone(): ?string
     {
         // Verificamos si el array de dirección existe y contiene las claves necesarias
         $address = $this->address;
-        
+
         // Concatenamos de manera segura los valores de la dirección
         $phone = isset($address['phone']) ? $address['phone'] : '';
-        return $phone;        
+        return $phone;
     }
 }
