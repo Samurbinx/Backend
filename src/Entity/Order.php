@@ -63,25 +63,6 @@ class Order
         return $data;
     }
 
-    public function getMSG(): ?string
-    {
-        $orderId = $this->getId();
-        $orderStatus = $this->getStatus();
-
-        $artworks = $this->getArtworks()->map(function ($artwork) {
-            return $artwork->getMSG();  
-        })->toArray();
-
-        
-        $artworksList = implode("\n", $artworks);  
-
-        $message = 'Su pedido ha sido realizado con éxito: ' . "\n\n" .
-            'Nº Pedido: ' . $orderId . "\n\n" .
-            'Estado: ' . $orderStatus . "\n\n" .
-            'Obras adquiridas: \n' . $artworksList;
-
-        return $message;
-    }
 
     public function getId(): ?int
     {

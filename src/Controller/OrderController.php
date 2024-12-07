@@ -158,7 +158,7 @@ class OrderController extends AbstractController
                 ->from('samurbinx@gmail.com')
                 ->to($user->getEmail())
                 ->subject('AESMA')
-                ->text($order->getMSG());
+                ->text('Su pedido Nº'.$order->getId().' ha sido realizado con éxito');
 
             $mailer->send($email);
 
