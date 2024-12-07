@@ -67,19 +67,22 @@ class Order
     {
         $orderId = $this->getId();
         $orderStatus = $this->getStatus();
-        $artworks = $this->getArtworks()->map(function ($artwork) {
-            return $artwork->getMSG();
-        })->toArray(); 
 
-        $artworksList = implode(', ', $artworks);
+        $artworks = $this->getArtworks()->map(function ($artwork) {
+            return $artwork->getMSG();  
+        })->toArray();
+
+        
+        $artworksList = implode("\n", $artworks);  
 
         $message = 'Su pedido ha sido realizado con éxito: ' . "\n\n" .
             'Nº Pedido: ' . $orderId . "\n\n" .
             'Estado: ' . $orderStatus . "\n\n" .
-            'Obras adquiridas: ' . $artworksList;
+            'Obras adquiridas: \n' . $artworksList;
 
         return $message;
     }
+
     public function getId(): ?int
     {
         return $this->id;

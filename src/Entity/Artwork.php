@@ -86,13 +86,14 @@ class Artwork
         ];
     }
 
-    public function getMSG(): ?string {
-        $msg = $this->Title . '\nContiene: \n' .
-        $this->pieces->map(function ($piece){
-            return ' - ' . $piece->getTitle() . '\n';
-        });
+    public function getMSG(): ?string { 
+        $msg = $this->Title . "\nContiene: \n" . 
+        $this->pieces->map(function ($piece) {
+            return ' - ' . $piece->getTitle() . "\n"; 
+        })->toArray();
         return $msg;
     }
+    
     
     public function getArtworkDetail(): ?array {
         $data = [
