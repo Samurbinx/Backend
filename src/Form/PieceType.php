@@ -32,15 +32,15 @@ class PieceType extends AbstractType
                 'prototype' => true,               
             ])
             ->add('Height', NumberType::class, [
-                'label' => 'Alto',
+                'label' => 'Alto (cm)',
                 'required' => false
             ])
             ->add('Width', NumberType::class, [
-                'label' => 'Ancho',
+                'label' => 'Ancho (cm)',
                 'required' => false
             ])
             ->add('Depth', NumberType::class, [
-                'label' => 'Profundo',
+                'label' => 'Profundo (cm)',
                 'required' => false
             ])
             ->add('Images', FileType::class, [
