@@ -42,7 +42,6 @@
         {% for image in piece.Images %}
         <div>
         <img src="{{ asset('uploads/works/' ~ artwork.work.id ~ '/' ~ artwork.id ~'/'~ piece.id ~'/'~ image) }}" id="imagePreview">
-        <button>Eliminar</button>
     </div>
         {% endfor %}
         {% endif %}
