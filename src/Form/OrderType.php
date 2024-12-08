@@ -35,7 +35,6 @@ class OrderType extends AbstractType
                 ],
                 'required' => true,
                 'placeholder' => 'Selecciona una opción', // Opción por defecto
-                'data' => 'pending', // Valor predeterminado seleccionado
             ])
             ->add('street', TextType::class, ['label' => 'Dirección'])
             ->add('details', TextType::class, ['label' => 'Detalles de dirección', 'required' => false])

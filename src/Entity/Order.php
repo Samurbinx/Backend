@@ -32,7 +32,7 @@ class Order
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 20)]
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]

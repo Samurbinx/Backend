@@ -931,7 +931,7 @@ class AdminZoneController extends AbstractController
                         ->from('samurbinx@gmail.com')
                         ->to($user->getEmail())
                         ->subject('AESMA')
-                        ->text('El estado de su pedido ha sido actualizado: ' . "\n\n" . 'Nº Pedido: ' . $order->getId() . "\n\n" . 'Estado: ' . $data['status']);
+                        ->text('El estado de su pedido ha sido actualizado: ' . "\n\n" . 'Nº Pedido: ' . $order->getId() . "\n\n" . 'Estado: ' . $order->getEstado());
         
                     $mailer->send($email);
         
