@@ -32,7 +32,7 @@ class WorkType extends AbstractType
             ->add('Image', FileType::class, [
                 'label' => 'Imagen de portada (JPEG, JPG, PNG o WEBP)',
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '50M',
