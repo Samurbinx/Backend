@@ -211,3 +211,26 @@ checkboxes.forEach(function (checkbox) {
 //    // Envía el formulario
 //    form.submit();
 // });
+
+document.addEventListener('DOMContentLoaded', function () {
+   document.querySelectorAll('.delete-form').forEach(function (form) {
+       form.addEventListener('submit', function (event) {
+           event.preventDefault(); // Detiene el envío del formulario
+
+           Swal.fire({
+               title: '¿Seguro que desea eliminarlo?',
+               text: "Esta acción no se puede deshacer.",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Sí, borrar',
+               cancelButtonText: 'Cancelar'
+           }).then((result) => {
+               if (result.isConfirmed) {
+                   form.submit();
+               }
+           });
+       });
+   });
+});

@@ -50,7 +50,7 @@
 
     </div>
     <form method="post" action="{{ path('app_artwork_delete', {'id': artwork.id}) }}"
-        onsubmit="return confirm('¿Seguro que desea borrar esta obra?');">
+        class="delete-form">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.id) }}">
         <button class="btn del"><i class="bi bi-trash"></i> <span class="PC">Eliminar obra</span></button>
     </form>

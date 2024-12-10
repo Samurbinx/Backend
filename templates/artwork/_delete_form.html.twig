@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('app_artwork_delete', {'id': artwork.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar esta obra?');">
+<form method="post" action="{{ path('app_artwork_delete', {'id': artwork.id}) }}" class="delete-form">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ artwork.id) }}">
     <button class="btn del"><i class="bi bi-trash"></i></button>
 </form>
