@@ -1,4 +1,5 @@
 import 'bootstrap'; 
+import Swal from 'sweetalert2'; 
 import '../css/general/styles.css';
 import '../css/general/buttons.css';
 import '../css/general/forms.css';
@@ -17,4 +18,31 @@ import { Tooltip, Toast, Popover } from 'bootstrap';
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new Tooltip(tooltipTriggerEl);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Selecciona todos los formularios con la clase `delete-form`
+  const deleteForms = document.querySelectorAll('.delete-form');
+
+  deleteForms.forEach(form => {
+      form.addEventListener('submit', event => {
+          event.preventDefault(); // Detiene el envío del formulario
+
+          Swal.fire({
+              title: '¿Estás seguro?',
+              text: 'Esta acción no se puede deshacer.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Sí, borrar',
+              cancelButtonText: 'Cancelar'
+          }).then(result => {
+              if (result.isConfirmed) {
+                  // Envía el formulario si el usuario confirma
+                  form.submit();
+              }
+          });
+      });
+  });
 });
