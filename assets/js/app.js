@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
               text: 'Esta acción no se puede deshacer.',
               icon: 'warning',
               showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Sí, borrar',
-              cancelButtonText: 'Cancelar'
+              cancelButtonColor: '#d62525',
+              confirmButtonColor: '#33aa67',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Sí, borrar'
           }).then(result => {
               if (result.isConfirmed) {
                   // Envía el formulario si el usuario confirma
