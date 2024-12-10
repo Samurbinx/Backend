@@ -22,6 +22,7 @@ class UserType extends AbstractType
             ->add('address', AddressType::class, [
                 'label' => false,
                 'mapped' => true,
+                'required'=> false,
             ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',
