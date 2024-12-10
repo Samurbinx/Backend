@@ -1,5 +1,5 @@
 import 'bootstrap'; 
-import Swal from 'sweetalert2'; 
+import 'sweetalert2'; 
 import '../css/general/styles.css';
 import '../css/general/buttons.css';
 import '../css/general/forms.css';
@@ -13,6 +13,8 @@ import '../css/components/user.css';
 import '../css/components/order.css';
 
 import { Tooltip, Toast, Popover } from 'bootstrap';
+import Swal from 'sweetalert2'; 
+
 
 // Inicializa el tooltip de Bootstrap
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
