@@ -36,7 +36,7 @@
         </tbody>
     </table>
 
-  <form method="post" action="{{ path('app_work_delete', {'id': work.id}) }}" onsubmit="return confirm('¿Seguro que desea borrar este proyecto? (Se borrarán también sus obras)');">
+  <form method="post" action="{{ path('app_work_delete', {'id': work.id}) }}" class="delete-form">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ work.id) }}">
     <button class="btn del"><i class="bi bi-trash"></i> <span class="PC">Eliminar proyecto </span></button>
 </form>
