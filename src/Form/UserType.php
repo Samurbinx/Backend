@@ -31,7 +31,7 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('password', PasswordType::class, ['label' => 'Contraseña']);
+            ->add('password', null, ['label' => 'Contraseña']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
